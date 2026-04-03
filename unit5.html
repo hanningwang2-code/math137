@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Unit 5 — Differentiation · Calculus I</title>
+<link rel="stylesheet" href="shared.css"/></head>
+<body>
+<script>window.UNIT_CONTEXT = "Calculus I — Unit 5: Differentiability and what it means geometrically, the first-principles (limit) definition of the derivative, Power/Chain/Product/Quotient Rules with proofs, and derivatives of logarithmic, trigonometric, and exponential functions";</script>
+<nav class="topnav"><a class="nav-brand" href="index.html"><span class="nav-brand-logo">Math<span>Base</span></span><span class="nav-divider"></span><span class="nav-course">Calculus I</span></a><ul class="nav-units"><li><a href="unit1.html">U1</a></li><li><a href="unit2.html">U2</a></li><li><a href="unit3.html">U3</a></li><li><a href="unit4.html">U4</a></li><li><a href="unit5.html" class="active">U5</a></li><li><a href="unit6.html">U6</a></li><li><a href="unit7.html">U7</a></li><li><a href="unit8.html">U8</a></li><li><a href="unit9.html">U9</a></li></ul></nav>
+<section class="unit-hero"><div class="unit-hero-bg"></div><div class="unit-eyebrow">Unit 05 · Calculus I</div><h1>The Art of<br><em>Differentiation</em></h1><p class="unit-hero-desc">From the limit definition of the derivative to the full toolkit: Power, Product, Quotient, and Chain Rules, plus every elementary derivative.</p><div class="unit-hero-number">5</div></section>
+<div class="page-body"><main class="main-content">
+
+<!-- TOPIC 1: FIRST PRINCIPLES -->
+<div class="topic-block" id="firstprinciples">
+  <div class="topic-label">Topic 1</div>
+  <h2>Differentiability &amp; First Principles</h2>
+  <p>The derivative at a point is the <strong>instantaneous rate of change</strong> — the slope of the tangent line. It is defined as a limit of slopes of secant lines as the two points collapse together.</p>
+
+  <div class="theorem-box"><div class="thm-label">Definition — Derivative (First Principles)</div><div class="thm-title">f'(x) = lim(h→0) [f(x+h) − f(x)] / h</div><div class="thm-body">f is <strong>differentiable</strong> at x if this limit exists and is finite. Equivalent form at a specific point a:<br>f'(a) = lim(x→a) [f(x)−f(a)]/(x−a)<br><br>Geometrically: the derivative is the slope of the unique tangent line to the graph of f at (a, f(a)).</div></div>
+
+  <div class="theorem-box"><div class="thm-label">Theorem — Differentiability Implies Continuity</div><div class="thm-title">Differentiable ⟹ Continuous (converse FALSE)</div><div class="thm-body">If f is differentiable at a, then f is continuous at a.<br><strong>Proof:</strong> lim(x→a)[f(x)−f(a)] = lim(x→a) [f(x)−f(a)]/(x−a) · (x−a) = f'(a)·0 = 0. So lim f(x)=f(a). □<br><br><strong>Counterexample to converse:</strong> f(x)=|x| is continuous at 0 but f'(0) does not exist (left slope = −1 ≠ +1 = right slope).</div></div>
+
+  <!-- Secant → Tangent visualization -->
+  <div class="viz-container">
+    <div class="viz-header"><span>Visualization — Secant Lines → Tangent Line (First Principles)</span><span class="viz-badge">Interactive</span></div>
+    <div class="viz-body">
+      <canvas id="derivCanvas" width="540" height="300" style="max-width:100%;display:block;background:#0c0e0f;border-radius:2px"></canvas>
+      <div class="viz-controls">
+        <div class="viz-slider-group"><span class="viz-slider-label">h (step size)</span><input type="range" class="viz-slider" id="hSlider" min="1" max="100" value="60" step="1"/></div>
+        <div class="viz-slider-group"><span class="viz-slider-label">a (base point)</span><input type="range" class="viz-slider" id="aSlider" min="-150" max="150" value="-50" step="5"/></div>
+      </div>
+      <div class="viz-caption">f(x) = x². As h → 0, the orange secant line through (a, f(a)) and (a+h, f(a+h)) approaches the golden tangent line. Slope shown in real time.</div>
+    </div>
+  </div>
+
+  <div class="proof-block"><div class="proof-header"><span>Proof — d/dx[x²] = 2x</span><span>First Principles</span></div><div class="proof-body">
+    f'(x) = lim(h→0) [(x+h)² − x²]/h = lim(h→0) [x²+2xh+h²−x²]/h = lim(h→0)[2x+h] = 2x. <span class="qed">□</span>
+  </div></div>
+
+  <div class="proof-block"><div class="proof-header"><span>Proof — d/dx[sin x] = cos x</span><span>First Principles + Fundamental Limits</span></div><div class="proof-body">
+    f'(x) = lim(h→0)[sin(x+h)−sin(x)]/h<br>
+    = lim(h→0)[sin(x)cos(h)+cos(x)sin(h)−sin(x)]/h<br>
+    = sin(x)·lim(h→0)(cos(h)−1)/h + cos(x)·lim(h→0)sin(h)/h<br>
+    = sin(x)·0 + cos(x)·1 = cos(x). <span class="qed">□</span>
+  </div></div>
+</div>
+
+<hr class="topic-divider"/>
+
+<!-- TOPIC 2: DIFFERENTIATION RULES -->
+<div class="topic-block" id="rules">
+  <div class="topic-label">Topic 2</div>
+  <h2>The Four Differentiation Rules</h2>
+
+  <div class="formula-block"><div class="f-label">Power Rule</div><div class="f-math">d/dx[xⁿ] = n·xⁿ⁻¹   for any n ∈ ℝ
+d/dx[x⁵] = 5x⁴,   d/dx[x^(1/2)] = (1/2)x^(-1/2) = 1/(2√x)</div></div>
+
+  <div class="theorem-box"><div class="thm-label">Theorem — Product Rule</div><div class="thm-title">(fg)' = f'g + fg'</div><div class="thm-body">If f and g are differentiable: (fg)' = f'g + fg'. Mnemonic: "derivative of first times second, plus first times derivative of second."</div></div>
+
+  <div class="proof-block"><div class="proof-header"><span>Proof — Product Rule</span><span>First Principles (add-and-subtract trick)</span></div><div class="proof-body">
+    [f(x+h)g(x+h) − f(x)g(x)]/h<br>
+    Add and subtract f(x+h)g(x):<br>
+    = [f(x+h)g(x+h) − f(x+h)g(x) + f(x+h)g(x) − f(x)g(x)]/h<br>
+    = f(x+h)·[g(x+h)−g(x)]/h + g(x)·[f(x+h)−f(x)]/h<br>
+    → f(x)·g'(x) + g(x)·f'(x) &nbsp;as h→0 (using f continuity: f(x+h)→f(x)). <span class="qed">□</span>
+  </div></div>
+
+  <div class="theorem-box"><div class="thm-label">Theorem — Quotient Rule</div><div class="thm-title">(f/g)' = (f'g − fg') / g²</div><div class="thm-body">Mnemonic: "low d-high minus high d-low, over low squared." Requires g ≠ 0.</div></div>
+
+  <div class="theorem-box"><div class="thm-label">Theorem — Chain Rule</div><div class="thm-title">d/dx[f(g(x))] = f'(g(x)) · g'(x)</div><div class="thm-body">The most powerful rule. Applied <strong>outside-in</strong>: differentiate the outer function evaluated at the inner function, then multiply by the derivative of the inner function. In Leibniz: dy/dx = (dy/du)·(du/dx).<br><br><strong>Common error:</strong> forgetting to multiply by the inner derivative. Every composition demands it.</div></div>
+
+  <div class="example-block"><div class="ex-label">Worked Example — Chain Rule (multiple layers)</div>
+  <div class="ex-problem">Differentiate h(x) = e^(sin(x²)).</div>
+  <div class="ex-step">Outermost layer: eᵘ at u=sin(x²). Derivative: eᵘ = e^(sin(x²)).</div>
+  <div class="ex-step">Middle layer: sin(v) at v=x². Derivative: cos(v) = cos(x²).</div>
+  <div class="ex-step">Innermost: x². Derivative: 2x.</div>
+  <div class="ex-step">h'(x) = e^(sin(x²)) · cos(x²) · 2x.</div></div>
+</div>
+
+<hr class="topic-divider"/>
+
+<!-- TOPIC 3: SPECIAL DERIVATIVES -->
+<div class="topic-block" id="special">
+  <div class="topic-label">Topic 3</div>
+  <h2>Derivatives of Special Functions</h2>
+
+  <div class="formula-block"><div class="f-label">Complete Derivative Reference Table</div><div class="f-math">d/dx[eˣ]        = eˣ
+d/dx[aˣ]        = aˣ ln(a)
+d/dx[ln|x|]     = 1/x
+d/dx[logₐ|x|]  = 1/(x ln a)
+d/dx[sin x]     = cos x
+d/dx[cos x]     = −sin x
+d/dx[tan x]     = sec²x
+d/dx[sec x]     = sec x tan x
+d/dx[csc x]     = −csc x cot x
+d/dx[cot x]     = −csc²x
+d/dx[arcsin x]  = 1/√(1−x²)
+d/dx[arccos x]  = −1/√(1−x²)
+d/dx[arctan x]  = 1/(1+x²)</div></div>
+
+  <div class="proof-block"><div class="proof-header"><span>Proof — d/dx[ln x] = 1/x</span><span>First Principles + fundamental log limit</span></div><div class="proof-body">
+    d/dx[ln x] = lim(h→0)[ln(x+h)−ln(x)]/h = lim(h→0)(1/h)ln((x+h)/x)<br>
+    = lim(h→0)(1/x)·(x/h)·ln(1+h/x).<br>
+    Let u=h/x → 0 as h→0:<br>
+    = (1/x)·lim(u→0) ln(1+u)/u = (1/x)·1 = 1/x. <span class="qed">□</span>
+  </div></div>
+
+  <div class="example-block"><div class="ex-label">Worked Example — Logarithmic Differentiation</div>
+  <div class="ex-problem">Differentiate f(x) = xˣ (not a power rule case — the exponent is variable).</div>
+  <div class="ex-step">Take ln: ln f(x) = x·ln(x).</div>
+  <div class="ex-step">Differentiate both sides: f'(x)/f(x) = ln(x) + x·(1/x) = ln(x) + 1.</div>
+  <div class="ex-step">Multiply by f(x): f'(x) = xˣ·(ln(x)+1).</div></div>
+</div>
+
+<hr class="topic-divider"/>
+
+<div class="practice-section topic-block" id="practice">
+  <h3>Practice Problems</h3>
+  <div class="practice-grid">
+    <div class="practice-problem"><div class="pp-header"><span class="pp-num">01</span><span class="pp-q">From first principles, prove d/dx[x³] = 3x².</span><span class="pp-diff diff-easy">Easy</span><span class="pp-toggle">▾</span></div><div class="pp-answer">lim(h→0)[(x+h)³−x³]/h = lim[3x²h+3xh²+h³]/h = lim[3x²+3xh+h²] = 3x². □</div></div>
+    <div class="practice-problem"><div class="pp-header"><span class="pp-num">02</span><span class="pp-q">Differentiate f(x) = (x²+1)·ln(x).</span><span class="pp-diff diff-easy">Easy</span><span class="pp-toggle">▾</span></div><div class="pp-answer">Product rule: f'(x) = 2x·ln(x) + (x²+1)·(1/x) = 2x·ln(x) + x + 1/x.</div></div>
+    <div class="practice-problem"><div class="pp-header"><span class="pp-num">03</span><span class="pp-q">Differentiate g(x) = ln(x)/sin(x) using Quotient Rule.</span><span class="pp-diff diff-med">Medium</span><span class="pp-toggle">▾</span></div><div class="pp-answer">g'(x)=[(1/x)sin(x)−ln(x)cos(x)]/sin²(x) = [sin(x)/x − ln(x)cos(x)]/sin²(x).</div></div>
+    <div class="practice-problem"><div class="pp-header"><span class="pp-num">04</span><span class="pp-q">Differentiate h(x) = arctan(e^(3x)).</span><span class="pp-diff diff-hard">Hard</span><span class="pp-toggle">▾</span></div><div class="pp-answer">Chain rule (2 layers). Outer: arctan(u), derivative 1/(1+u²) at u=e^(3x): gives 1/(1+e^(6x)). Inner: e^(3x), derivative 3e^(3x). So h'(x) = 3e^(3x)/(1+e^(6x)).</div></div>
+  </div>
+</div>
+
+<div class="ai-chat topic-block" id="ai-chat">
+  <div class="ai-chat-header"><div class="ai-dot"></div><span>AI Tutor — Unit 5</span><small>Ask about first principles, differentiation rules, or specific derivatives</small></div>
+  <div class="chat-messages" id="chatMessages"><div class="msg ai"><div class="msg-avatar">∑</div><div class="msg-bubble">Hi! I can prove any derivative from first principles, walk through a Chain/Product/Quotient rule example, or help with logarithmic differentiation. What are you working on?</div></div></div>
+  <div class="chat-input-row"><textarea class="chat-input" id="chatInput" placeholder="e.g. Differentiate f(x) = x² · arcsin(√x)" rows="1"></textarea><button class="chat-send" id="sendBtn" onclick="sendMessage()">Send ↑</button></div>
+</div>
+
+<!-- QUIZ -->
+<div class="quiz-section topic-block" id="quiz-u5">
+  <div class="quiz-banner"><div class="quiz-banner-left"><h2>Unit 5 Quiz</h2><p>First Principles · Rules · Special Derivatives</p></div>
+    <div class="quiz-meta"><div class="quiz-meta-item"><span class="quiz-meta-num">3</span><span class="quiz-meta-label">MC</span></div><div class="quiz-meta-item"><span class="quiz-meta-num">2</span><span class="quiz-meta-label">Short</span></div><div class="quiz-meta-item"><span class="quiz-meta-num">2</span><span class="quiz-meta-label">Long</span></div></div>
+    <button class="quiz-start-btn">Begin Quiz →</button></div>
+  <div class="quiz-body">
+    <div class="quiz-progress-bar"><div class="quiz-progress-fill"></div></div>
+    <div class="quiz-section-label"><span class="qsl-icon">Section A</span><span class="qsl-title">Multiple Choice</span><span class="qsl-badge">3 Questions</span></div>
+
+    <div class="quiz-question">
+      <div class="qq-num">Question 1</div>
+      <div class="qq-text">If f is differentiable at x=a, which must be true?</div>
+      <div class="qq-hint">Recall the theorem about differentiability and continuity — and its converse.</div>
+      <div class="mc-options">
+        <div class="mc-option" data-correct="false"><span class="mc-letter">A</span><span class="mc-text">f is differentiable in a neighbourhood of a.</span></div>
+        <div class="mc-option" data-correct="true"><span class="mc-letter">B</span><span class="mc-text">f is continuous at a.</span></div>
+        <div class="mc-option" data-correct="false"><span class="mc-letter">C</span><span class="mc-text">f' is continuous at a.</span></div>
+        <div class="mc-option" data-correct="false"><span class="mc-letter">D</span><span class="mc-text">f is twice differentiable at a.</span></div>
+      </div>
+      <div class="mc-feedback"><strong>Correct! B.</strong> Differentiability at a point implies continuity at that point (theorem proved in this unit). A is false — differentiability at one point says nothing about nearby points. C is false — f could be differentiable at a but f' not continuous there (example: f(x)=x²sin(1/x), f(0)=0). D is false — a function can be once but not twice differentiable.</div>
+      <button class="qq-check-btn" data-type="mc" disabled>Check Answer</button>
+    </div>
+
+    <div class="quiz-question">
+      <div class="qq-num">Question 2</div>
+      <div class="qq-text">What is d/dx[x^x]?</div>
+      <div class="qq-hint">This is NOT a power rule case. The exponent is variable — you need logarithmic differentiation.</div>
+      <div class="mc-options">
+        <div class="mc-option" data-correct="false"><span class="mc-letter">A</span><span class="mc-text">x · x^(x−1)</span></div>
+        <div class="mc-option" data-correct="false"><span class="mc-letter">B</span><span class="mc-text">x^x · ln(x)</span></div>
+        <div class="mc-option" data-correct="true"><span class="mc-letter">C</span><span class="mc-text">x^x · (ln(x) + 1)</span></div>
+        <div class="mc-option" data-correct="false"><span class="mc-letter">D</span><span class="mc-text">x · x^(x−1) · ln(x)</span></div>
+      </div>
+      <div class="mc-feedback"><strong>Correct! C.</strong> Power rule only applies when the exponent is a constant. For xˣ: take ln y = x·ln x, differentiate to get y'/y = ln x + 1, so y' = xˣ(ln x + 1). Option A wrongly applies power rule. Option B forgets the +1 from the product rule on x·ln x.</div>
+      <button class="qq-check-btn" data-type="mc" disabled>Check Answer</button>
+    </div>
+
+    <div class="quiz-question">
+      <div class="qq-num">Question 3</div>
+      <div class="qq-text">In the first-principles definition f'(a) = lim(h→0)[f(a+h)−f(a)]/h, the expression [f(a+h)−f(a)]/h represents:</div>
+      <div class="mc-options">
+        <div class="mc-option" data-correct="false"><span class="mc-letter">A</span><span class="mc-text">The slope of the tangent line to f at a.</span></div>
+        <div class="mc-option" data-correct="true"><span class="mc-letter">B</span><span class="mc-text">The slope of the secant line through (a, f(a)) and (a+h, f(a+h)).</span></div>
+        <div class="mc-option" data-correct="false"><span class="mc-letter">C</span><span class="mc-text">The instantaneous rate of change of f at a.</span></div>
+        <div class="mc-option" data-correct="false"><span class="mc-letter">D</span><span class="mc-text">The average of f over [a, a+h].</span></div>
+      </div>
+      <div class="mc-feedback"><strong>Correct! B.</strong> Before taking the limit, [f(a+h)−f(a)]/h is the slope of the secant line connecting two points on the graph. Taking the limit as h→0 collapses this to the tangent slope. A and C are what f'(a) equals AFTER taking the limit — not what the expression equals before. D is unrelated.</div>
+      <button class="qq-check-btn" data-type="mc" disabled>Check Answer</button>
+    </div>
+
+    <div class="quiz-section-label"><span class="qsl-icon">Section B</span><span class="qsl-title">Short Answer</span><span class="qsl-badge">2 Questions</span></div>
+
+    <div class="quiz-question">
+      <div class="qq-num">Question 4</div>
+      <div class="qq-text">Differentiate f(x) = x³·eˣ. Write your answer in fully simplified form.</div>
+      <input type="text" class="sa-input" placeholder="e.g. e^x(3x^2 + x^3)" data-accept="e^x(x^3+3x^2)|eˣ(x³+3x²)|x²eˣ(x+3)|e^x(3x^2+x^3)|(3x^2+x^3)e^x"/>
+      <div class="sa-feedback incorrect-sfb"><span class="sa-answer-reveal">f'(x) = 3x²eˣ + x³eˣ = eˣ(x³+3x²) = x²eˣ(x+3). Product rule: f'=(x³)'eˣ+x³(eˣ)'=3x²eˣ+x³eˣ.</span></div>
+      <button class="qq-check-btn" data-type="sa">Check</button>
+    </div>
+
+    <div class="quiz-question">
+      <div class="qq-num">Question 5</div>
+      <div class="qq-text">Find the equation of the tangent line to f(x) = ln(x) at x = e. Write in y = mx + b form.</div>
+      <input type="text" class="sa-input" placeholder="e.g. y = (1/e)x" data-accept="y=(1/e)x|y=(x/e)|y=(1/e)x+0"/>
+      <div class="sa-feedback incorrect-sfb"><span class="sa-answer-reveal">y = (1/e)x. f(e)=ln(e)=1. f'(x)=1/x, f'(e)=1/e. Tangent: y−1=(1/e)(x−e) ⟹ y=(1/e)x−1+1=(1/e)x.</span></div>
+      <button class="qq-check-btn" data-type="sa">Check</button>
+    </div>
+
+    <div class="quiz-section-label"><span class="qsl-icon">Section C</span><span class="qsl-title">Long Answer</span><span class="qsl-badge">2 Questions</span></div>
+
+    <div class="quiz-question">
+      <div class="qq-num">Question 6 — First Principles Proof</div>
+      <div class="qq-text">Prove from first principles that d/dx[eˣ] = eˣ, using the known limit lim(h→0)(eʰ−1)/h = 1. Show every algebraic step.</div>
+      <textarea class="la-textarea" placeholder="Apply the definition, factor out eˣ, apply the known limit..."></textarea>
+      <button class="la-reveal-btn">Reveal Model Solution</button>
+      <div class="la-solution"><div class="la-sol-label">Model Solution</div><div class="la-sol-body">
+        d/dx[eˣ] = lim(h→0)[e^(x+h) − eˣ]/h<br>
+        = lim(h→0)[eˣ·eʰ − eˣ]/h<br>
+        = lim(h→0) eˣ·(eʰ−1)/h<br>
+        = eˣ · lim(h→0)(eʰ−1)/h<br>
+        = eˣ · 1 = eˣ. □<br><br>
+        (The key step is factoring out eˣ — constant with respect to h — so it passes through the limit.)
+      </div></div>
+    </div>
+
+    <div class="quiz-question">
+      <div class="qq-num">Question 7 — Chain + Product</div>
+      <div class="qq-text">Differentiate f(x) = x²·sin(ln x). Show which rules you apply at each step.</div>
+      <textarea class="la-textarea" placeholder="Identify the structure (product of x² and sin(ln x)), then differentiate each part..."></textarea>
+      <button class="la-reveal-btn">Reveal Model Solution</button>
+      <div class="la-solution"><div class="la-sol-label">Model Solution</div><div class="la-sol-body">
+        <strong>Structure:</strong> Product of u(x)=x² and v(x)=sin(ln x).<br><br>
+        <strong>u'(x):</strong> d/dx[x²] = 2x.<br><br>
+        <strong>v'(x):</strong> d/dx[sin(ln x)] = cos(ln x) · d/dx[ln x] = cos(ln x) · (1/x). (Chain Rule)<br><br>
+        <strong>Product Rule:</strong> f'(x) = u'v + uv' = 2x·sin(ln x) + x²·cos(ln x)/x<br>
+        = 2x·sin(ln x) + x·cos(ln x)<br>
+        = x[2sin(ln x) + cos(ln x)].
+      </div></div>
+    </div>
+
+    <div class="quiz-submit-row"><span class="quiz-submit-note">MC and Short Answer auto-scored.</span><button class="quiz-submit-btn">Submit &amp; Score →</button></div>
+    <div class="quiz-score-panel"><div class="qs-title">Quiz Complete</div><div class="qs-score">—</div><div class="qs-label">out of 5 scored questions</div><p class="qs-msg"></p><button class="quiz-retry-btn">↺ Retry Quiz</button></div>
+  </div>
+</div>
+
+</main>
+<aside class="sidebar">
+  <div class="sidebar-section"><h4>On This Page</h4><ul class="toc-list">
+    <li><a href="#firstprinciples">First Principles</a></li><li><a href="#rules">Differentiation Rules</a></li><li><a href="#special">Special Derivatives</a></li><li><a href="#practice">Practice</a></li><li><a href="#ai-chat">AI Tutor</a></li><li><a href="#quiz-u5">Unit Quiz</a></li>
+  </ul></div>
+  <div class="sidebar-section"><h4>Key Formulas</h4>
+    <div class="formula-pill"><div class="fp-label">First Principles</div><div class="fp-math">f'(x)=lim(h→0)[f(x+h)−f(x)]/h</div></div>
+    <div class="formula-pill"><div class="fp-label">Chain Rule</div><div class="fp-math">d/dx f(g(x)) = f'(g(x))·g'(x)</div></div>
+    <div class="formula-pill"><div class="fp-label">Product Rule</div><div class="fp-math">(fg)' = f'g + fg'</div></div>
+    <div class="formula-pill"><div class="fp-label">Quotient Rule</div><div class="fp-math">(f/g)' = (f'g−fg')/g²</div></div>
+  </div>
+</aside>
+</div>
+<div class="unit-nav"><a href="unit4.html" class="unit-nav-btn">← <div><span class="un-label">Previous</span><span class="un-title">Continuity & IVT</span></div></a><a href="unit6.html" class="unit-nav-btn"><div style="text-align:right"><span class="un-label">Next Unit</span><span class="un-title">Approximation & Inverses</span></div> →</a></div>
+<script src="shared.js"></script>
+<script>
+(function(){
+  const canvas=document.getElementById('derivCanvas');
+  if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  const hSlider=document.getElementById('hSlider');
+  const aSlider=document.getElementById('aSlider');
+  const W=canvas.width,H=canvas.height;
+  const xMin=-3,xMax=3,yMin=-0.5,yMax=10;
+  const pad={l:44,r:16,t:20,b:36};
+  const pw=W-pad.l-pad.r,ph=H-pad.t-pad.b;
+  const sx=x=>pad.l+(x-xMin)/(xMax-xMin)*pw;
+  const sy=y=>pad.t+(1-(y-yMin)/(yMax-yMin))*ph;
+  const f=x=>x*x;
+  const fp=x=>2*x;
+
+  function draw(){
+    const h=+hSlider.value/100*2.5+0.01;
+    const a=+aSlider.value/100*2.5;
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle='#0c0e0f';ctx.fillRect(0,0,W,H);
+
+    // grid
+    ctx.strokeStyle='rgba(255,255,255,0.05)';ctx.lineWidth=1;
+    for(let x=-3;x<=3;x++){ctx.beginPath();ctx.moveTo(sx(x),pad.t);ctx.lineTo(sx(x),pad.t+ph);ctx.stroke();}
+    for(let y=0;y<=10;y+=2){ctx.beginPath();ctx.moveTo(pad.l,sy(y));ctx.lineTo(pad.l+pw,sy(y));ctx.stroke();}
+
+    // axes
+    ctx.strokeStyle='rgba(255,255,255,0.2)';ctx.lineWidth=1.5;
+    ctx.beginPath();ctx.moveTo(pad.l,sy(0));ctx.lineTo(pad.l+pw,sy(0));ctx.stroke();
+    ctx.beginPath();ctx.moveTo(sx(0),pad.t);ctx.lineTo(sx(0),pad.t+ph);ctx.stroke();
+
+    // curve f(x)=x²
+    ctx.strokeStyle='#e8e4dc';ctx.lineWidth=2.5;
+    ctx.beginPath();
+    for(let px=0;px<=pw;px++){
+      const x=xMin+(px/pw)*(xMax-xMin);
+      if(px===0)ctx.moveTo(pad.l+px,sy(f(x)));
+      else ctx.lineTo(pad.l+px,sy(f(x)));
+    }
+    ctx.stroke();
+
+    // secant line
+    const secSlope=(f(a+h)-f(a))/h;
+    ctx.strokeStyle='#e8924a';ctx.lineWidth=2;ctx.setLineDash([]);
+    ctx.beginPath();
+    const x1s=xMin,x2s=xMax;
+    ctx.moveTo(sx(x1s),sy(f(a)+secSlope*(x1s-a)));
+    ctx.lineTo(sx(x2s),sy(f(a)+secSlope*(x2s-a)));
+    ctx.stroke();
+
+    // tangent line
+    const tanSlope=fp(a);
+    ctx.strokeStyle='#d4a843';ctx.lineWidth=2;ctx.setLineDash([5,4]);
+    ctx.beginPath();
+    ctx.moveTo(sx(x1s),sy(f(a)+tanSlope*(x1s-a)));
+    ctx.lineTo(sx(x2s),sy(f(a)+tanSlope*(x2s-a)));
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // points
+    ctx.beginPath();ctx.arc(sx(a),sy(f(a)),5,0,Math.PI*2);ctx.fillStyle='#d4a843';ctx.fill();
+    ctx.beginPath();ctx.arc(sx(a+h),sy(f(a+h)),5,0,Math.PI*2);ctx.fillStyle='#e8924a';ctx.fill();
+
+    // labels
+    ctx.fillStyle='#e8924a';ctx.font='11px JetBrains Mono,monospace';ctx.textAlign='left';
+    ctx.fillText(`secant slope: ${secSlope.toFixed(3)}`,pad.l+8,pad.t+16);
+    ctx.fillStyle='#d4a843';
+    ctx.fillText(`tangent slope: ${tanSlope.toFixed(3)} (h→0)`,pad.l+8,pad.t+32);
+    ctx.fillStyle='rgba(255,255,255,0.3)';
+    ctx.fillText(`h = ${h.toFixed(3)}`,pad.l+8,pad.t+48);
+
+    [(-2),(-1),0,1,2].forEach(x=>{ctx.fillStyle='#5a5650';ctx.font='9px JetBrains Mono';ctx.textAlign='center';ctx.fillText(x,sx(x),pad.t+ph+14);});
+  }
+  hSlider.addEventListener('input',draw);
+  aSlider.addEventListener('input',draw);
+  draw();
+})();
+</script>
+</body></html>

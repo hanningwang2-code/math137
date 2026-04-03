@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Unit 4 — Continuity & IVT · Calculus I</title>
+<link rel="stylesheet" href="shared.css"/></head>
+<body>
+<script>window.UNIT_CONTEXT = "Calculus I — Unit 4: Epsilon-Delta definition of continuity, types of discontinuities, limits at infinity (L=∞), vertical/horizontal asymptotes, and the Intermediate Value Theorem with proof applications";</script>
+<nav class="topnav"><a class="nav-brand" href="index.html"><span class="nav-brand-logo">Math<span>Base</span></span><span class="nav-divider"></span><span class="nav-course">Calculus I</span></a><ul class="nav-units"><li><a href="unit1.html">U1</a></li><li><a href="unit2.html">U2</a></li><li><a href="unit3.html">U3</a></li><li><a href="unit4.html" class="active">U4</a></li><li><a href="unit5.html">U5</a></li><li><a href="unit6.html">U6</a></li><li><a href="unit7.html">U7</a></li><li><a href="unit8.html">U8</a></li><li><a href="unit9.html">U9</a></li></ul></nav>
+<section class="unit-hero"><div class="unit-hero-bg"></div><div class="unit-eyebrow">Unit 04 · Calculus I</div><h1>Continuity &amp;<br><em>The IVT</em></h1><p class="unit-hero-desc">Epsilon-delta continuity, classifying discontinuities, limits at infinity, asymptotes, and the Intermediate Value Theorem as a rigorous existence tool.</p><div class="unit-hero-number">4</div></section>
+<div class="page-body"><main class="main-content">
+
+<!-- TOPIC 1: CONTINUITY -->
+<div class="topic-block" id="continuity">
+  <div class="topic-label">Topic 1</div>
+  <h2>Continuity — The Formal Definition</h2>
+  <p>Informally, a function is continuous at a if you can draw it through a without lifting your pen. Formally, it is the coincidence of three things: the function is defined at a, the limit exists at a, and they agree. The ε-δ form is identical to the limit definition except x = a is now <em>allowed</em> (the 0 &lt; condition is dropped).</p>
+
+  <div class="theorem-box"><div class="thm-label">Definition — Continuity at a Point (ε-δ)</div><div class="thm-title">f is continuous at a iff lim(x→a) f(x) = f(a)</div><div class="thm-body">Three simultaneous requirements:<br>(1) f(a) is defined. &nbsp; (2) lim(x→a) f(x) exists. &nbsp; (3) lim(x→a) f(x) = f(a).<br><br><strong>ε-δ form:</strong> ∀ ε > 0, ∃ δ > 0 such that |x − a| &lt; δ ⟹ |f(x) − f(a)| &lt; ε.<br>Key difference from limit: |x−a| &lt; δ, NOT 0 &lt; |x−a| &lt; δ. The point x=a is included.</div></div>
+
+  <div class="theorem-box"><div class="thm-label">Classification — Types of Discontinuity</div><div class="thm-title">Removable · Jump · Infinite</div><div class="thm-body"><strong>Removable:</strong> lim(x→a) f(x) = L exists, but either f(a) is undefined or f(a) ≠ L. "Fix" it by redefining f(a) = L.<br><br><strong>Jump:</strong> Left and right limits exist but differ: lim(x→a⁻) f(x) ≠ lim(x→a⁺) f(x). Cannot be fixed by redefining one value.<br><br><strong>Infinite (Essential):</strong> f(x) → ±∞ as x → a. Creates a vertical asymptote.</div></div>
+
+  <!-- Discontinuity visualization -->
+  <div class="viz-container">
+    <div class="viz-header"><span>Visualization — Types of Discontinuity</span><span class="viz-badge">Interactive</span></div>
+    <div class="viz-body">
+      <canvas id="discCanvas" width="540" height="260" style="max-width:100%;display:block;background:#0c0e0f;border-radius:2px"></canvas>
+      <div class="viz-controls">
+        <select id="discType" style="background:var(--surface2);border:1px solid var(--border2);color:var(--text);font-family:'JetBrains Mono',monospace;font-size:.7rem;padding:6px 14px;outline:none;cursor:pointer;border-radius:2px">
+          <option value="removable">Removable — hole at x=2</option>
+          <option value="jump">Jump — left ≠ right limit</option>
+          <option value="infinite">Infinite — vertical asymptote</option>
+          <option value="continuous">Continuous — for comparison</option>
+        </select>
+      </div>
+      <div class="viz-caption" id="discCaption">Select a type to see the discontinuity and its classification.</div>
+    </div>
+  </div>
+
+  <div class="proof-block"><div class="proof-header"><span>Proof — f(x) = x² is continuous at x=3</span><span>ε-δ</span></div><div class="proof-body">
+    <strong>Need:</strong> |x²−9| &lt; ε whenever |x−3| &lt; δ.<br>
+    <strong>Key step:</strong> |x²−9|=|x−3||x+3|. Restrict δ≤1: then 2&lt;x&lt;4, so |x+3|&lt;7. Thus |x²−9|&lt;7|x−3|.<br>
+    <strong>Choose</strong> δ=min(1, ε/7).<br><br>
+    <strong>Formal:</strong> Let ε>0, δ=min(1,ε/7). If |x−3|&lt;δ≤1: |x+3|&lt;7, so |x²−9|=|x−3||x+3|&lt;7δ≤ε. <span class="qed">□</span>
+  </div></div>
+</div>
+
+<hr class="topic-divider"/>
+
+<!-- TOPIC 2: LIMITS AT INFINITY -->
+<div class="topic-block" id="asymptotes">
+  <div class="topic-label">Topic 2</div>
+  <h2>Limits at Infinity &amp; Asymptotes</h2>
+
+  <div class="theorem-box"><div class="thm-label">Definitions</div><div class="thm-title">Limits at Infinity and Infinite Limits</div><div class="thm-body"><strong>lim(x→∞) f(x) = L:</strong> ∀ε>0, ∃M>0 such that x>M ⟹ |f(x)−L|&lt;ε.<br><br><strong>lim(x→a) f(x) = +∞:</strong> ∀M>0, ∃δ>0 such that 0&lt;|x−a|&lt;δ ⟹ f(x)>M.<br><br>These generate the two types of asymptote: horizontal (limit at ±∞) and vertical (infinite limit).</div></div>
+
+  <div class="formula-block"><div class="f-label">Asymptote Classification</div><div class="f-math">Vertical asymptote x=a:    lim(x→a) f(x) = ±∞
+Horizontal asymptote y=L:  lim(x→±∞) f(x) = L
+Oblique asymptote y=mx+b:  lim(x→∞) [f(x)−(mx+b)] = 0
+
+For rational f(x)=P(x)/Q(x):
+  deg P &lt; deg Q  ⟹  y=0 horizontal asymptote
+  deg P = deg Q  ⟹  y = (leading coeff P)/(leading coeff Q)
+  deg P > deg Q  ⟹  no horizontal; possible oblique</div></div>
+
+  <div class="example-block"><div class="ex-label">Worked Example — Complete Asymptote Analysis</div>
+  <div class="ex-problem">Find all asymptotes of f(x) = (3x² − 1)/(x² − 4).</div>
+  <div class="ex-step">Vertical: x²−4=0 ⟹ x=±2. Check numerator at x=2: 3(4)−1=11≠0. So x=2 and x=−2 are vertical asymptotes.</div>
+  <div class="ex-step">Horizontal: equal degrees, ratio of leading coefficients = 3/1 = 3. So y=3 is a horizontal asymptote (both sides).</div>
+  <div class="ex-step">Verify: lim(x→∞)(3x²−1)/(x²−4) = lim(3−1/x²)/(1−4/x²) = 3/1 = 3. ✓</div></div>
+</div>
+
+<hr class="topic-divider"/>
+
+<!-- TOPIC 3: IVT -->
+<div class="topic-block" id="ivt">
+  <div class="topic-label">Topic 3</div>
+  <h2>The Intermediate Value Theorem</h2>
+  <p>The IVT encodes the intuition that a continuous function cannot "jump over" any value. Its proof relies on completeness of ℝ. As a tool, it is used almost exclusively to <em>prove existence</em> of solutions — roots, intersections, fixed points.</p>
+
+  <div class="theorem-box"><div class="thm-label">Theorem — Intermediate Value Theorem (IVT)</div><div class="thm-title">Continuous functions attain every intermediate value</div><div class="thm-body">Let f be continuous on [a,b] and let N be any value strictly between f(a) and f(b) (i.e. f(a)&lt;N&lt;f(b) or f(b)&lt;N&lt;f(a)). Then ∃ c ∈ (a,b) such that f(c) = N.<br><br><strong>Zero version (most useful):</strong> If f is continuous on [a,b] and f(a)·f(b) &lt; 0 (opposite signs), then ∃ c ∈ (a,b) with f(c) = 0.</div></div>
+
+  <!-- IVT visualization -->
+  <div class="viz-container">
+    <div class="viz-header"><span>Visualization — Intermediate Value Theorem</span><span class="viz-badge">Interactive</span></div>
+    <div class="viz-body">
+      <canvas id="ivtCanvas" width="540" height="280" style="max-width:100%;display:block;background:#0c0e0f;border-radius:2px"></canvas>
+      <div class="viz-controls">
+        <div class="viz-slider-group"><span class="viz-slider-label">Target value N</span><input type="range" class="viz-slider" id="ivtN" min="-80" max="80" value="0" step="2"/></div>
+      </div>
+      <div class="viz-caption">The horizontal dashed line shows the target value N. The IVT guarantees at least one crossing point c where f(c) = N, shown in gold.</div>
+    </div>
+  </div>
+
+  <div class="example-block"><div class="ex-label">Application 1 — Root Existence</div>
+  <div class="ex-problem">Show x⁵ − 3x + 1 = 0 has a root in (1,2).</div>
+  <div class="ex-step">f(x) = x⁵−3x+1 is continuous (polynomial).</div>
+  <div class="ex-step">f(1) = 1−3+1 = −1 &lt; 0. &nbsp; f(2) = 32−6+1 = 27 > 0.</div>
+  <div class="ex-step">Since f(1)&lt;0&lt;f(2) and f is continuous on [1,2], by IVT ∃ c∈(1,2) with f(c)=0. □</div></div>
+
+  <div class="example-block"><div class="ex-label">Application 2 — Fixed Point Theorem</div>
+  <div class="ex-problem">Let f: [0,1]→[0,1] be continuous. Prove ∃ c ∈ [0,1] with f(c) = c.</div>
+  <div class="ex-step">Let g(x) = f(x) − x. Then g is continuous on [0,1].</div>
+  <div class="ex-step">g(0) = f(0) − 0 = f(0) ≥ 0 (since f(0) ∈ [0,1]).</div>
+  <div class="ex-step">g(1) = f(1) − 1 ≤ 0 (since f(1) ∈ [0,1]).</div>
+  <div class="ex-step">If either is 0, done. Otherwise g(0)>0>g(1), and by IVT ∃ c∈(0,1) with g(c)=0, i.e. f(c)=c. □</div></div>
+</div>
+
+<hr class="topic-divider"/>
+
+<!-- PRACTICE -->
+<div class="practice-section topic-block" id="practice">
+  <h3>Practice Problems</h3>
+  <div class="practice-grid">
+    <div class="practice-problem"><div class="pp-header"><span class="pp-num">01</span><span class="pp-q">Classify the discontinuity of f(x) = (x²−9)/(x−3) at x=3.</span><span class="pp-diff diff-easy">Easy</span><span class="pp-toggle">▾</span></div><div class="pp-answer">lim(x→3)(x²−9)/(x−3) = lim(x+3) = 6 exists, but f(3) is undefined. This is a removable discontinuity. Redefine f(3)=6 to make it continuous.</div></div>
+    <div class="practice-problem"><div class="pp-header"><span class="pp-num">02</span><span class="pp-q">Use IVT to show cos(x) = x has at least one solution.</span><span class="pp-diff diff-med">Medium</span><span class="pp-toggle">▾</span></div><div class="pp-answer">Let g(x)=cos(x)−x. g is continuous. g(0)=1>0. g(π/2)=0−π/2&lt;0. By IVT ∃c∈(0,π/2) with g(c)=0, i.e. cos(c)=c. □</div></div>
+    <div class="practice-problem"><div class="pp-header"><span class="pp-num">03</span><span class="pp-q">Find all asymptotes of f(x)=(2x³+1)/(x³−x).</span><span class="pp-diff diff-hard">Hard</span><span class="pp-toggle">▾</span></div><div class="pp-answer">Vertical: x³−x=x(x−1)(x+1)=0 ⟹ x=0,1,−1. Check numerator at each: 2(0)+1=1≠0, 2(1)+1=3≠0, 2(−1)+1=−1≠0. All three are vertical asymptotes. Horizontal: equal degrees, ratio of leading coefficients = 2/1 = 2. So y=2.</div></div>
+  </div>
+</div>
+
+<!-- AI CHAT -->
+<div class="ai-chat topic-block" id="ai-chat">
+  <div class="ai-chat-header"><div class="ai-dot"></div><span>AI Tutor — Unit 4</span><small>Ask about continuity, asymptotes, or IVT applications</small></div>
+  <div class="chat-messages" id="chatMessages"><div class="msg ai"><div class="msg-avatar">∑</div><div class="msg-bubble">Hi! Ask me about classifying discontinuities, the ε-δ proof of continuity, finding asymptotes, or applying the IVT to existence proofs. What are you working on?</div></div></div>
+  <div class="chat-input-row"><textarea class="chat-input" id="chatInput" placeholder="e.g. How do I prove a polynomial is everywhere continuous?" rows="1"></textarea><button class="chat-send" id="sendBtn" onclick="sendMessage()">Send ↑</button></div>
+</div>
+
+<!-- QUIZ -->
+<div class="quiz-section topic-block" id="quiz-u4">
+  <div class="quiz-banner"><div class="quiz-banner-left"><h2>Unit 4 Quiz</h2><p>Continuity · Asymptotes · Intermediate Value Theorem</p></div>
+    <div class="quiz-meta"><div class="quiz-meta-item"><span class="quiz-meta-num">3</span><span class="quiz-meta-label">MC</span></div><div class="quiz-meta-item"><span class="quiz-meta-num">2</span><span class="quiz-meta-label">Short</span></div><div class="quiz-meta-item"><span class="quiz-meta-num">2</span><span class="quiz-meta-label">Long</span></div></div>
+    <button class="quiz-start-btn">Begin Quiz →</button></div>
+  <div class="quiz-body">
+    <div class="quiz-progress-bar"><div class="quiz-progress-fill"></div></div>
+    <div class="quiz-section-label"><span class="qsl-icon">Section A</span><span class="qsl-title">Multiple Choice</span><span class="qsl-badge">3 Questions</span></div>
+
+    <div class="quiz-question">
+      <div class="qq-num">Question 1</div>
+      <div class="qq-text">f is continuous at a if and only if lim(x→a) f(x) = f(a). Which of the following functions is continuous at x = 0?</div>
+      <div class="qq-hint">Check all three conditions: defined, limit exists, they agree.</div>
+      <div class="mc-options">
+        <div class="mc-option" data-correct="false"><span class="mc-letter">A</span><span class="mc-text">f(x) = sin(1/x), f(0) = 0</span></div>
+        <div class="mc-option" data-correct="true"><span class="mc-letter">B</span><span class="mc-text">f(x) = x·sin(1/x) for x≠0, f(0) = 0</span></div>
+        <div class="mc-option" data-correct="false"><span class="mc-letter">C</span><span class="mc-text">f(x) = 1/x for x≠0, f(0) = 0</span></div>
+        <div class="mc-option" data-correct="false"><span class="mc-letter">D</span><span class="mc-text">f(x) = |x|/x for x≠0, f(0) = 0</span></div>
+      </div>
+      <div class="mc-feedback"><strong>Correct! B.</strong> For B: lim(x→0) x·sin(1/x) = 0 by Squeeze (Unit 2), and f(0)=0, so lim = f(0). Continuous! A fails because lim(x→0) sin(1/x) doesn't exist. C fails because lim(x→0) 1/x = ±∞. D fails because lim(x→0) |x|/x doesn't exist (left = −1, right = +1).</div>
+      <button class="qq-check-btn" data-type="mc" disabled>Check Answer</button>
+    </div>
+
+    <div class="quiz-question">
+      <div class="qq-num">Question 2</div>
+      <div class="qq-text">The IVT says f must attain every value between f(a) and f(b). Which hypothesis is strictly necessary?</div>
+      <div class="qq-hint">Think of a counterexample: what breaks if you remove "continuous" or "closed interval"?</div>
+      <div class="mc-options">
+        <div class="mc-option" data-correct="false"><span class="mc-letter">A</span><span class="mc-text">f must be differentiable on (a,b).</span></div>
+        <div class="mc-option" data-correct="false"><span class="mc-letter">B</span><span class="mc-text">f must be monotone on [a,b].</span></div>
+        <div class="mc-option" data-correct="true"><span class="mc-letter">C</span><span class="mc-text">f must be continuous on the closed interval [a,b].</span></div>
+        <div class="mc-option" data-correct="false"><span class="mc-letter">D</span><span class="mc-text">f must satisfy f(a) &lt; f(b) (increasing).</span></div>
+      </div>
+      <div class="mc-feedback"><strong>Correct! C.</strong> Continuity on [a,b] is what's required — not differentiability, not monotonicity, and the IVT works just as well for f(a)>f(b). Without continuity: define f(x)=−1 for x∈[0,1) and f(1)=1. Then f(0)=−1, f(1)=1, but f never equals 0 — the IVT fails because f is not continuous at x=1.</div>
+      <button class="qq-check-btn" data-type="mc" disabled>Check Answer</button>
+    </div>
+
+    <div class="quiz-question">
+      <div class="qq-num">Question 3</div>
+      <div class="qq-text">If lim(x→a⁻) f(x) = lim(x→a⁺) f(x) = L but f(a) = L + 1, then:</div>
+      <div class="qq-hint">Carefully identify which of the three continuity conditions fails.</div>
+      <div class="mc-options">
+        <div class="mc-option" data-correct="false"><span class="mc-letter">A</span><span class="mc-text">f has a jump discontinuity at a.</span></div>
+        <div class="mc-option" data-correct="true"><span class="mc-letter">B</span><span class="mc-text">f has a removable discontinuity at a; redefine f(a)=L to fix it.</span></div>
+        <div class="mc-option" data-correct="false"><span class="mc-letter">C</span><span class="mc-text">f has an infinite discontinuity at a.</span></div>
+        <div class="mc-option" data-correct="false"><span class="mc-letter">D</span><span class="mc-text">f is continuous at a because the two-sided limit exists.</span></div>
+      </div>
+      <div class="mc-feedback"><strong>Correct! B.</strong> The two-sided limit exists (=L), so this is removable — the discontinuity is only because f(a)≠L. Jump discontinuity requires the two one-sided limits to differ. Infinite discontinuity requires the limit to be ±∞. D is wrong: the existence of the limit is necessary but not sufficient for continuity — we also need f(a) = L.</div>
+      <button class="qq-check-btn" data-type="mc" disabled>Check Answer</button>
+    </div>
+
+    <div class="quiz-section-label"><span class="qsl-icon">Section B</span><span class="qsl-title">Short Answer</span><span class="qsl-badge">2 Questions</span></div>
+
+    <div class="quiz-question">
+      <div class="qq-num">Question 4</div>
+      <div class="qq-text">Find the horizontal asymptote of f(x) = (5x³ − 2x)/(2x³ + 7).</div>
+      <input type="text" class="sa-input" placeholder="e.g. y = 5/2" data-accept="y=5/2|5/2|y = 5/2"/>
+      <div class="sa-feedback incorrect-sfb"><span class="sa-answer-reveal">y = 5/2. Equal degrees (both 3); ratio of leading coefficients = 5/2.</span></div>
+      <button class="qq-check-btn" data-type="sa">Check</button>
+    </div>
+
+    <div class="quiz-question">
+      <div class="qq-num">Question 5</div>
+      <div class="qq-text">Give the interval in which IVT guarantees a root of f(x) = x³ − x − 2 lies, choosing from (1,2) or (0,1). Which is it, and why in one sentence?</div>
+      <input type="text" class="sa-input" placeholder="(1,2) or (0,1)" data-accept="(1,2)|1,2"/>
+      <div class="sa-feedback incorrect-sfb"><span class="sa-answer-reveal">(1,2). f(1)=1−1−2=−2&lt;0 and f(2)=8−2−2=4>0, opposite signs; IVT guarantees a root. (f(0)=−2&lt;0, f(1)=−2&lt;0 — same sign, IVT doesn't apply to (0,1).)</span></div>
+      <button class="qq-check-btn" data-type="sa">Check</button>
+    </div>
+
+    <div class="quiz-section-label"><span class="qsl-icon">Section C</span><span class="qsl-title">Long Answer</span><span class="qsl-badge">2 Questions</span></div>
+
+    <div class="quiz-question">
+      <div class="qq-num">Question 6 — Proof (ε-δ Continuity)</div>
+      <div class="qq-text">Prove using the ε-δ definition that f(x) = √x is continuous at x = 4. (Hint: multiply and divide by √x + 2.)</div>
+      <textarea class="la-textarea" placeholder="Scratch work: bound |√x − 2| by rationalising... then formal proof."></textarea>
+      <button class="la-reveal-btn">Reveal Model Solution</button>
+      <div class="la-solution"><div class="la-sol-label">Model Solution</div><div class="la-sol-body">
+        <strong>Scratch work:</strong> |√x − 2| = |√x−2|·(√x+2)/(√x+2) = |x−4|/(√x+2). For x near 4 (say x>1), √x+2 > 1, so |√x−2| = |x−4|/(√x+2) &lt; |x−4|. Need |x−4|&lt;ε, so take δ=ε.<br><br>
+        <strong>Formal proof:</strong> Let ε>0. Set δ=ε. Suppose |x−4|&lt;δ and x≥0. Then √x+2 ≥ 2 > 0, so:<br>
+        |√x − 2| = |x−4|/(√x+2) ≤ |x−4|/2 &lt; δ/2 ≤ ε.<br>
+        (In fact δ=ε works with the tighter bound; δ=min(4,ε) is another safe choice.) □
+      </div></div>
+    </div>
+
+    <div class="quiz-question">
+      <div class="qq-num">Question 7 — IVT Existence Proof</div>
+      <div class="qq-text">Prove that the equation e^x = 3 − x has at least one real solution. Identify your function, interval, and verify the sign condition explicitly.</div>
+      <textarea class="la-textarea" placeholder="Define g(x) = ..., evaluate at two points, apply IVT..."></textarea>
+      <button class="la-reveal-btn">Reveal Model Solution</button>
+      <div class="la-solution"><div class="la-sol-label">Model Solution</div><div class="la-sol-body">
+        <strong>Setup:</strong> Let g(x) = eˣ − (3−x) = eˣ + x − 3. Finding a root of g is equivalent to solving eˣ = 3−x.<br><br>
+        <strong>Continuity:</strong> g is continuous on ℝ (sum of continuous functions).<br><br>
+        <strong>Sign change:</strong> g(0) = e⁰ + 0 − 3 = 1 + 0 − 3 = −2 &lt; 0.<br>
+        g(2) = e² + 2 − 3 = e² − 1 ≈ 6.39 > 0.<br><br>
+        <strong>Conclusion:</strong> g(0) &lt; 0 &lt; g(2) and g is continuous on [0,2]. By the IVT, ∃ c ∈ (0,2) with g(c)=0, i.e. eᶜ = 3−c. □
+      </div></div>
+    </div>
+
+    <div class="quiz-submit-row"><span class="quiz-submit-note">MC and Short Answer auto-scored.</span><button class="quiz-submit-btn">Submit &amp; Score →</button></div>
+    <div class="quiz-score-panel"><div class="qs-title">Quiz Complete</div><div class="qs-score">—</div><div class="qs-label">out of 5 scored questions</div><p class="qs-msg"></p><button class="quiz-retry-btn">↺ Retry Quiz</button></div>
+  </div>
+</div>
+
+</main>
+<aside class="sidebar">
+  <div class="sidebar-section"><h4>On This Page</h4><ul class="toc-list">
+    <li><a href="#continuity">Continuity (ε-δ)</a></li><li><a href="#asymptotes">Limits at ∞ & Asymptotes</a></li><li><a href="#ivt">Intermediate Value Theorem</a></li><li><a href="#practice">Practice</a></li><li><a href="#ai-chat">AI Tutor</a></li><li><a href="#quiz-u4">Unit Quiz</a></li>
+  </ul></div>
+  <div class="sidebar-section"><h4>Key Results</h4>
+    <div class="formula-pill"><div class="fp-label">Continuity (ε-δ)</div><div class="fp-math">|x−a|&lt;δ ⟹ |f(x)−f(a)|&lt;ε</div></div>
+    <div class="formula-pill"><div class="fp-label">IVT</div><div class="fp-math">f cont. on [a,b], f(a)&lt;N&lt;f(b) ⟹ ∃c: f(c)=N</div></div>
+    <div class="formula-pill"><div class="fp-label">H. Asymptote</div><div class="fp-math">lim(x→±∞) f(x) = L ⟹ y=L</div></div>
+    <div class="formula-pill"><div class="fp-label">V. Asymptote</div><div class="fp-math">lim(x→a) f(x)=±∞ ⟹ x=a</div></div>
+  </div>
+</aside>
+</div>
+<div class="unit-nav"><a href="unit3.html" class="unit-nav-btn">← <div><span class="un-label">Previous</span><span class="un-title">Limits of Functions</span></div></a><a href="unit5.html" class="unit-nav-btn"><div style="text-align:right"><span class="un-label">Next Unit</span><span class="un-title">Differentiation</span></div> →</a></div>
+<script src="shared.js"></script>
+<script>
+// Discontinuity visualization
+(function(){
+  const canvas = document.getElementById('discCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const sel = document.getElementById('discType');
+  const cap = document.getElementById('discCaption');
+  const W=canvas.width, H=canvas.height;
+  const xMin=-1, xMax=5, yMin=-3, yMax=8;
+  const pad={l:44,r:16,t:20,b:36};
+  const pw=W-pad.l-pad.r, ph=H-pad.t-pad.b;
+  const sx=x=>pad.l+(x-xMin)/(xMax-xMin)*pw;
+  const sy=y=>pad.t+(1-(y-yMin)/(yMax-yMin))*ph;
+
+  const types = {
+    removable: { fn: x=>x===2?null:(x*x-4)/(x-2), label:'f(x)=(x²−4)/(x−2) — removable at x=2 (limit=4, undefined)', color:'#4a90d9' },
+    jump: { fn: x=>x<2?x+1:x-0.5, label:'f(x) — jump at x=2 (left limit=3, right limit=1.5)', color:'#e8924a' },
+    infinite: { fn: x=>{ if(Math.abs(x-2)<0.08) return null; return 1/(x-2); }, label:'f(x)=1/(x−2) — infinite discontinuity at x=2', color:'#e05555' },
+    continuous: { fn: x=>0.5*x*x-x+1, label:'f(x)=½x²−x+1 — continuous everywhere', color:'#4caf7d' }
+  };
+
+  function draw(){
+    const key = sel.value;
+    const t = types[key];
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle='#0c0e0f'; ctx.fillRect(0,0,W,H);
+
+    // grid
+    ctx.strokeStyle='rgba(255,255,255,0.05)'; ctx.lineWidth=1;
+    for(let x=Math.ceil(xMin);x<=xMax;x++){ctx.beginPath();ctx.moveTo(sx(x),pad.t);ctx.lineTo(sx(x),pad.t+ph);ctx.stroke();}
+    for(let y=Math.ceil(yMin);y<=yMax;y+=2){ctx.beginPath();ctx.moveTo(pad.l,sy(y));ctx.lineTo(pad.l+pw,sy(y));ctx.stroke();}
+
+    // axes
+    ctx.strokeStyle='rgba(255,255,255,0.2)'; ctx.lineWidth=1.5;
+    ctx.beginPath();ctx.moveTo(pad.l,sy(0));ctx.lineTo(pad.l+pw,sy(0));ctx.stroke();
+    ctx.beginPath();ctx.moveTo(sx(0),pad.t);ctx.lineTo(sx(0),pad.t+ph);ctx.stroke();
+
+    // curve
+    ctx.strokeStyle=t.color; ctx.lineWidth=2.5;
+    const steps=600;
+    let drawing=false;
+    ctx.beginPath();
+    for(let i=0;i<=steps;i++){
+      const x=xMin+(i/steps)*(xMax-xMin);
+      const y=t.fn(x);
+      if(y===null||y<yMin-2||y>yMax+2){drawing=false;continue;}
+      const px=sx(x),py=sy(y);
+      if(!drawing){ctx.moveTo(px,py);drawing=true;}
+      else ctx.lineTo(px,py);
+    }
+    ctx.stroke();
+
+    // markers for discontinuity types
+    if(key==='removable'){
+      ctx.beginPath();ctx.arc(sx(2),sy(4),6,0,Math.PI*2);
+      ctx.fillStyle='#0c0e0f';ctx.fill();ctx.strokeStyle=t.color;ctx.lineWidth=2;ctx.stroke();
+    }
+    if(key==='jump'){
+      ctx.beginPath();ctx.arc(sx(2),sy(3),5,0,Math.PI*2);ctx.fillStyle='#0c0e0f';ctx.fill();ctx.strokeStyle=t.color;ctx.lineWidth=2;ctx.stroke();
+      ctx.beginPath();ctx.arc(sx(2),sy(1.5),5,0,Math.PI*2);ctx.fillStyle=t.color;ctx.fill();
+    }
+
+    // label
+    ctx.fillStyle='rgba(255,255,255,0.35)'; ctx.font='10px JetBrains Mono,monospace'; ctx.textAlign='center';
+    ctx.fillText(t.label, W/2, H-6);
+    cap.textContent = t.label;
+
+    // tick labels
+    ctx.fillStyle='#5a5650'; ctx.font='9px JetBrains Mono,monospace';
+    [0,1,2,3,4].forEach(x=>{ctx.textAlign='center';ctx.fillText(x,sx(x),pad.t+ph+14);});
+    [-2,0,2,4,6].forEach(y=>{ctx.textAlign='right';ctx.fillText(y,pad.l-4,sy(y)+4);});
+  }
+  sel.addEventListener('change',draw); draw();
+})();
+
+// IVT visualization
+(function(){
+  const canvas=document.getElementById('ivtCanvas');
+  if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  const slider=document.getElementById('ivtN');
+  const W=canvas.width,H=canvas.height;
+  const a=0.5,b=5.5;
+  const pad={l:48,r:16,t:20,b:36};
+  const pw=W-pad.l-pad.r,ph=H-pad.t-pad.b;
+  const yMin=-120,yMax=120;
+  const sx=x=>pad.l+(x-a)/(b-a)*pw;
+  const sy=y=>pad.t+(1-(y-yMin)/(yMax-yMin))*ph;
+  const f=x=>80*Math.sin(x-0.5)*Math.cos(x*0.5);
+
+  function draw(){
+    const N=+slider.value;
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle='#0c0e0f';ctx.fillRect(0,0,W,H);
+
+    // shaded region between a and b
+    ctx.fillStyle='rgba(74,144,217,0.06)';
+    ctx.fillRect(sx(a),pad.t,sx(b)-sx(a),ph);
+
+    // N line
+    const yN=sy(N);
+    ctx.strokeStyle='rgba(212,168,67,0.7)';ctx.lineWidth=1.5;ctx.setLineDash([6,4]);
+    ctx.beginPath();ctx.moveTo(pad.l,yN);ctx.lineTo(pad.l+pw,yN);ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle='#d4a843';ctx.font='11px JetBrains Mono,monospace';ctx.textAlign='left';
+    ctx.fillText('N='+N,pad.l+4,yN-5);
+
+    // function
+    ctx.strokeStyle='#e8e4dc';ctx.lineWidth=2.5;
+    ctx.beginPath();
+    for(let px=0;px<=pw;px++){
+      const x=a+(px/pw)*(b-a);
+      const y=f(x);
+      if(px===0)ctx.moveTo(pad.l+px,sy(y));
+      else ctx.lineTo(pad.l+px,sy(y));
+    }
+    ctx.stroke();
+
+    // find crossings
+    const steps=500;
+    for(let i=0;i<steps;i++){
+      const x1=a+(i/steps)*(b-a),x2=a+((i+1)/steps)*(b-a);
+      if((f(x1)-N)*(f(x2)-N)<=0){
+        const c=(x1+x2)/2;
+        ctx.beginPath();ctx.arc(sx(c),sy(N),7,0,Math.PI*2);
+        ctx.fillStyle='#d4a843';ctx.fill();
+        ctx.fillStyle='#0c0e0f';ctx.font='bold 9px JetBrains Mono';ctx.textAlign='center';
+        ctx.fillText('c',sx(c),sy(N)+4);
+      }
+    }
+
+    // fa and fb dots
+    ctx.beginPath();ctx.arc(sx(a),sy(f(a)),5,0,Math.PI*2);ctx.fillStyle='#4a90d9';ctx.fill();
+    ctx.beginPath();ctx.arc(sx(b),sy(f(b)),5,0,Math.PI*2);ctx.fillStyle='#4a90d9';ctx.fill();
+    ctx.fillStyle='#4a90d9';ctx.font='10px JetBrains Mono';
+    ctx.textAlign='center';ctx.fillText('f(a)',sx(a),sy(f(a))-10);
+    ctx.textAlign='center';ctx.fillText('f(b)',sx(b),sy(f(b))-10);
+
+    // axes
+    ctx.strokeStyle='rgba(255,255,255,0.15)';ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(pad.l,sy(0));ctx.lineTo(pad.l+pw,sy(0));ctx.stroke();
+    ctx.beginPath();ctx.moveTo(pad.l,pad.t);ctx.lineTo(pad.l,pad.t+ph);ctx.stroke();
+  }
+  slider.addEventListener('input',draw); draw();
+})();
+</script>
+</body></html>

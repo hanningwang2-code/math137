@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Unit 2 — Convergence & Sequence Theorems · Calculus I</title>
+<link rel="stylesheet" href="shared.css"/></head>
+<body>
+<script>window.UNIT_CONTEXT = "Calculus I — Unit 2: Convergence and Divergence of sequences, Squeeze Theorem, Monotone Convergence Theorem (MCT), and Mathematical Induction for proving sequence bounds and monotonicity";</script>
+<nav class="topnav"><a class="nav-brand" href="index.html"><span class="nav-brand-logo">Math<span>Base</span></span><span class="nav-divider"></span><span class="nav-course">Calculus I</span></a><ul class="nav-units"><li><a href="unit1.html">U1</a></li><li><a href="unit2.html" class="active">U2</a></li><li><a href="unit3.html">U3</a></li><li><a href="unit4.html">U4</a></li><li><a href="unit5.html">U5</a></li><li><a href="unit6.html">U6</a></li><li><a href="unit7.html">U7</a></li><li><a href="unit8.html">U8</a></li><li><a href="unit9.html">U9</a></li></ul></nav>
+<section class="unit-hero"><div class="unit-hero-bg"></div><div class="unit-eyebrow">Unit 02 · Calculus I</div><h1>Convergence &amp;<br><em>Sequence Theorems</em></h1><p class="unit-hero-desc">Divergence, the Squeeze Theorem, the Monotone Convergence Theorem, and induction as a rigorous tool for bounding and classifying sequences.</p><div class="unit-hero-number">2</div></section>
+<div class="page-body"><main class="main-content">
+
+<div class="topic-block" id="convdiv">
+  <div class="topic-label">Topic 1</div>
+  <h2>Convergence, Divergence &amp; Limit Laws</h2>
+  <p>A sequence either converges to a unique real limit or it diverges. Divergence is not a single phenomenon: a sequence may grow without bound (diverge to ±∞), oscillate, or simply fail to settle near any value.</p>
+
+  <div class="theorem-box"><div class="thm-label">Theorem — Uniqueness of Limits</div><div class="thm-title">A convergent sequence has exactly one limit</div><div class="thm-body">If lim aₙ = L and lim aₙ = M, then L = M.<br><br><strong>Proof:</strong> Suppose L ≠ M; take ε = |L−M|/2 > 0. Since aₙ→L, ∃N₁: n>N₁ ⟹ |aₙ−L| &lt; ε, so aₙ &lt; L+ε = (L+M)/2. Since aₙ→M, ∃N₂: n>N₂ ⟹ |aₙ−M| &lt; ε, so aₙ > M−ε = (L+M)/2. For n > max(N₁,N₂): aₙ &lt; (L+M)/2 AND aₙ > (L+M)/2 — contradiction. □</div></div>
+
+  <div class="theorem-box"><div class="thm-label">Theorem — Limit Laws for Sequences</div><div class="thm-title">Algebraic operations preserve limits</div><div class="thm-body">If lim aₙ = L and lim bₙ = M, then:<br>lim(aₙ ± bₙ) = L ± M &nbsp;|&nbsp; lim(aₙ · bₙ) = LM &nbsp;|&nbsp; lim(aₙ/bₙ) = L/M (M ≠ 0) &nbsp;|&nbsp; lim(caₙ) = cL<br>These follow from the ε-N definition using the Triangle Inequality splitting technique from Unit 1.</div></div>
+
+  <div class="example-block"><div class="ex-label">Worked Example — Showing Divergence by Contradiction</div>
+  <div class="ex-problem">Prove (−1)ⁿ diverges.</div>
+  <div class="ex-step">Suppose lim(−1)ⁿ = L. Let ε = 1/2. Then ∃N: for all n > N, |(−1)ⁿ − L| &lt; 1/2.</div>
+  <div class="ex-step">For n > N, both n and n+1 are > N, so |(−1)ⁿ − L| &lt; 1/2 and |(−1)ⁿ⁺¹ − L| &lt; 1/2.</div>
+  <div class="ex-step">By Triangle Inequality: 2 = |(−1)ⁿ − (−1)ⁿ⁺¹| ≤ |(−1)ⁿ − L| + |L − (−1)ⁿ⁺¹| &lt; 1/2 + 1/2 = 1. Contradiction. □</div></div>
+
+  <!-- Convergence/divergence visualization -->
+  <div class="viz-container">
+    <div class="viz-header"><span>Visualization — Convergent vs. Divergent Sequences</span><span class="viz-badge">Interactive</span></div>
+    <div class="viz-body">
+      <canvas id="convCanvas" width="560" height="240" style="max-width:100%;display:block;background:#131618;border-radius:2px"></canvas>
+      <div class="viz-controls">
+        <div class="viz-slider-group">
+          <span class="viz-slider-label">Sequence type</span>
+          <select id="seqType" style="background:var(--surface2);border:1px solid var(--border2);color:var(--text);font-family:'JetBrains Mono',monospace;font-size:.7rem;padding:4px 10px;outline:none;cursor:pointer">
+            <option value="1n">1/n → 0</option>
+            <option value="alt">(-1)ⁿ (diverges)</option>
+            <option value="rat">(2n+1)/(n+3) → 2</option>
+            <option value="geo">0.8ⁿ → 0</option>
+          </select>
+        </div>
+        <div class="viz-slider-group">
+          <span class="viz-slider-label">ε (band)</span>
+          <input type="range" class="viz-slider" id="convEps" min="3" max="80" value="20" step="1"/>
+        </div>
+      </div>
+      <div class="viz-caption" id="convCaption">Green dots fall within the ε-band around the limit. Red dots lie outside. A convergent sequence eventually has ALL dots green.</div>
+    </div>
+  </div>
+</div>
+
+<hr class="topic-divider"/>
+
+<div class="topic-block" id="squeeze">
+  <div class="topic-label">Topic 2</div>
+  <h2>The Squeeze Theorem</h2>
+  <p>When a sequence is <em>sandwiched</em> between two others that converge to the same limit, it is forced to converge there too. This is one of the most elegant tools in analysis, enabling limit computations that would otherwise be impossible.</p>
+
+  <div class="theorem-box"><div class="thm-label">Theorem — Squeeze Theorem for Sequences</div><div class="thm-title">aₙ ≤ bₙ ≤ cₙ with aₙ,cₙ → L ⟹ bₙ → L</div><div class="thm-body">Suppose aₙ ≤ bₙ ≤ cₙ for all n ≥ N₀, and lim aₙ = lim cₙ = L. Then lim bₙ = L.</div></div>
+
+  <div class="proof-block"><div class="proof-header"><span>Proof — Squeeze Theorem</span><span>ε-N</span></div><div class="proof-body">
+    Let ε > 0. Since aₙ→L: ∃N₁ such that n>N₁ ⟹ L−ε &lt; aₙ. Since cₙ→L: ∃N₂ such that n>N₂ ⟹ cₙ &lt; L+ε.<br><br>
+    Let N = max(N₀, N₁, N₂). For n > N:<br>
+    L − ε &lt; aₙ ≤ bₙ ≤ cₙ &lt; L + ε, so |bₙ − L| &lt; ε. <span class="qed">□</span>
+  </div></div>
+
+  <div class="example-block"><div class="ex-label">Worked Example — sin(n)/n</div>
+  <div class="ex-problem">Prove lim(n→∞) sin(n)/n = 0.</div>
+  <div class="ex-step">Since |sin(n)| ≤ 1 for all n: −1/n ≤ sin(n)/n ≤ 1/n.</div>
+  <div class="ex-step">lim(−1/n) = 0 and lim(1/n) = 0 (proved in Unit 1).</div>
+  <div class="ex-step">By Squeeze Theorem: lim sin(n)/n = 0. □</div></div>
+
+  <div class="example-block"><div class="ex-label">Worked Example — Exponential Growth Beats Polynomial</div>
+  <div class="ex-problem">Prove lim(n→∞) n/2ⁿ = 0.</div>
+  <div class="ex-step">For n ≥ 2, by the Binomial Theorem: 2ⁿ = (1+1)ⁿ ≥ C(n,2) = n(n−1)/2.</div>
+  <div class="ex-step">So 0 ≤ n/2ⁿ ≤ n / [n(n−1)/2] = 2/(n−1) for n ≥ 2.</div>
+  <div class="ex-step">lim 0 = 0 and lim 2/(n−1) = 0. By Squeeze Theorem: lim n/2ⁿ = 0. □</div></div>
+</div>
+
+<hr class="topic-divider"/>
+
+<div class="topic-block" id="mct">
+  <div class="topic-label">Topic 3</div>
+  <h2>Monotone Convergence Theorem</h2>
+  <p>The MCT is a profound consequence of the <strong>completeness of ℝ</strong>: every non-empty set bounded above has a supremum. It guarantees convergence <em>without knowing the limit in advance</em> — just establish monotonicity and boundedness.</p>
+
+  <div class="theorem-box"><div class="thm-label">Theorem — Monotone Convergence Theorem (MCT)</div><div class="thm-title">Bounded monotone sequences converge to their supremum/infimum</div><div class="thm-body">If (aₙ) is monotone increasing and bounded above (∃M: aₙ ≤ M for all n), then (aₙ) converges and lim aₙ = sup{aₙ : n ∈ ℕ}.<br>If (aₙ) is monotone decreasing and bounded below, then (aₙ) converges to inf{aₙ}.</div></div>
+
+  <div class="proof-block"><div class="proof-header"><span>Proof — MCT (increasing case)</span><span>Completeness of ℝ</span></div><div class="proof-body">
+    Let S = {aₙ : n ∈ ℕ}. Since (aₙ) is bounded above, by the <strong>Completeness Axiom</strong> of ℝ, L = sup S exists in ℝ.<br><br>
+    Let ε > 0. Since L is the <em>least</em> upper bound, L − ε is not an upper bound of S, so ∃N with aₙ > L − ε.<br><br>
+    Since (aₙ) is increasing: for all n > N, aₙ ≥ aₙ > L − ε.<br>
+    Since L is an upper bound: aₙ ≤ L &lt; L + ε.<br><br>
+    So for all n > N: L − ε &lt; aₙ ≤ L, giving |aₙ − L| &lt; ε. Thus aₙ → L. <span class="qed">□</span>
+  </div></div>
+
+  <div class="example-block"><div class="ex-label">Worked Example — MCT for a Recursive Sequence</div>
+  <div class="ex-problem">Let a₁=1, aₙ₊₁ = (aₙ+2)/2. Show it converges and find the limit.</div>
+  <div class="ex-step"><strong>Claim: aₙ &lt; 2 for all n.</strong> Base: a₁=1&lt;2. Step: if aₖ&lt;2, then aₖ₊₁=(aₖ+2)/2&lt;(2+2)/2=2. ✓</div>
+  <div class="ex-step"><strong>Claim: (aₙ) is increasing.</strong> aₙ₊₁−aₙ = (aₙ+2)/2−aₙ = (2−aₙ)/2 > 0 since aₙ &lt; 2. ✓</div>
+  <div class="ex-step">By MCT: L = lim aₙ exists. Taking limits in aₙ₊₁=(aₙ+2)/2: L = (L+2)/2 ⟹ 2L=L+2 ⟹ L=2.</div></div>
+</div>
+
+<hr class="topic-divider"/>
+
+<div class="topic-block" id="induction">
+  <div class="topic-label">Topic 4</div>
+  <h2>Induction for Sequence Bounds &amp; Monotonicity</h2>
+  <p>The MCT requires proving boundedness and monotonicity — and for recursively defined sequences, induction is the standard tool. The template is always: prove the base case, assume the inductive hypothesis, use the recurrence to advance one step.</p>
+
+  <div class="theorem-box"><div class="thm-label">Principle of Mathematical Induction</div><div class="thm-title">Proving P(n) for all n ≥ 1</div><div class="thm-body"><strong>Base case:</strong> Verify P(1) directly.<br><strong>Inductive step:</strong> Assume P(k) (the inductive hypothesis). Prove P(k+1) using the recurrence and P(k).<br><strong>Conclusion:</strong> P(n) holds for all n ≥ 1.</div></div>
+
+  <div class="formula-block"><div class="f-label">Template — Proving aₙ &lt; M for a Recursive Sequence</div><div class="f-math">Given: a₁ = c,  aₙ₊₁ = f(aₙ).  Prove: aₙ &lt; M for all n.
+
+Step 1. Base: verify a₁ = c &lt; M directly.
+Step 2. Hypothesis: assume aₖ &lt; M.
+Step 3. Show: aₖ₊₁ = f(aₖ) &lt; M.
+         (Use the recurrence AND the hypothesis aₖ &lt; M.)
+Step 4. Conclude: aₙ &lt; M for all n by induction.</div></div>
+
+  <div class="example-block"><div class="ex-label">Full Worked Example — Nested Radical Sequence</div>
+  <div class="ex-problem">Let a₁=√2, aₙ₊₁=√(2+aₙ). Prove by induction: (i) aₙ &lt; 2, (ii) aₙ is increasing. Then find lim aₙ.</div>
+  <div class="ex-step"><strong>Part (i): aₙ &lt; 2 by induction.</strong> Base: a₁=√2≈1.414&lt;2 ✓. Step: assume aₖ&lt;2. Then aₖ₊₁=√(2+aₖ)&lt;√(2+2)=√4=2 ✓.</div>
+  <div class="ex-step"><strong>Part (ii): increasing.</strong> Base: a₂=√(2+√2)>√(2)=a₁ ✓. Step: assume aₖ₊₁>aₖ. Then 2+aₖ₊₁>2+aₖ, so √(2+aₖ₊₁)>√(2+aₖ), i.e., aₖ₊₂>aₖ₊₁ ✓.</div>
+  <div class="ex-step"><strong>Limit:</strong> By MCT, L exists. L=√(2+L) ⟹ L²=2+L ⟹ L²−L−2=0 ⟹ (L−2)(L+1)=0. Since L>0, L=2.</div></div>
+</div>
+
+<hr class="topic-divider"/>
+
+<div class="practice-section topic-block" id="practice">
+  <h3>Practice Problems</h3>
+  <div class="practice-grid">
+    <div class="practice-problem"><div class="pp-header"><span class="pp-num">01</span><span class="pp-q">Prove lim(n→∞) cos(n²)/√n = 0 using Squeeze Theorem.</span><span class="pp-diff diff-easy">Easy</span><span class="pp-toggle">▾</span></div><div class="pp-answer">Since |cos(n²)| ≤ 1: −1/√n ≤ cos(n²)/√n ≤ 1/√n. Both ±1/√n → 0. By Squeeze: limit = 0. □</div></div>
+    <div class="practice-problem"><div class="pp-header"><span class="pp-num">02</span><span class="pp-q">Let a₁=3, aₙ₊₁=aₙ/2+1. Prove convergence and find the limit.</span><span class="pp-diff diff-med">Medium</span><span class="pp-toggle">▾</span></div><div class="pp-answer">aₙ₊₁−aₙ = 1−aₙ/2 &lt; 0 iff aₙ>2. By induction aₙ>2 (base a₁=3>2; step: aₙ>2⟹aₙ₊₁=aₙ/2+1>2). Decreasing and bounded below by 2 → MCT: L exists. L=L/2+1⟹L=2.</div></div>
+    <div class="practice-problem"><div class="pp-header"><span class="pp-num">03</span><span class="pp-q">Prove by induction: for a₁=1, aₙ₊₁=aₙ/(aₙ+2), we have 0&lt;aₙ≤1 for all n.</span><span class="pp-diff diff-hard">Hard</span><span class="pp-toggle">▾</span></div><div class="pp-answer">Base: a₁=1∈(0,1] ✓. Step: assume 0&lt;aₖ≤1. Then aₖ>0⟹aₖ+2>2>0, so aₖ₊₁=aₖ/(aₖ+2)>0. Also aₖ≤1&lt;aₖ+2, so aₖ/(aₖ+2)&lt;1. So 0&lt;aₙ≤1 for all n. The sequence is decreasing (aₙ₊₁&lt;aₙ since aₙ/(aₙ+2)&lt;aₙ) and bounded below by 0; MCT gives convergence. Taking L=L/(L+2): L(L+2)=L ⟹ L²+L=0 ⟹ L=0.</div></div>
+  </div>
+</div>
+
+<div class="ai-chat topic-block" id="ai-chat">
+  <div class="ai-chat-header"><div class="ai-dot"></div><span>AI Tutor — Unit 2</span><small>Ask about convergence, Squeeze Theorem, MCT, or induction</small></div>
+  <div class="chat-messages" id="chatMessages"><div class="msg ai"><div class="msg-avatar">∑</div><div class="msg-bubble">Hi! I can help prove convergence or divergence, set up Squeeze Theorem arguments, or guide you through an MCT proof. What are you working on?</div></div></div>
+  <div class="chat-input-row"><textarea class="chat-input" id="chatInput" placeholder="e.g. How do I show n^(1/n) → 1 using the Squeeze Theorem?" rows="1"></textarea><button class="chat-send" id="sendBtn" onclick="sendMessage()">Send ↑</button></div>
+</div>
+
+<!-- QUIZ -->
+<div class="quiz-section topic-block" id="quiz-u2">
+  <div class="quiz-banner">
+    <div class="quiz-banner-left"><h2>Unit 2 Quiz</h2><p>Convergence · Squeeze Theorem · MCT · Induction</p></div>
+    <div class="quiz-meta"><div class="quiz-meta-item"><span class="quiz-meta-num">3</span><span class="quiz-meta-label">MC</span></div><div class="quiz-meta-item"><span class="quiz-meta-num">2</span><span class="quiz-meta-label">Short</span></div><div class="quiz-meta-item"><span class="quiz-meta-num">2</span><span class="quiz-meta-label">Long</span></div></div>
+    <button class="quiz-start-btn">Begin Quiz →</button>
+  </div>
+  <div class="quiz-body">
+    <div class="quiz-progress-bar"><div class="quiz-progress-fill"></div></div>
+    <div class="quiz-section-label"><span class="qsl-icon">Section A</span><span class="qsl-title">Multiple Choice</span><span class="qsl-badge">3 Questions</span></div>
+
+    <div class="quiz-question">
+      <div class="qq-num">Question 1 — Multiple Choice</div>
+      <div class="qq-text">The Monotone Convergence Theorem (MCT) guarantees that a sequence converges when it is:</div>
+      <div class="qq-hint">Pay attention to whether both conditions are required, or just one.</div>
+      <div class="mc-options">
+        <div class="mc-option" data-correct="false"><span class="mc-letter">A</span><span class="mc-text">Bounded above (no monotonicity required)</span></div>
+        <div class="mc-option" data-correct="false"><span class="mc-letter">B</span><span class="mc-text">Monotone increasing (no bound required)</span></div>
+        <div class="mc-option" data-correct="true"><span class="mc-letter">C</span><span class="mc-text">Monotone AND bounded (both conditions needed)</span></div>
+        <div class="mc-option" data-correct="false"><span class="mc-letter">D</span><span class="mc-text">Monotone decreasing (no bound needed since it can't go to +∞)</span></div>
+      </div>
+      <div class="mc-feedback"><strong>Correct!</strong> BOTH conditions are necessary. Counterexample for A: aₙ = (−1)ⁿ·n is bounded above (barely) but not convergent. Counterexample for B/D: aₙ = n is monotone increasing but unbounded and diverges to ∞. Monotone decreasing sequences can still diverge to −∞ if not bounded below.</div>
+      <button class="qq-check-btn" data-type="mc" disabled>Check Answer</button>
+    </div>
+
+    <div class="quiz-question">
+      <div class="qq-num">Question 2 — Multiple Choice</div>
+      <div class="qq-text">To apply the Squeeze Theorem to show lim bₙ = L, you need:</div>
+      <div class="qq-hint">Think carefully: does the bounding need to hold for ALL n, or just eventually?</div>
+      <div class="mc-options">
+        <div class="mc-option" data-correct="false"><span class="mc-letter">A</span><span class="mc-text">aₙ ≤ bₙ ≤ cₙ for ALL n ≥ 1 and lim aₙ = lim cₙ = L</span></div>
+        <div class="mc-option" data-correct="true"><span class="mc-letter">B</span><span class="mc-text">aₙ ≤ bₙ ≤ cₙ for all n ≥ N₀ (some N₀) and lim aₙ = lim cₙ = L</span></div>
+        <div class="mc-option" data-correct="false"><span class="mc-letter">C</span><span class="mc-text">aₙ ≤ bₙ ≤ cₙ for all n and lim aₙ = L and lim cₙ = M with L ≤ M</span></div>
+        <div class="mc-option" data-correct="false"><span class="mc-letter">D</span><span class="mc-text">aₙ ≤ bₙ ≤ cₙ for all n and lim aₙ exists (lim cₙ not needed)</span></div>
+      </div>
+      <div class="mc-feedback"><strong>Correct!</strong> B. The squeezing only needs to hold <em>eventually</em> (for n ≥ N₀ for some N₀); behaviour of finitely many terms at the start doesn't affect convergence. A is slightly too restrictive (but also works). C is wrong because we need the same limit L for both bounds. D is wrong — we need both bounds to converge to the same L.</div>
+      <button class="qq-check-btn" data-type="mc" disabled>Check Answer</button>
+    </div>
+
+    <div class="quiz-question">
+      <div class="qq-num">Question 3 — Multiple Choice</div>
+      <div class="qq-text">Suppose aₙ → L and all terms satisfy aₙ ≤ M. Can we conclude L ≤ M?</div>
+      <div class="qq-hint">This tests whether limits preserve non-strict inequalities.</div>
+      <div class="mc-options">
+        <div class="mc-option" data-correct="false"><span class="mc-letter">A</span><span class="mc-text">No — limits don't preserve inequalities.</span></div>
+        <div class="mc-option" data-correct="false"><span class="mc-letter">B</span><span class="mc-text">Yes, and in fact L &lt; M (the strict inequality is preserved).</span></div>
+        <div class="mc-option" data-correct="true"><span class="mc-letter">C</span><span class="mc-text">Yes, L ≤ M (non-strict inequality is preserved, but L = M is possible).</span></div>
+        <div class="mc-option" data-correct="false"><span class="mc-letter">D</span><span class="mc-text">Only if the sequence is monotone.</span></div>
+      </div>
+      <div class="mc-feedback"><strong>Correct!</strong> C. Limits preserve non-strict inequalities: if aₙ ≤ M for all n and aₙ → L, then L ≤ M. Proof: if L > M, take ε = (L−M)/2; eventually |aₙ−L|&lt;ε means aₙ > L−ε = (L+M)/2 > M, contradiction. But strict inequality is NOT preserved: aₙ = 1/n &lt; 1 for all n, yet lim aₙ = 0 &lt; 1, not 0 &lt; 1 becoming strict equality. Counter: aₙ = −1/n &lt; 0 but limit = 0, which is NOT &lt; 0.</div>
+      <button class="qq-check-btn" data-type="mc" disabled>Check Answer</button>
+    </div>
+
+    <div class="quiz-section-label"><span class="qsl-icon">Section B</span><span class="qsl-title">Short Answer</span><span class="qsl-badge">2 Questions</span></div>
+
+    <div class="quiz-question">
+      <div class="qq-num">Question 4 — Short Answer</div>
+      <div class="qq-text">Give a sequence (aₙ) that is bounded but diverges. (Write a short formula.)</div>
+      <input type="text" class="sa-input" placeholder="e.g. (-1)^n" data-accept="(-1)^n|(-1)n|(-1)^n|sin(n*pi/2)|(−1)^n"/>
+      <div class="sa-feedback incorrect-sfb">
+        <span class="sa-answer-reveal">Example: aₙ = (−1)ⁿ. This is bounded (|aₙ| = 1 for all n) but diverges by oscillation (proved in the unit). Other valid examples: aₙ = sin(n·π/2), or aₙ = (−1)ⁿ + 1/n.</span>
+      </div>
+      <button class="qq-check-btn" data-type="sa">Check</button>
+    </div>
+
+    <div class="quiz-question">
+      <div class="qq-num">Question 5 — Short Answer</div>
+      <div class="qq-text">Given a₁ = 4 and aₙ₊₁ = √(aₙ + 2), suppose the sequence converges. What is lim(n→∞) aₙ? (Exact value.)</div>
+      <input type="text" class="sa-input" placeholder="e.g. 2" data-accept="2|(1+√13)/2|2.30|(1+sqrt(13))/2"/>
+      <div class="sa-feedback incorrect-sfb">
+        <span class="sa-answer-reveal">L = (1+√13)/2 ≈ 2.30. Taking limits: L = √(L+2) ⟹ L² = L+2 ⟹ L²−L−2 = 0 ⟹ (L−2)(L+1) = 0... wait, re-check: L²=L+2 ⟹ L²−L−2=0 ⟹ L=(1±√9)/2 = (1±3)/2. So L=2 or L=−1. Since aₙ>0, L=2.</span>
+      </div>
+      <button class="qq-check-btn" data-type="sa">Check</button>
+    </div>
+
+    <div class="quiz-section-label"><span class="qsl-icon">Section C</span><span class="qsl-title">Long Answer</span><span class="qsl-badge">2 Questions</span></div>
+
+    <div class="quiz-question">
+      <div class="qq-num">Question 6 — Long Answer (Proof)</div>
+      <div class="qq-text">Let a₁ = 5 and aₙ₊₁ = (aₙ + 4)/2. (a) Prove by induction that aₙ > 4 for all n. (b) Prove (aₙ) is strictly decreasing. (c) Conclude (aₙ) converges and find its limit.</div>
+      <textarea class="la-textarea" placeholder="Write your full proof here..."></textarea>
+      <button class="la-reveal-btn">Reveal Model Solution</button>
+      <div class="la-solution"><div class="la-sol-label">Model Solution</div><div class="la-sol-body">
+        <strong>(a) aₙ > 4 by induction.</strong> Base: a₁=5>4 ✓. Step: Assume aₖ>4. Then aₖ₊₁=(aₖ+4)/2>(4+4)/2=4 ✓.<br><br>
+        <strong>(b) Decreasing.</strong> aₙ₊₁−aₙ = (aₙ+4)/2−aₙ = (4−aₙ)/2 &lt; 0 since aₙ>4 (from part a). So aₙ₊₁&lt;aₙ for all n. ✓<br><br>
+        <strong>(c) Convergence.</strong> (aₙ) is monotone decreasing and bounded below by 4. By MCT, L = lim aₙ exists. Taking limits: L=(L+4)/2 ⟹ 2L=L+4 ⟹ L=4.
+      </div></div>
+    </div>
+
+    <div class="quiz-question">
+      <div class="qq-num">Question 7 — Long Answer (Squeeze Theorem)</div>
+      <div class="qq-text">Prove that lim(n→∞) (2 + (−1)ⁿ/n²) = 2 using the Squeeze Theorem. Identify your bounding sequences explicitly and verify their limits.</div>
+      <textarea class="la-textarea" placeholder="Identify upper/lower bounds, verify limits, apply Squeeze Theorem..."></textarea>
+      <button class="la-reveal-btn">Reveal Model Solution</button>
+      <div class="la-solution"><div class="la-sol-label">Model Solution</div><div class="la-sol-body">
+        <strong>Bound:</strong> Since −1 ≤ (−1)ⁿ ≤ 1, we have −1/n² ≤ (−1)ⁿ/n² ≤ 1/n².<br>
+        Adding 2: &nbsp;&nbsp;2 − 1/n² ≤ 2 + (−1)ⁿ/n² ≤ 2 + 1/n².<br><br>
+        <strong>Limits of bounds:</strong> lim(2 − 1/n²) = 2 − lim(1/n²) = 2 − 0 = 2. Similarly lim(2 + 1/n²) = 2.<br><br>
+        <strong>Conclusion:</strong> By the Squeeze Theorem: lim(2 + (−1)ⁿ/n²) = 2. □
+      </div></div>
+    </div>
+
+    <div class="quiz-submit-row">
+      <span class="quiz-submit-note">MC and Short Answer will be auto-scored. Long Answer solutions will be revealed.</span>
+      <button class="quiz-submit-btn">Submit &amp; Score →</button>
+    </div>
+    <div class="quiz-score-panel">
+      <div class="qs-title">Quiz Complete</div><div class="qs-score">—</div><div class="qs-label">out of 5 scored questions</div><p class="qs-msg"></p>
+      <button class="quiz-retry-btn">↺ Retry Quiz</button>
+    </div>
+  </div>
+</div>
+
+</main>
+<aside class="sidebar">
+  <div class="sidebar-section"><h4>On This Page</h4><ul class="toc-list">
+    <li><a href="#convdiv">Convergence & Divergence</a></li>
+    <li><a href="#squeeze">Squeeze Theorem</a></li>
+    <li><a href="#mct">Monotone Convergence Thm.</a></li>
+    <li><a href="#induction">Induction for Bounds</a></li>
+    <li><a href="#practice">Practice Problems</a></li>
+    <li><a href="#ai-chat">AI Tutor</a></li>
+    <li><a href="#quiz-u2">Unit Quiz</a></li>
+  </ul></div>
+  <div class="sidebar-section"><h4>Key Results</h4>
+    <div class="formula-pill"><div class="fp-label">Squeeze</div><div class="fp-math">aₙ≤bₙ≤cₙ, aₙ,cₙ→L ⟹ bₙ→L</div></div>
+    <div class="formula-pill"><div class="fp-label">MCT</div><div class="fp-math">Monotone + bounded ⟹ convergent</div></div>
+    <div class="formula-pill"><div class="fp-label">Uniqueness</div><div class="fp-math">Convergent sequences have unique limits</div></div>
+    <div class="formula-pill"><div class="fp-label">Limit Laws</div><div class="fp-math">lim(aₙ±bₙ) = L±M</div></div>
+  </div>
+</aside>
+</div>
+<div class="unit-nav">
+  <a href="unit1.html" class="unit-nav-btn">← <div><span class="un-label">Previous</span><span class="un-title">Absolute Values & ε-N</span></div></a>
+  <a href="unit3.html" class="unit-nav-btn"><div style="text-align:right"><span class="un-label">Next Unit</span><span class="un-title">Limits of Functions</span></div> →</a>
+</div>
+<script src="shared.js"></script>
+<script>
+(function(){
+  const canvas = document.getElementById('convCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const seqSel = document.getElementById('seqType');
+  const epsSlider = document.getElementById('convEps');
+  const W = canvas.width, H = canvas.height;
+  const PAD = 48, RPAD = 20, NTERMS = 28;
+
+  const sequences = {
+    '1n':  { fn: n => 1/n, L: 0, range: [-0.1, 1.2], label: 'aₙ=1/n → L=0' },
+    'alt': { fn: n => Math.pow(-1,n), L: null, range: [-1.5, 1.5], label: 'aₙ=(−1)ⁿ — DIVERGES' },
+    'rat': { fn: n => (2*n+1)/(n+3), L: 2, range: [0.2, 2.5], label: 'aₙ=(2n+1)/(n+3) → L=2' },
+    'geo': { fn: n => Math.pow(0.8,n), L: 0, range: [-0.05, 1.0], label: 'aₙ=0.8ⁿ → L=0' }
+  };
+
+  function draw() {
+    const key = seqSel.value;
+    const seq = sequences[key];
+    const eps = +epsSlider.value / 300;
+    const [yMin, yMax] = seq.range;
+    const plotW = W - PAD - RPAD, plotH = H - 50;
+
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = '#131618'; ctx.fillRect(0, 0, W, H);
+
+    const toX = n => PAD + ((n-1)/(NTERMS-1))*plotW;
+    const toY = v => 16 + (1 - (v - yMin)/(yMax - yMin))*plotH;
+
+    // eps band
+    if (seq.L !== null) {
+      const yTop = toY(seq.L + eps), yBot = toY(seq.L - eps);
+      ctx.fillStyle = 'rgba(212,168,67,0.1)'; ctx.fillRect(PAD, yTop, plotW, yBot-yTop);
+      ctx.strokeStyle = 'rgba(212,168,67,0.5)'; ctx.lineWidth=1; ctx.setLineDash([5,4]);
+      ctx.beginPath(); ctx.moveTo(PAD,yTop); ctx.lineTo(PAD+plotW,yTop); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(PAD,yBot); ctx.lineTo(PAD+plotW,yBot); ctx.stroke();
+      ctx.setLineDash([]);
+      // L line
+      ctx.strokeStyle='rgba(212,168,67,0.3)'; ctx.lineWidth=1; ctx.setLineDash([]);
+      ctx.beginPath(); ctx.moveTo(PAD,toY(seq.L)); ctx.lineTo(PAD+plotW,toY(seq.L)); ctx.stroke();
+      ctx.fillStyle='rgba(212,168,67,0.7)'; ctx.font='10px JetBrains Mono,monospace'; ctx.textAlign='left';
+      ctx.fillText('L='+seq.L, 4, toY(seq.L)+4);
+    }
+
+    // axis
+    ctx.strokeStyle='rgba(255,255,255,0.12)'; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(PAD,10); ctx.lineTo(PAD,H-30); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(PAD,H-30); ctx.lineTo(W-RPAD,H-30); ctx.stroke();
+
+    // dots
+    for (let n=1; n<=NTERMS; n++) {
+      const v = seq.fn(n);
+      const x = toX(n), y = toY(v);
+      const inBand = seq.L !== null && Math.abs(v - seq.L) < eps;
+      ctx.fillStyle = seq.L === null ? '#e8924a' : (inBand ? '#4caf7d' : '#e05555');
+      ctx.beginPath(); ctx.arc(x, y, 4, 0, Math.PI*2); ctx.fill();
+    }
+
+    // label
+    ctx.fillStyle='rgba(255,255,255,0.4)'; ctx.font='11px JetBrains Mono,monospace'; ctx.textAlign='center';
+    ctx.fillText(seq.label, W/2, H-8);
+
+    // n-axis ticks
+    [5,10,15,20,25].forEach(n => {
+      ctx.fillStyle='#5a5650'; ctx.font='9px JetBrains Mono,monospace'; ctx.textAlign='center';
+      ctx.fillText(n, toX(n), H-18);
+    });
+  }
+  seqSel.addEventListener('change', draw);
+  epsSlider.addEventListener('input', draw);
+  draw();
+})();
+</script>
+</body></html>

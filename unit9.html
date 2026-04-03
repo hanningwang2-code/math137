@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Unit 9 — MVT & L'Hôpital's Rule · Calculus I</title>
+<link rel="stylesheet" href="shared.css"/></head>
+<body>
+<script>window.UNIT_CONTEXT = "Calculus I — Unit 9: The Mean Value Theorem (statement, proof via Rolle's Theorem, and proof applications including monotonicity, uniqueness of roots, and inequalities), Indeterminate Forms, L'Hôpital's Rule for all 7 forms, and strategies for rewriting limits";</script>
+<nav class="topnav"><a class="nav-brand" href="index.html"><span class="nav-brand-logo">Math<span>Base</span></span><span class="nav-divider"></span><span class="nav-course">Calculus I</span></a><ul class="nav-units"><li><a href="unit1.html">U1</a></li><li><a href="unit2.html">U2</a></li><li><a href="unit3.html">U3</a></li><li><a href="unit4.html">U4</a></li><li><a href="unit5.html">U5</a></li><li><a href="unit6.html">U6</a></li><li><a href="unit7.html">U7</a></li><li><a href="unit8.html">U8</a></li><li><a href="unit9.html" class="active">U9</a></li></ul></nav>
+<section class="unit-hero"><div class="unit-hero-bg"></div><div class="unit-eyebrow">Unit 09 · Calculus I</div><h1>MVT &amp;<br><em>L'Hôpital's Rule</em></h1><p class="unit-hero-desc">The Mean Value Theorem as a proof engine, Rolle's Theorem, all seven indeterminate forms, and L'Hôpital's Rule with every rewriting strategy.</p><div class="unit-hero-number">9</div></section>
+<div class="page-body"><main class="main-content">
+
+<!-- TOPIC 1: MVT -->
+<div class="topic-block" id="mvt">
+  <div class="topic-label">Topic 1</div>
+  <h2>The Mean Value Theorem</h2>
+  <p>The MVT is arguably the most important theorem in differential calculus. Its statement is deceptively simple — there must be a point where the instantaneous rate equals the average rate — but its applications as a <strong>proof tool</strong> are extraordinarily powerful.</p>
+
+  <div class="theorem-box"><div class="thm-label">Theorem — Rolle's Theorem</div><div class="thm-title">If f(a) = f(b), then f'(c) = 0 for some c ∈ (a,b)</div><div class="thm-body">If f is continuous on [a,b], differentiable on (a,b), and f(a)=f(b), then ∃ c∈(a,b) with f'(c)=0. Proof: by EVT, f has a max and min on [a,b]. If both are at endpoints, f is constant and f'≡0. Otherwise one extremum is interior; by Fermat's Theorem, f'=0 there. □</div></div>
+
+  <div class="theorem-box"><div class="thm-label">Theorem — Mean Value Theorem (MVT)</div><div class="thm-title">∃ c ∈ (a,b) such that f'(c) = [f(b) − f(a)] / (b − a)</div><div class="thm-body">If f is continuous on [a,b] and differentiable on (a,b), then ∃ c∈(a,b) such that f'(c) = (f(b)−f(a))/(b−a).<br><br>Geometrically: there is a point on the curve where the tangent is parallel to the secant through (a,f(a)) and (b,f(b)).</div></div>
+
+  <!-- MVT visualization -->
+  <div class="viz-container">
+    <div class="viz-header"><span>Visualization — Mean Value Theorem</span><span class="viz-badge">Interactive</span></div>
+    <div class="viz-body">
+      <canvas id="mvtCanvas" width="540" height="300" style="max-width:100%;display:block;background:#0c0e0f;border-radius:2px"></canvas>
+      <div class="viz-controls">
+        <div class="viz-slider-group"><span class="viz-slider-label">a (left endpoint)</span><input type="range" class="viz-slider" id="mvtA" min="-200" max="-20" value="-150" step="5"/></div>
+        <div class="viz-slider-group"><span class="viz-slider-label">b (right endpoint)</span><input type="range" class="viz-slider" id="mvtB" min="20" max="200" value="150" step="5"/></div>
+      </div>
+      <div class="viz-caption">The gold dashed secant connects (a,f(a)) and (b,f(b)). The blue tangent lines have the same slope. MVT guarantees ≥1 such point c always exists.</div>
+    </div>
+  </div>
+
+  <div class="proof-block"><div class="proof-header"><span>Proof — MVT from Rolle's Theorem</span><span>Auxiliary function construction</span></div><div class="proof-body">
+    Define h(x) = f(x) − f(a) − [(f(b)−f(a))/(b−a)]·(x−a). (This is f minus the secant line.)<br><br>
+    h(a) = 0. &nbsp; h(b) = f(b)−f(a)−(f(b)−f(a)) = 0. So h(a)=h(b).<br>
+    h is continuous on [a,b] and differentiable on (a,b) (from f).<br><br>
+    By Rolle's Theorem: ∃ c∈(a,b) with h'(c)=0.<br>
+    h'(x) = f'(x) − (f(b)−f(a))/(b−a).<br>
+    h'(c)=0 ⟹ f'(c) = (f(b)−f(a))/(b−a). <span class="qed">□</span>
+  </div></div>
+
+  <h3>MVT as a Proof Tool — Three Canonical Applications</h3>
+
+  <div class="theorem-box"><div class="thm-label">Corollary 1 — Zero Derivative = Constant</div><div class="thm-title">f' ≡ 0 on (a,b) ⟹ f is constant</div><div class="thm-body">For any x₁&lt;x₂ in (a,b): MVT gives f(x₂)−f(x₁)=f'(c)(x₂−x₁)=0. So f(x₁)=f(x₂) for all x₁,x₂. □<br>This justifies the "+C" in antidifferentiation.</div></div>
+
+  <div class="theorem-box"><div class="thm-label">Corollary 2 — MVT Inequality</div><div class="thm-title">|f'(x)| ≤ M ⟹ |f(x)−f(y)| ≤ M|x−y| (Lipschitz)</div><div class="thm-body">Apply MVT: f(x)−f(y)=f'(c)(x−y) for some c between x and y. Take absolute values: |f(x)−f(y)| = |f'(c)||x−y| ≤ M|x−y|. □ This is the Lipschitz condition and shows bounded derivative implies controlled variation.</div></div>
+
+  <div class="theorem-box"><div class="thm-label">Corollary 3 — Monotonicity from Derivative Sign</div><div class="thm-title">f' > 0 on (a,b) ⟹ f strictly increasing</div><div class="thm-body">For x₁&lt;x₂ in (a,b): MVT gives f(x₂)−f(x₁)=f'(c)(x₂−x₁)>0·(x₂−x₁)>0. So f(x₁)&lt;f(x₂). □</div></div>
+
+  <div class="example-block"><div class="ex-label">MVT Proof — sin(x) &lt; x for x > 0</div>
+  <div class="ex-problem">Prove sin(x) &lt; x for all x > 0.</div>
+  <div class="ex-step">Let f(t) = t − sin(t). f(0)=0. f'(t) = 1 − cos(t) ≥ 0, with equality only at isolated points.</div>
+  <div class="ex-step">By Corollary 3: f is strictly increasing on (0,∞).</div>
+  <div class="ex-step">For x>0: f(x) > f(0) = 0 ⟹ x − sin(x) > 0 ⟹ sin(x) &lt; x. □</div></div>
+
+  <div class="example-block"><div class="ex-label">MVT Proof — Uniqueness of Roots</div>
+  <div class="ex-problem">Prove f(x) = x³ + 2x − 1 has exactly one real root.</div>
+  <div class="ex-step"><strong>Existence:</strong> f(0)=−1&lt;0, f(1)=2>0. By IVT, ∃ root in (0,1).</div>
+  <div class="ex-step"><strong>Uniqueness:</strong> f'(x) = 3x²+2 > 0 for all x. By Corollary 3, f is strictly increasing.</div>
+  <div class="ex-step">A strictly increasing function equals any value at most once. So f has exactly one root. □</div></div>
+</div>
+
+<hr class="topic-divider"/>
+
+<!-- TOPIC 2: LHOPITAL -->
+<div class="topic-block" id="lhopital">
+  <div class="topic-label">Topic 2</div>
+  <h2>Indeterminate Forms &amp; L'Hôpital's Rule</h2>
+  <p>An <strong>indeterminate form</strong> is an expression like 0/0 or ∞/∞ where the value of the limit is not determined by the form alone — it depends on the relative rates of the numerator and denominator. L'Hôpital's Rule provides a systematic method.</p>
+
+  <div class="theorem-box"><div class="thm-label">Theorem — L'Hôpital's Rule</div><div class="thm-title">For 0/0 or ∞/∞: lim f/g = lim f'/g'</div><div class="thm-body">If lim(x→a) f(x)/g(x) gives 0/0 or ±∞/±∞, and f,g are differentiable near a with g'(x)≠0, then:<br><br>lim(x→a) f(x)/g(x) = lim(x→a) f'(x)/g'(x)<br><br>provided the right side exists (or is ±∞). The rule may be applied repeatedly. Also holds for x→a⁺, x→a⁻, x→±∞.</div></div>
+
+  <div class="formula-block"><div class="f-label">All Seven Indeterminate Forms — Identification & Strategy</div><div class="f-math">Form      Arises from       Strategy
+──────────────────────────────────────────────────────
+0/0       f→0, g→0          Apply L'Hôpital directly
+∞/∞       f,g→∞             Apply L'Hôpital directly
+0·∞       f→0, g→∞          Rewrite: f·g = f/(1/g) → 0/0, or g/(1/f) → ∞/∞
+∞−∞       both→∞            Combine fractions, factor, or multiply by conjugate
+0⁰        fᵍ, f→0⁺, g→0    Write e^[g·ln f]; exponent: g·ln(f) is 0·(−∞) → use 0·∞ strategy
+1^∞       fᵍ, f→1, g→∞     Write e^[g·ln f]; exponent: g·(f−1) is ∞·0 → use 0·∞ strategy
+∞⁰        fᵍ, f→∞, g→0     Write e^[g·ln f]; exponent: 0·∞ → use 0·∞ strategy</div></div>
+
+  <div class="example-block"><div class="ex-label">Example 1 — 0/0 (applied twice)</div>
+  <div class="ex-problem">Evaluate lim(x→0) (eˣ − 1 − x)/x².</div>
+  <div class="ex-step">Form: 0/0. L'Hôpital: lim (eˣ−1)/(2x). Still 0/0.</div>
+  <div class="ex-step">L'Hôpital again: lim eˣ/2 = 1/2.</div></div>
+
+  <div class="example-block"><div class="ex-label">Example 2 — 0·∞ form</div>
+  <div class="ex-problem">Evaluate lim(x→0⁺) x·ln(x).</div>
+  <div class="ex-step">Form: 0·(−∞). Rewrite: x·ln(x) = ln(x)/(1/x) → ∞/∞ form.</div>
+  <div class="ex-step">L'Hôpital: lim (1/x)/(−1/x²) = lim(−x) = 0.</div></div>
+
+  <div class="example-block"><div class="ex-label">Example 3 — 1^∞ form (definition of e)</div>
+  <div class="ex-problem">Evaluate lim(x→∞) (1 + 1/x)ˣ.</div>
+  <div class="ex-step">Form: 1^∞. Let L=lim(1+1/x)ˣ. Then ln L = lim x·ln(1+1/x).</div>
+  <div class="ex-step">Form 0·∞ → rewrite: ln(1+1/x)/(1/x). As x→∞ this is 0/0.</div>
+  <div class="ex-step">L'Hôpital: lim [−1/(x²(1+1/x))] / (−1/x²) = lim 1/(1+1/x) = 1.</div>
+  <div class="ex-step">ln L = 1, so L = e. (This recovers the definition of e.) □</div></div>
+
+  <div class="example-block"><div class="ex-label">Example 4 — ∞ − ∞ form</div>
+  <div class="ex-problem">Evaluate lim(x→1) [1/ln(x) − 1/(x−1)].</div>
+  <div class="ex-step">Form: ∞−∞. Combine: [(x−1) − ln(x)] / [(x−1)ln(x)]. Now 0/0 form.</div>
+  <div class="ex-step">L'Hôpital: [1−1/x] / [ln(x) + (x−1)/x]. Still 0/0 at x=1.</div>
+  <div class="ex-step">L'Hôpital again: [1/x²] / [1/x + 1/x + 1/x²]. At x=1: 1/2.</div></div>
+</div>
+
+<hr class="topic-divider"/>
+
+<div class="practice-section topic-block" id="practice">
+  <h3>Practice Problems</h3>
+  <div class="practice-grid">
+    <div class="practice-problem"><div class="pp-header"><span class="pp-num">01</span><span class="pp-q">Evaluate lim(x→0) sin(3x)/tan(5x) using L'Hôpital.</span><span class="pp-diff diff-easy">Easy</span><span class="pp-toggle">▾</span></div><div class="pp-answer">Form 0/0. L'Hôpital: lim 3cos(3x)/(5sec²(5x)) = 3/5 at x=0.</div></div>
+    <div class="practice-problem"><div class="pp-header"><span class="pp-num">02</span><span class="pp-q">Use MVT to prove: |sin a − sin b| ≤ |a − b| for all a,b∈ℝ.</span><span class="pp-diff diff-med">Medium</span><span class="pp-toggle">▾</span></div><div class="pp-answer">Apply MVT to f(x)=sin(x) on [a,b] (or [b,a]): sin(a)−sin(b)=cos(c)(a−b) for some c. So |sin(a)−sin(b)|=|cos(c)||a−b|≤1·|a−b|=|a−b|. □</div></div>
+    <div class="practice-problem"><div class="pp-header"><span class="pp-num">03</span><span class="pp-q">Evaluate lim(x→0⁺) xˣ  (0⁰ form).</span><span class="pp-diff diff-hard">Hard</span><span class="pp-toggle">▾</span></div><div class="pp-answer">Let L=lim xˣ. ln L=lim x·ln(x). Form 0·(−∞)=ln(x)/(1/x)→∞/∞. L'Hôpital: (1/x)/(−1/x²)=−x→0. So ln L=0, L=e⁰=1.</div></div>
+  </div>
+</div>
+
+<div class="ai-chat topic-block" id="ai-chat">
+  <div class="ai-chat-header"><div class="ai-dot"></div><span>AI Tutor — Unit 9</span><small>MVT proofs · Indeterminate forms · L'Hôpital</small></div>
+  <div class="chat-messages" id="chatMessages"><div class="msg ai"><div class="msg-avatar">∑</div><div class="msg-bubble">Welcome to the final unit! Ask me to walk through an MVT proof, identify the indeterminate form in a limit, or work through any L'Hôpital calculation. What would you like to tackle?</div></div></div>
+  <div class="chat-input-row"><textarea class="chat-input" id="chatInput" placeholder="e.g. How do I handle lim(x→0) (1−cos x)/x² ?" rows="1"></textarea><button class="chat-send" id="sendBtn" onclick="sendMessage()">Send ↑</button></div>
+</div>
+
+<!-- QUIZ -->
+<div class="quiz-section topic-block" id="quiz-u9">
+  <div class="quiz-banner"><div class="quiz-banner-left"><h2>Unit 9 Quiz</h2><p>MVT · Indeterminate Forms · L'Hôpital's Rule</p></div>
+    <div class="quiz-meta"><div class="quiz-meta-item"><span class="quiz-meta-num">3</span><span class="quiz-meta-label">MC</span></div><div class="quiz-meta-item"><span class="quiz-meta-num">2</span><span class="quiz-meta-label">Short</span></div><div class="quiz-meta-item"><span class="quiz-meta-num">2</span><span class="quiz-meta-label">Long</span></div></div>
+    <button class="quiz-start-btn">Begin Quiz →</button></div>
+  <div class="quiz-body">
+    <div class="quiz-progress-bar"><div class="quiz-progress-fill"></div></div>
+    <div class="quiz-section-label"><span class="qsl-icon">Section A</span><span class="qsl-title">Multiple Choice</span><span class="qsl-badge">3 Questions</span></div>
+
+    <div class="quiz-question">
+      <div class="qq-num">Question 1</div>
+      <div class="qq-text">The MVT requires that f be continuous on [a,b] and differentiable on (a,b). What breaks if f is differentiable on [a,b] but you drop the continuity on [a,b] assumption?</div>
+      <div class="qq-hint">Is differentiability on (a,b) stronger than continuity on (a,b)?</div>
+      <div class="mc-options">
+        <div class="mc-option" data-correct="false"><span class="mc-letter">A</span><span class="mc-text">Nothing breaks — differentiability on (a,b) implies continuity on (a,b), so the theorem still holds.</span></div>
+        <div class="mc-option" data-correct="true"><span class="mc-letter">B</span><span class="mc-text">Nothing breaks — but you still need continuity at the endpoints a and b. Differentiability on the open interval doesn't guarantee this.</span></div>
+        <div class="mc-option" data-correct="false"><span class="mc-letter">C</span><span class="mc-text">The theorem requires continuity on all of [a,b] and differentiability on [a,b]; they're both needed separately.</span></div>
+        <div class="mc-option" data-correct="false"><span class="mc-letter">D</span><span class="mc-text">Nothing breaks — differentiability everywhere implies the MVT works.</span></div>
+      </div>
+      <div class="mc-feedback"><strong>Correct! B.</strong> Differentiability on (a,b) does imply continuity on (a,b). But continuity at the endpoints a and b must be assumed separately — differentiability on the open interval tells us nothing about behaviour at the boundary. The MVT requires f to be continuous on the entire closed interval [a,b].</div>
+      <button class="qq-check-btn" data-type="mc" disabled>Check Answer</button>
+    </div>
+
+    <div class="quiz-question">
+      <div class="qq-num">Question 2</div>
+      <div class="qq-text">lim(x→∞) x·e^(−x) is what indeterminate form, and how should you rewrite it?</div>
+      <div class="mc-options">
+        <div class="mc-option" data-correct="false"><span class="mc-letter">A</span><span class="mc-text">0/0 — already in the right form for L'Hôpital.</span></div>
+        <div class="mc-option" data-correct="true"><span class="mc-letter">B</span><span class="mc-text">∞·0 — rewrite as x/eˣ to get ∞/∞, then apply L'Hôpital.</span></div>
+        <div class="mc-option" data-correct="false"><span class="mc-letter">C</span><span class="mc-text">∞·0 — rewrite as eˣ/x to get ∞/∞.</span></div>
+        <div class="mc-option" data-correct="false"><span class="mc-letter">D</span><span class="mc-text">∞/∞ — already in the right form.</span></div>
+      </div>
+      <div class="mc-feedback"><strong>Correct! B.</strong> As x→∞: x→∞ and e^(−x)→0, giving ∞·0. Rewrite as x·(1/eˣ) = x/eˣ → ∞/∞. L'Hôpital: lim 1/eˣ = 0. Option C would give lim eˣ/x → ∞, the wrong limit entirely.</div>
+      <button class="qq-check-btn" data-type="mc" disabled>Check Answer</button>
+    </div>
+
+    <div class="quiz-question">
+      <div class="qq-num">Question 3</div>
+      <div class="qq-text">You want to evaluate lim(x→1) (x^5 − 1)/(x − 1) using L'Hôpital. A classmate says "just factor x⁵−1 = (x−1)(x⁴+x³+x²+x+1) and cancel." Who is right?</div>
+      <div class="mc-options">
+        <div class="mc-option" data-correct="false"><span class="mc-letter">A</span><span class="mc-text">L'Hôpital — algebraic factoring is not rigorous.</span></div>
+        <div class="mc-option" data-correct="true"><span class="mc-letter">B</span><span class="mc-text">Both methods are correct and give the same answer (5). Factoring is often simpler.</span></div>
+        <div class="mc-option" data-correct="false"><span class="mc-letter">C</span><span class="mc-text">The classmate — L'Hôpital requires computing derivatives, which is harder here.</span></div>
+        <div class="mc-option" data-correct="false"><span class="mc-letter">D</span><span class="mc-text">Neither — direct substitution gives 0/0, so the limit doesn't exist.</span></div>
+      </div>
+      <div class="mc-feedback"><strong>Correct! B.</strong> Both methods are valid. Factoring: (x−1)(x⁴+x³+x²+x+1)/(x−1) → x⁴+x³+x²+x+1 → 5 at x=1. L'Hôpital: lim 5x⁴/1 = 5. A 0/0 form doesn't mean the limit doesn't exist (D) — it just means direct substitution fails.</div>
+      <button class="qq-check-btn" data-type="mc" disabled>Check Answer</button>
+    </div>
+
+    <div class="quiz-section-label"><span class="qsl-icon">Section B</span><span class="qsl-title">Short Answer</span><span class="qsl-badge">2 Questions</span></div>
+
+    <div class="quiz-question">
+      <div class="qq-num">Question 4</div>
+      <div class="qq-text">Evaluate lim(x→0) (e^(2x) − 1 − 2x) / x². (Apply L'Hôpital as needed.)</div>
+      <input type="text" class="sa-input" placeholder="e.g. 2" data-accept="2|2.0"/>
+      <div class="sa-feedback incorrect-sfb"><span class="sa-answer-reveal">2. Form 0/0. L'Hôpital: lim (2e^(2x)−2)/(2x). Still 0/0. L'Hôpital again: lim 4e^(2x)/2 = 4/2 = 2.</span></div>
+      <button class="qq-check-btn" data-type="sa">Check</button>
+    </div>
+
+    <div class="quiz-question">
+      <div class="qq-num">Question 5</div>
+      <div class="qq-text">f is differentiable on ℝ with f(0)=1 and f(3)=7. What does the MVT guarantee about f' on (0,3)?</div>
+      <input type="text" class="sa-input" placeholder="f'(c) = ?" data-accept="f'(c)=2|2|f'(c) = 2"/>
+      <div class="sa-feedback incorrect-sfb"><span class="sa-answer-reveal">∃ c∈(0,3) with f'(c) = (7−1)/(3−0) = 6/3 = 2.</span></div>
+      <button class="qq-check-btn" data-type="sa">Check</button>
+    </div>
+
+    <div class="quiz-section-label"><span class="qsl-icon">Section C</span><span class="qsl-title">Long Answer</span><span class="qsl-badge">2 Questions</span></div>
+
+    <div class="quiz-question">
+      <div class="qq-num">Question 6 — MVT Proof</div>
+      <div class="qq-text">Use the Mean Value Theorem to prove: if f is differentiable on ℝ with |f'(x)| ≤ 5 for all x, then |f(x) − f(y)| ≤ 5|x − y| for all x, y ∈ ℝ. (This is the Lipschitz condition.)</div>
+      <textarea class="la-textarea" placeholder="Apply MVT to f on the interval [x,y] (or [y,x])..."></textarea>
+      <button class="la-reveal-btn">Reveal Model Solution</button>
+      <div class="la-solution"><div class="la-sol-label">Model Solution</div><div class="la-sol-body">
+        <strong>Setup:</strong> Let x, y ∈ ℝ with x ≠ y (WLOG x &lt; y; the case y &lt; x is symmetric).<br><br>
+        <strong>Apply MVT:</strong> f is continuous on [x,y] and differentiable on (x,y). By the MVT, ∃ c ∈ (x,y) such that:<br>
+        f(y) − f(x) = f'(c)·(y − x).<br><br>
+        <strong>Take absolute values:</strong><br>
+        |f(y) − f(x)| = |f'(c)| · |y − x| ≤ 5 · |y − x|.<br><br>
+        <strong>Conclusion:</strong> |f(x) − f(y)| ≤ 5|x − y| for all x, y ∈ ℝ. □
+      </div></div>
+    </div>
+
+    <div class="quiz-question">
+      <div class="qq-num">Question 7 — L'Hôpital (1^∞ form)</div>
+      <div class="qq-text">Evaluate lim(x→0⁺) (sin x)^(tan x). Identify the indeterminate form, state the rewriting strategy, and carry through the full computation.</div>
+      <textarea class="la-textarea" placeholder="Identify form. Write L = lim ... . Take ln L = lim tan(x)·ln(sin x). Rewrite as 0/0 or ∞/∞..."></textarea>
+      <button class="la-reveal-btn">Reveal Model Solution</button>
+      <div class="la-solution"><div class="la-sol-label">Model Solution</div><div class="la-sol-body">
+        <strong>Form:</strong> As x→0⁺: sin(x)→0⁺ and tan(x)→0. So (sin x)^(tan x) → 0⁰ — an indeterminate form.<br><br>
+        <strong>Strategy:</strong> Let L = lim(sin x)^(tan x). Take logarithm:<br>
+        ln L = lim(x→0⁺) tan(x) · ln(sin x).<br><br>
+        This is 0·(−∞). Rewrite as:<br>
+        ln(sin x) / cot(x) → −∞/∞ form.<br><br>
+        <strong>L'Hôpital:</strong><br>
+        lim [cos(x)/sin(x)] / [−csc²(x)] = lim [cos(x)/sin(x)] · [−sin²(x)] = lim [−cos(x)·sin(x)].<br><br>
+        As x→0⁺: −cos(0)·sin(0) = −1·0 = 0.<br><br>
+        <strong>Conclusion:</strong> ln L = 0, so L = e⁰ = <strong>1</strong>. □
+      </div></div>
+    </div>
+
+    <div class="quiz-submit-row"><span class="quiz-submit-note">MC and Short Answer auto-scored.</span><button class="quiz-submit-btn">Submit &amp; Score →</button></div>
+    <div class="quiz-score-panel"><div class="qs-title">Quiz Complete</div><div class="qs-score">—</div><div class="qs-label">out of 5 scored questions</div><p class="qs-msg"></p><button class="quiz-retry-btn">↺ Retry Quiz</button></div>
+  </div>
+</div>
+
+</main>
+<aside class="sidebar">
+  <div class="sidebar-section"><h4>On This Page</h4><ul class="toc-list">
+    <li><a href="#mvt">Mean Value Theorem</a></li><li><a href="#lhopital">L'Hôpital's Rule</a></li><li><a href="#practice">Practice</a></li><li><a href="#ai-chat">AI Tutor</a></li><li><a href="#quiz-u9">Unit Quiz</a></li>
+  </ul></div>
+  <div class="sidebar-section"><h4>Key Results</h4>
+    <div class="formula-pill"><div class="fp-label">MVT</div><div class="fp-math">f'(c) = [f(b)−f(a)]/(b−a)</div></div>
+    <div class="formula-pill"><div class="fp-label">L'Hôpital</div><div class="fp-math">lim f/g = lim f'/g' (0/0 or ∞/∞)</div></div>
+    <div class="formula-pill"><div class="fp-label">0·∞ Strategy</div><div class="fp-math">f·g = f/(1/g) → 0/0</div></div>
+    <div class="formula-pill"><div class="fp-label">Exponential form</div><div class="fp-math">fᵍ = e^[g·ln f], then evaluate exponent</div></div>
+  </div>
+</aside>
+</div>
+<div class="unit-nav"><a href="unit8.html" class="unit-nav-btn">← <div><span class="un-label">Previous</span><span class="un-title">Extrema & Curve Sketching</span></div></a><a href="index.html" class="unit-nav-btn"><div style="text-align:right"><span class="un-label">Back to</span><span class="un-title">Course Overview</span></div> →</a></div>
+<script src="shared.js"></script>
+<script>
+(function(){
+  const canvas=document.getElementById('mvtCanvas');
+  if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  const aSlider=document.getElementById('mvtA');
+  const bSlider=document.getElementById('mvtB');
+  const W=canvas.width,H=canvas.height;
+  const xMin=-3.5,xMax=3.5,yMin=-1,yMax=10;
+  const pad={l:44,r:16,t:20,b:36};
+  const pw=W-pad.l-pad.r,ph=H-pad.t-pad.b;
+  const sx=x=>pad.l+(x-xMin)/(xMax-xMin)*pw;
+  const sy=y=>pad.t+(1-(y-yMin)/(yMax-yMin))*ph;
+  const f=x=>0.4*x*x+0.5*Math.sin(x*2)+1;
+  const fp=x=>0.8*x+Math.cos(x*2);
+
+  function draw(){
+    const a=+aSlider.value/100*3;
+    const b=+bSlider.value/100*3;
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle='#0c0e0f';ctx.fillRect(0,0,W,H);
+    // grid
+    ctx.strokeStyle='rgba(255,255,255,0.05)';ctx.lineWidth=1;
+    for(let yg=0;yg<=10;yg+=2){ctx.beginPath();ctx.moveTo(pad.l,sy(yg));ctx.lineTo(pad.l+pw,sy(yg));ctx.stroke();}
+    // axes
+    ctx.strokeStyle='rgba(255,255,255,0.18)';ctx.lineWidth=1.5;
+    ctx.beginPath();ctx.moveTo(pad.l,sy(0));ctx.lineTo(pad.l+pw,sy(0));ctx.stroke();
+    ctx.beginPath();ctx.moveTo(sx(0),pad.t);ctx.lineTo(sx(0),pad.t+ph);ctx.stroke();
+    // curve
+    ctx.strokeStyle='#e8e4dc';ctx.lineWidth=2.5;
+    ctx.beginPath();
+    for(let px=0;px<=pw;px++){
+      const x=xMin+(px/pw)*(xMax-xMin);
+      const y=f(x);
+      if(y<yMin||y>yMax+0.5){continue;}
+      if(px===0)ctx.moveTo(pad.l+px,sy(y));
+      else ctx.lineTo(pad.l+px,sy(y));
+    }
+    ctx.stroke();
+    // secant line
+    const secSlope=(f(b)-f(a))/(b-a);
+    ctx.strokeStyle='#d4a843';ctx.lineWidth=2;ctx.setLineDash([6,4]);
+    const ext=1.5;
+    ctx.beginPath();ctx.moveTo(sx(a-ext),sy(f(a)+secSlope*(a-ext-a)));ctx.lineTo(sx(b+ext),sy(f(a)+secSlope*(b+ext-a)));ctx.stroke();
+    ctx.setLineDash([]);
+    // find c values
+    const steps=1000;
+    const cVals=[];
+    for(let i=0;i<steps;i++){
+      const x1=a+i/steps*(b-a),x2=a+(i+1)/steps*(b-a);
+      if((fp(x1)-secSlope)*(fp(x2)-secSlope)<=0)cVals.push((x1+x2)/2);
+    }
+    // tangent lines at c
+    cVals.forEach(c=>{
+      ctx.strokeStyle='#4a90d9';ctx.lineWidth=1.5;ctx.setLineDash([4,3]);
+      const d=1.2;
+      ctx.beginPath();ctx.moveTo(sx(c-d),sy(f(c)+secSlope*(c-d-c)));ctx.lineTo(sx(c+d),sy(f(c)+secSlope*(c+d-c)));ctx.stroke();
+      ctx.setLineDash([]);
+      // dot
+      ctx.beginPath();ctx.arc(sx(c),sy(f(c)),5,0,Math.PI*2);ctx.fillStyle='#4a90d9';ctx.fill();
+      ctx.fillStyle='#4a90d9';ctx.font='10px JetBrains Mono,monospace';ctx.textAlign='center';
+      ctx.fillText('c='+c.toFixed(2),sx(c),sy(f(c))-12);
+    });
+    // endpoints
+    ctx.beginPath();ctx.arc(sx(a),sy(f(a)),5,0,Math.PI*2);ctx.fillStyle='#d4a843';ctx.fill();
+    ctx.beginPath();ctx.arc(sx(b),sy(f(b)),5,0,Math.PI*2);ctx.fillStyle='#d4a843';ctx.fill();
+    // labels
+    ctx.fillStyle='rgba(212,168,67,0.8)';ctx.font='10px JetBrains Mono,monospace';ctx.textAlign='center';
+    ctx.fillText('a='+a.toFixed(2),sx(a),sy(f(a))-14);
+    ctx.fillText('b='+b.toFixed(2),sx(b),sy(f(b))-14);
+    ctx.fillStyle='rgba(255,255,255,0.3)';ctx.textAlign='left';
+    ctx.fillText('secant slope: '+secSlope.toFixed(3),pad.l+6,pad.t+14);
+  }
+  aSlider.addEventListener('input',draw);
+  bSlider.addEventListener('input',draw);
+  draw();
+})();
+</script>
+</body></html>

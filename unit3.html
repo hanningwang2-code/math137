@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Unit 3 — Limits of Functions · Calculus I</title>
+<link rel="stylesheet" href="shared.css"/></head>
+<body>
+<script>window.UNIT_CONTEXT = "Calculus I — Unit 3: Epsilon-Delta definition of limits of functions, Sequential Characterization of Limits (and its use to disprove limits), and Fundamental Trigonometric and Logarithmic limits";</script>
+<nav class="topnav"><a class="nav-brand" href="index.html"><span class="nav-brand-logo">Math<span>Base</span></span><span class="nav-divider"></span><span class="nav-course">Calculus I</span></a><ul class="nav-units"><li><a href="unit1.html">U1</a></li><li><a href="unit2.html">U2</a></li><li><a href="unit3.html" class="active">U3</a></li><li><a href="unit4.html">U4</a></li><li><a href="unit5.html">U5</a></li><li><a href="unit6.html">U6</a></li><li><a href="unit7.html">U7</a></li><li><a href="unit8.html">U8</a></li><li><a href="unit9.html">U9</a></li></ul></nav>
+<section class="unit-hero"><div class="unit-hero-bg"></div><div class="unit-eyebrow">Unit 03 · Calculus I</div><h1>Limits of<br><em>Functions</em></h1><p class="unit-hero-desc">The ε-δ definition of a function limit, sequential characterization as a disproof tool, and the fundamental trig and log limits.</p><div class="unit-hero-number">3</div></section>
+<div class="page-body"><main class="main-content">
+
+<div class="topic-block" id="epsdelta">
+  <div class="topic-label">Topic 1</div>
+  <h2>The ε-δ Definition of a Limit</h2>
+  <p>The ε-δ definition formalizes what it means for f(x) to approach L as x approaches a — <em>without requiring f to be defined at a</em>. The key asymmetry: ε is chosen by the challenger (as small as they like); δ is your response and may depend on ε.</p>
+
+  <div class="theorem-box"><div class="thm-label">Definition — Limit of a Function</div><div class="thm-title">lim(x→a) f(x) = L</div><div class="thm-body">∀ ε > 0, ∃ δ > 0 such that <strong>0 &lt; |x − a| &lt; δ ⟹ |f(x) − L| &lt; ε</strong><br><br>Note 0 &lt; |x − a|: the value at x = a is explicitly excluded. The limit is about f's behaviour <em>near</em> a, not <em>at</em> a. The challenge: given any ε, find a δ = δ(ε) that works.</div></div>
+
+  <!-- INTERACTIVE ε-δ Visualization -->
+  <div class="viz-container">
+    <div class="viz-header"><span>Visualization — ε-δ Definition for f(x) = 2x + 1</span><span class="viz-badge">Interactive</span></div>
+    <div class="viz-body">
+      <canvas id="edCanvas" width="560" height="340" style="max-width:100%;display:block;background:#0c0e0f;border-radius:2px"></canvas>
+      <div class="viz-controls">
+        <div class="viz-slider-group"><span class="viz-slider-label">ε (output tolerance)</span><input type="range" class="viz-slider" id="edEps" min="5" max="100" value="50" step="1"/></div>
+        <div class="viz-slider-group"><span class="viz-slider-label">δ (input tolerance)</span><input type="range" class="viz-slider" id="edDelta" min="2" max="80" value="25" step="1"/></div>
+      </div>
+      <div class="viz-caption">Gold horizontal band = ε-neighborhood of L. Blue vertical band = δ-neighborhood of a. The ε-δ condition is satisfied iff every point of the graph inside the blue band also lands inside the gold band.</div>
+    </div>
+  </div>
+
+  <div class="formula-block"><div class="f-label">Strategy for ε-δ Proofs</div><div class="f-math">Step 1. Scratch work: compute |f(x)−L|, manipulate to isolate |x−a|.
+Step 2. If extra factors appear (non-linear f), restrict δ≤1 first to bound them.
+Step 3. Choose δ = min(1, ε/C) where C bounds the extra factor.
+Step 4. Formal proof: "Let ε>0. Set δ=… If 0&lt;|x−a|&lt;δ, then…"</div></div>
+
+  <div class="proof-block"><div class="proof-header"><span>Proof — lim(x→3) x² = 9</span><span>ε-δ with bounding</span></div><div class="proof-body">
+    <strong>Scratch work:</strong> |x²−9| = |x−3||x+3|. Need to bound |x+3|. Assume δ≤1: then |x−3|&lt;1 ⟹ 2&lt;x&lt;4 ⟹ |x+3|&lt;7. So |x²−9|&lt;7|x−3|. For this to be &lt;ε: |x−3|&lt;ε/7. Choose δ=min(1,ε/7).<br><br>
+    <strong>Formal proof:</strong> Let ε>0. Set δ=min(1,ε/7). Suppose 0&lt;|x−3|&lt;δ. Since δ≤1: |x+3|≤|x−3|+6&lt;7. Therefore:<br>
+    |x²−9| = |x−3|·|x+3| &lt; δ·7 ≤ (ε/7)·7 = ε. <span class="qed">□</span>
+  </div></div>
+</div>
+
+<hr class="topic-divider"/>
+
+<div class="topic-block" id="seqchar">
+  <div class="topic-label">Topic 2</div>
+  <h2>Sequential Characterization of Limits</h2>
+  <p>The sequential characterization is a bridge theorem connecting function limits to sequence limits. Its primary practical use is as a <strong>disproof tool</strong>: exhibit two sequences approaching a with different limiting function values, and the limit cannot exist.</p>
+
+  <div class="theorem-box"><div class="thm-label">Theorem — Sequential Characterization</div><div class="thm-title">lim(x→a) f(x) = L iff f(xₙ) → L for every sequence xₙ → a with xₙ ≠ a</div><div class="thm-body">
+    (⟹) If lim(x→a)f(x)=L and xₙ→a with xₙ≠a, then given ε>0, ∃δ: 0&lt;|x−a|&lt;δ⟹|f(x)−L|&lt;ε. Since xₙ→a, ∃N: n>N⟹|xₙ−a|&lt;δ, so |f(xₙ)−L|&lt;ε. Thus f(xₙ)→L.<br><br>
+    <strong>Contrapositive (the useful direction):</strong> If ∃ two sequences xₙ→a and yₙ→a (both ≠a) with lim f(xₙ) ≠ lim f(yₙ), then lim(x→a) f(x) does NOT exist.
+  </div></div>
+
+  <div class="example-block"><div class="ex-label">Worked Example — Disproving lim(x→0) sin(1/x)</div>
+  <div class="ex-problem">Show lim(x→0) sin(1/x) does not exist.</div>
+  <div class="ex-step">Sequence 1: xₙ = 1/(2πn) → 0. Then sin(1/xₙ) = sin(2πn) = 0 → 0.</div>
+  <div class="ex-step">Sequence 2: yₙ = 1/(2πn + π/2) → 0. Then sin(1/yₙ) = sin(2πn+π/2) = 1 → 1.</div>
+  <div class="ex-step">0 ≠ 1. By the contrapositive of the Sequential Characterization, lim(x→0) sin(1/x) does not exist. □</div></div>
+
+  <div class="example-block"><div class="ex-label">Worked Example — One-Sided Limit Mismatch</div>
+  <div class="ex-problem">Show lim(x→0) |x|/x does not exist.</div>
+  <div class="ex-step">xₙ = 1/n → 0⁺: f(xₙ) = 1 → 1.</div>
+  <div class="ex-step">yₙ = −1/n → 0⁻: f(yₙ) = −1 → −1.</div>
+  <div class="ex-step">Left limit = −1 ≠ 1 = right limit ⟹ limit does not exist. □</div></div>
+</div>
+
+<hr class="topic-divider"/>
+
+<div class="topic-block" id="funlimits">
+  <div class="topic-label">Topic 3</div>
+  <h2>Fundamental Trig &amp; Log Limits</h2>
+
+  <div class="theorem-box"><div class="thm-label">Theorem — The Sinc Limit</div><div class="thm-title">lim(x→0) sin(x)/x = 1</div><div class="thm-body">Cannot be found by substitution. Proved by a geometric squeeze between triangle areas.</div></div>
+
+  <div class="proof-block"><div class="proof-header"><span>Proof — lim(x→0) sin(x)/x = 1</span><span>Geometric Squeeze</span></div><div class="proof-body">
+    For 0 &lt; x &lt; π/2, compare areas on the unit circle:<br>
+    Area△OAB = ½sin(x) &nbsp;|&nbsp; Area sector = ½x &nbsp;|&nbsp; Area△OAT = ½tan(x)<br><br>
+    Triangle ≤ Sector ≤ Triangle: ½sin(x) ≤ ½x ≤ ½tan(x).<br>
+    Divide by ½sin(x)>0: 1 ≤ x/sin(x) ≤ 1/cos(x).<br>
+    Take reciprocals: cos(x) ≤ sin(x)/x ≤ 1.<br><br>
+    Since lim(x→0)cos(x)=1 and lim(x→0)1=1: by Squeeze, lim sin(x)/x=1. By even symmetry, the limit from the left equals 1 too. <span class="qed">□</span>
+  </div></div>
+
+  <div class="formula-block"><div class="f-label">Fundamental Limits Reference</div><div class="f-math">lim(x→0) sin(x)/x = 1
+lim(x→0) (1−cos x)/x = 0
+lim(x→0) (1−cos x)/x² = 1/2
+lim(x→0) tan(x)/x = 1
+lim(x→0) (eˣ−1)/x = 1
+lim(x→0) ln(1+x)/x = 1
+lim(x→∞) (1+1/x)ˣ = e    (definition of e)</div></div>
+
+  <div class="example-block"><div class="ex-label">Worked Example — Combining Fundamental Limits</div>
+  <div class="ex-problem">Evaluate: lim(x→0) sin(5x)/tan(3x)</div>
+  <div class="ex-step">Write = [sin(5x)/(5x)] · (5x) / {[tan(3x)/(3x)] · (3x)} = [sin(5x)/(5x)] / [tan(3x)/(3x)] · (5/3).</div>
+  <div class="ex-step">As x→0: sin(5x)/(5x) → 1 and tan(3x)/(3x) → 1.</div>
+  <div class="ex-step">Limit = 1/1 · 5/3 = 5/3.</div></div>
+</div>
+
+<hr class="topic-divider"/>
+
+<div class="practice-section topic-block" id="practice">
+  <h3>Practice Problems</h3>
+  <div class="practice-grid">
+    <div class="practice-problem"><div class="pp-header"><span class="pp-num">01</span><span class="pp-q">Prove using ε-δ: lim(x→4) (2x+1) = 9.</span><span class="pp-diff diff-easy">Easy</span><span class="pp-toggle">▾</span></div><div class="pp-answer">|f(x)−9| = |(2x+1)−9| = |2x−8| = 2|x−4|. Set δ=ε/2. If 0&lt;|x−4|&lt;δ: 2|x−4| &lt; 2δ = ε. □</div></div>
+    <div class="practice-problem"><div class="pp-header"><span class="pp-num">02</span><span class="pp-q">Use Sequential Characterization to show lim(x→0) x·sin(1/x) = 0.</span><span class="pp-diff diff-med">Medium</span><span class="pp-toggle">▾</span></div><div class="pp-answer">Let xₙ→0, xₙ≠0. |xₙ·sin(1/xₙ)| = |xₙ|·|sin(1/xₙ)| ≤ |xₙ| → 0. So f(xₙ)→0 for every such sequence. By Sequential Characterization, limit = 0. □</div></div>
+    <div class="practice-problem"><div class="pp-header"><span class="pp-num">03</span><span class="pp-q">Evaluate: lim(x→0) sin²(4x)/x².</span><span class="pp-diff diff-med">Medium</span><span class="pp-toggle">▾</span></div><div class="pp-answer">= [sin(4x)/(4x)]² · 16x²/x² = [sin(4x)/(4x)]² · 16. As x→0: [sin(4x)/(4x)]→1. Limit = 1·16 = 16.</div></div>
+    <div class="practice-problem"><div class="pp-header"><span class="pp-num">04</span><span class="pp-q">Prove ε-δ: lim(x→1) x² = 1. Carefully handle the non-linear factor.</span><span class="pp-diff diff-hard">Hard</span><span class="pp-toggle">▾</span></div><div class="pp-answer">|x²−1|=|x−1||x+1|. If δ≤1: |x−1|&lt;1⟹0&lt;x&lt;2⟹|x+1|&lt;3. Choose δ=min(1,ε/3). For 0&lt;|x−1|&lt;δ: |x²−1|=|x−1||x+1|&lt;3δ≤ε. □</div></div>
+  </div>
+</div>
+
+<div class="ai-chat topic-block" id="ai-chat">
+  <div class="ai-chat-header"><div class="ai-dot"></div><span>AI Tutor — Unit 3</span><small>Ask about ε-δ proofs, sequential characterization, or fundamental limits</small></div>
+  <div class="chat-messages" id="chatMessages"><div class="msg ai"><div class="msg-avatar">∑</div><div class="msg-bubble">Hi! I can walk through ε-δ constructions step by step, help you find the right δ using scratch work, or discuss when to use sequential characterization. What do you need?</div></div></div>
+  <div class="chat-input-row"><textarea class="chat-input" id="chatInput" placeholder="e.g. Walk me through lim(x→2) x³ = 8 using ε-δ" rows="1"></textarea><button class="chat-send" id="sendBtn" onclick="sendMessage()">Send ↑</button></div>
+</div>
+
+<!-- QUIZ -->
+<div class="quiz-section topic-block" id="quiz-u3">
+  <div class="quiz-banner"><div class="quiz-banner-left"><h2>Unit 3 Quiz</h2><p>ε-δ Limits · Sequential Characterization · Fundamental Limits</p></div>
+    <div class="quiz-meta"><div class="quiz-meta-item"><span class="quiz-meta-num">3</span><span class="quiz-meta-label">MC</span></div><div class="quiz-meta-item"><span class="quiz-meta-num">2</span><span class="quiz-meta-label">Short</span></div><div class="quiz-meta-item"><span class="quiz-meta-num">2</span><span class="quiz-meta-label">Long</span></div></div>
+    <button class="quiz-start-btn">Begin Quiz →</button></div>
+  <div class="quiz-body">
+    <div class="quiz-progress-bar"><div class="quiz-progress-fill"></div></div>
+    <div class="quiz-section-label"><span class="qsl-icon">Section A</span><span class="qsl-title">Multiple Choice</span><span class="qsl-badge">3 Questions</span></div>
+
+    <div class="quiz-question">
+      <div class="qq-num">Question 1</div>
+      <div class="qq-text">In the ε-δ definition of lim(x→a) f(x) = L, the condition 0 &lt; |x−a| &lt; δ specifically excludes x = a. This means:</div>
+      <div class="qq-hint">What does the limit actually measure?</div>
+      <div class="mc-options">
+        <div class="mc-option" data-correct="false"><span class="mc-letter">A</span><span class="mc-text">f(a) must be undefined for the limit to exist.</span></div>
+        <div class="mc-option" data-correct="false"><span class="mc-letter">B</span><span class="mc-text">lim(x→a) f(x) can only equal f(a) if f is continuous.</span></div>
+        <div class="mc-option" data-correct="true"><span class="mc-letter">C</span><span class="mc-text">The limit describes f's behaviour near a; the value f(a) (or whether it exists) is completely irrelevant to the limit.</span></div>
+        <div class="mc-option" data-correct="false"><span class="mc-letter">D</span><span class="mc-text">The limit cannot equal f(a).</span></div>
+      </div>
+      <div class="mc-feedback"><strong>Correct!</strong> C. The 0 &lt; condition ensures x ≠ a, making f(a) irrelevant. A limit is about approach behaviour, not the value at the point. f(a) could be undefined, defined but different from L, or equal to L — all are compatible with lim(x→a)f(x)=L.</div>
+      <button class="qq-check-btn" data-type="mc" disabled>Check Answer</button>
+    </div>
+
+    <div class="quiz-question">
+      <div class="qq-num">Question 2</div>
+      <div class="qq-text">To disprove that lim(x→0) f(x) = L using Sequential Characterization, you need:</div>
+      <div class="qq-hint">Read the contrapositive carefully — what exactly are you constructing?</div>
+      <div class="mc-options">
+        <div class="mc-option" data-correct="false"><span class="mc-letter">A</span><span class="mc-text">One sequence xₙ→0 where f(xₙ) does not converge.</span></div>
+        <div class="mc-option" data-correct="false"><span class="mc-letter">B</span><span class="mc-text">Two sequences where neither f(xₙ) nor f(yₙ) converge.</span></div>
+        <div class="mc-option" data-correct="true"><span class="mc-letter">C</span><span class="mc-text">Two sequences xₙ→0 and yₙ→0 (both ≠0) where f(xₙ) and f(yₙ) converge to different limits.</span></div>
+        <div class="mc-option" data-correct="false"><span class="mc-letter">D</span><span class="mc-text">One sequence xₙ→0 where f(xₙ) → M ≠ L (only one sequence needed).</span></div>
+      </div>
+      <div class="mc-feedback"><strong>Correct!</strong> C. Option D is tempting but wrong: finding one sequence giving M≠L only shows the limit isn't L; it doesn't show the limit doesn't exist (it could be M). To show the limit doesn't exist at all, you need two sequences approaching 0 giving different limits — proving no single L can work.</div>
+      <button class="qq-check-btn" data-type="mc" disabled>Check Answer</button>
+    </div>
+
+    <div class="quiz-question">
+      <div class="qq-num">Question 3</div>
+      <div class="qq-text">What is lim(x→0) x²·sin(1/x)?</div>
+      <div class="qq-hint">sin(1/x) oscillates wildly — does that necessarily cause the limit to fail?</div>
+      <div class="mc-options">
+        <div class="mc-option" data-correct="false"><span class="mc-letter">A</span><span class="mc-text">Does not exist, because sin(1/x) oscillates as x→0.</span></div>
+        <div class="mc-option" data-correct="true"><span class="mc-letter">B</span><span class="mc-text">0, by the Squeeze Theorem: −x² ≤ x²sin(1/x) ≤ x².</span></div>
+        <div class="mc-option" data-correct="false"><span class="mc-letter">C</span><span class="mc-text">1, since sin(1/x)/(1/x)→1 as x→0.</span></div>
+        <div class="mc-option" data-correct="false"><span class="mc-letter">D</span><span class="mc-text">Cannot be determined without knowing the rate of oscillation.</span></div>
+      </div>
+      <div class="mc-feedback"><strong>Correct!</strong> B. The x² factor "damps" the oscillation. Since |sin(1/x)| ≤ 1: −x² ≤ x²sin(1/x) ≤ x². Both bounds go to 0, so the limit is 0. The trap is A: oscillation of sin(1/x) alone doesn't prevent the product from converging if it's multiplied by something that goes to 0.</div>
+      <button class="qq-check-btn" data-type="mc" disabled>Check Answer</button>
+    </div>
+
+    <div class="quiz-section-label"><span class="qsl-icon">Section B</span><span class="qsl-title">Short Answer</span><span class="qsl-badge">2 Questions</span></div>
+
+    <div class="quiz-question">
+      <div class="qq-num">Question 4</div>
+      <div class="qq-text">Evaluate: lim(x→0) sin(7x) / (3x). Give your answer as a fraction.</div>
+      <input type="text" class="sa-input" placeholder="e.g. 7/3" data-accept="7/3|7/3"/>
+      <div class="sa-feedback incorrect-sfb"><span class="sa-answer-reveal">7/3. Write = (7/3)·[sin(7x)/(7x)]. As x→0, sin(7x)/(7x)→1. Limit = 7/3.</span></div>
+      <button class="qq-check-btn" data-type="sa">Check</button>
+    </div>
+
+    <div class="quiz-question">
+      <div class="qq-num">Question 5</div>
+      <div class="qq-text">In an ε-δ proof of lim(x→2) (3x−1) = 5, what is the correct choice of δ in terms of ε?</div>
+      <input type="text" class="sa-input" placeholder="e.g. ε/3" data-accept="ε/3|e/3|eps/3|epsilon/3"/>
+      <div class="sa-feedback incorrect-sfb"><span class="sa-answer-reveal">δ = ε/3. Since |(3x−1)−5| = |3x−6| = 3|x−2|, we need 3|x−2|&lt;ε, so |x−2|&lt;ε/3. Set δ=ε/3.</span></div>
+      <button class="qq-check-btn" data-type="sa">Check</button>
+    </div>
+
+    <div class="quiz-section-label"><span class="qsl-icon">Section C</span><span class="qsl-title">Long Answer</span><span class="qsl-badge">2 Questions</span></div>
+
+    <div class="quiz-question">
+      <div class="qq-num">Question 6 — Long Answer (ε-δ Proof)</div>
+      <div class="qq-text">Prove using the ε-δ definition: lim(x→2) x³ = 8. You must carefully bound the non-linear factor. Show all scratch work and the formal proof.</div>
+      <textarea class="la-textarea" placeholder="Scratch work first: factor x³−8, restrict δ≤1 to bound, then formal proof..."></textarea>
+      <button class="la-reveal-btn">Reveal Model Solution</button>
+      <div class="la-solution"><div class="la-sol-label">Model Solution</div><div class="la-sol-body">
+        <strong>Scratch work:</strong> x³−8 = (x−2)(x²+2x+4). Need to bound |x²+2x+4|. Assume δ≤1: then 1&lt;x&lt;3, so x²&lt;9, |2x|&lt;6, so x²+2x+4 &lt; 9+6+4=19. Thus |x³−8|&lt;19|x−2|. For 19|x−2|&lt;ε: |x−2|&lt;ε/19. Choose δ=min(1,ε/19).<br><br>
+        <strong>Formal proof:</strong> Let ε>0. Set δ=min(1,ε/19). Suppose 0&lt;|x−2|&lt;δ. Since δ≤1: 1&lt;x&lt;3, so x²+2x+4 ≤ 9+6+4=19. Therefore:<br>
+        |x³−8| = |x−2|·|x²+2x+4| &lt; δ·19 ≤ (ε/19)·19 = ε. □
+      </div></div>
+    </div>
+
+    <div class="quiz-question">
+      <div class="qq-num">Question 7 — Long Answer (Disproof)</div>
+      <div class="qq-text">Let f(x) = x/|x| for x ≠ 0. Use the Sequential Characterization to prove that lim(x→0) f(x) does not exist. Be explicit about your two sequences and their function values.</div>
+      <textarea class="la-textarea" placeholder="Identify two sequences, compute f at each, show different limits..."></textarea>
+      <button class="la-reveal-btn">Reveal Model Solution</button>
+      <div class="la-solution"><div class="la-sol-label">Model Solution</div><div class="la-sol-body">
+        <strong>Suppose</strong> for contradiction that lim(x→0) f(x) = L for some L.<br><br>
+        <strong>Sequence 1:</strong> xₙ = 1/n > 0. Then xₙ → 0 and f(xₙ) = (1/n)/|1/n| = 1 → 1. So L must equal 1.<br><br>
+        <strong>Sequence 2:</strong> yₙ = −1/n &lt; 0. Then yₙ → 0 and f(yₙ) = (−1/n)/|−1/n| = −1 → −1. So L must equal −1.<br><br>
+        But 1 ≠ −1, so no single L can equal both. By the contrapositive of the Sequential Characterization, lim(x→0) f(x) does not exist. □
+      </div></div>
+    </div>
+
+    <div class="quiz-submit-row"><span class="quiz-submit-note">MC and Short Answer auto-scored.</span><button class="quiz-submit-btn">Submit &amp; Score →</button></div>
+    <div class="quiz-score-panel"><div class="qs-title">Quiz Complete</div><div class="qs-score">—</div><div class="qs-label">out of 5 scored questions</div><p class="qs-msg"></p><button class="quiz-retry-btn">↺ Retry Quiz</button></div>
+  </div>
+</div>
+
+</main>
+<aside class="sidebar">
+  <div class="sidebar-section"><h4>On This Page</h4><ul class="toc-list">
+    <li><a href="#epsdelta">ε-δ Definition</a></li><li><a href="#seqchar">Sequential Characterization</a></li><li><a href="#funlimits">Fundamental Limits</a></li><li><a href="#practice">Practice</a></li><li><a href="#ai-chat">AI Tutor</a></li><li><a href="#quiz-u3">Unit Quiz</a></li>
+  </ul></div>
+  <div class="sidebar-section"><h4>Key Formulas</h4>
+    <div class="formula-pill"><div class="fp-label">ε-δ Definition</div><div class="fp-math">∀ε>0 ∃δ>0: 0&lt;|x−a|&lt;δ ⟹ |f(x)−L|&lt;ε</div></div>
+    <div class="formula-pill"><div class="fp-label">Sine Limit</div><div class="fp-math">lim(x→0) sin(x)/x = 1</div></div>
+    <div class="formula-pill"><div class="fp-label">Exp Limit</div><div class="fp-math">lim(x→0) (eˣ−1)/x = 1</div></div>
+    <div class="formula-pill"><div class="fp-label">Log Limit</div><div class="fp-math">lim(x→0) ln(1+x)/x = 1</div></div>
+  </div>
+</aside>
+</div>
+<div class="unit-nav"><a href="unit2.html" class="unit-nav-btn">← <div><span class="un-label">Previous</span><span class="un-title">Convergence & Sequence Theorems</span></div></a><a href="unit4.html" class="unit-nav-btn"><div style="text-align:right"><span class="un-label">Next Unit</span><span class="un-title">Continuity & IVT</span></div> →</a></div>
+<script src="shared.js"></script>
+<script>
+(function(){
+  const canvas = document.getElementById('edCanvas');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const epsSlider = document.getElementById('edEps');
+  const deltaSlider = document.getElementById('edDelta');
+  const W=canvas.width, H=canvas.height;
+  const a=2, L=5; // lim(x→2)(2x+1)=5
+  const xMin=0, xMax=4, yMin=0, yMax=10;
+  const pad={l:50,r:20,t:20,b:40};
+  const pw=W-pad.l-pad.r, ph=H-pad.t-pad.b;
+  const toSX=x=>pad.l+(x-xMin)/(xMax-xMin)*pw;
+  const toSY=y=>pad.t+(1-(y-yMin)/(yMax-yMin))*ph;
+  const f=x=>2*x+1;
+
+  function draw(){
+    const eps=+epsSlider.value/100*3;
+    const delta=+deltaSlider.value/100*1.5;
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle='#0c0e0f'; ctx.fillRect(0,0,W,H);
+
+    // grid
+    ctx.strokeStyle='rgba(255,255,255,0.05)'; ctx.lineWidth=1;
+    for(let x=0;x<=4;x++){ctx.beginPath();ctx.moveTo(toSX(x),pad.t);ctx.lineTo(toSX(x),pad.t+ph);ctx.stroke();}
+    for(let y=0;y<=10;y+=2){ctx.beginPath();ctx.moveTo(pad.l,toSY(y));ctx.lineTo(pad.l+pw,toSY(y));ctx.stroke();}
+
+    // ε band (horizontal)
+    const yTop=toSY(L+eps), yBot=toSY(L-eps);
+    ctx.fillStyle='rgba(212,168,67,0.12)'; ctx.fillRect(pad.l,yTop,pw,yBot-yTop);
+    ctx.strokeStyle='rgba(212,168,67,0.6)'; ctx.lineWidth=1.5; ctx.setLineDash([5,4]);
+    ctx.beginPath();ctx.moveTo(pad.l,yTop);ctx.lineTo(pad.l+pw,yTop);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(pad.l,yBot);ctx.lineTo(pad.l+pw,yBot);ctx.stroke();
+    ctx.setLineDash([]);
+
+    // δ band (vertical)
+    const xLeft=toSX(a-delta), xRight=toSX(a+delta);
+    ctx.fillStyle='rgba(74,144,217,0.1)'; ctx.fillRect(xLeft,pad.t,xRight-xLeft,ph);
+    ctx.strokeStyle='rgba(74,144,217,0.6)'; ctx.lineWidth=1.5; ctx.setLineDash([5,4]);
+    ctx.beginPath();ctx.moveTo(xLeft,pad.t);ctx.lineTo(xLeft,pad.t+ph);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(xRight,pad.t);ctx.lineTo(xRight,pad.t+ph);ctx.stroke();
+    ctx.setLineDash([]);
+
+    // function curve
+    ctx.strokeStyle='#e8e4dc'; ctx.lineWidth=2; ctx.setLineDash([]);
+    ctx.beginPath();
+    for(let px=0;px<=pw;px++){
+      const x=xMin+(px/pw)*(xMax-xMin);
+      const y=f(x);
+      if(px===0) ctx.moveTo(pad.l+px,toSY(y));
+      else ctx.lineTo(pad.l+px,toSY(y));
+    }
+    ctx.stroke();
+
+    // open circle at (a, L)
+    ctx.beginPath();ctx.arc(toSX(a),toSY(L),5,0,Math.PI*2);
+    ctx.fillStyle='#0c0e0f'; ctx.fill();
+    ctx.strokeStyle='#d4a843'; ctx.lineWidth=2; ctx.stroke();
+
+    // labels
+    ctx.fillStyle='#d4a843'; ctx.font='11px JetBrains Mono,monospace'; ctx.textAlign='right';
+    ctx.fillText('L+ε',pad.l-4,yTop+4); ctx.fillText('L−ε',pad.l-4,yBot+4);
+    ctx.fillStyle='#4a90d9'; ctx.textAlign='center';
+    ctx.fillText('a−δ',xLeft,pad.t+ph+16); ctx.fillText('a+δ',xRight,pad.t+ph+16);
+    ctx.fillStyle='rgba(255,255,255,0.5)'; ctx.textAlign='left';
+    ctx.fillText('f(x)=2x+1',pad.l+6,pad.t+16);
+
+    // axes
+    ctx.strokeStyle='rgba(255,255,255,0.2)'; ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(pad.l,pad.t);ctx.lineTo(pad.l,pad.t+ph);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(pad.l,pad.t+ph);ctx.lineTo(pad.l+pw,pad.t+ph);ctx.stroke();
+    [1,2,3,4].forEach(x=>{ctx.fillStyle='#5a5650';ctx.font='9px JetBrains Mono';ctx.textAlign='center';ctx.fillText(x,toSX(x),pad.t+ph+14);});
+    [2,4,6,8,10].forEach(y=>{ctx.fillStyle='#5a5650';ctx.font='9px JetBrains Mono';ctx.textAlign='right';ctx.fillText(y,pad.l-5,toSY(y)+4);});
+  }
+  epsSlider.addEventListener('input',draw);
+  deltaSlider.addEventListener('input',draw);
+  draw();
+})();
+</script>
+</body></html>

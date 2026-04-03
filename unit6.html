@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Unit 6 — Approximation & Inverse Functions · Calculus I</title>
+<link rel="stylesheet" href="shared.css"/></head>
+<body>
+<script>window.UNIT_CONTEXT = "Calculus I — Unit 6: Newton's Method for root finding, Linear Approximation (linearisation) formula and its geometric meaning, Derivative of Inverse Functions theorem and its applications to arcsin/arctan/etc.";</script>
+<nav class="topnav"><a class="nav-brand" href="index.html"><span class="nav-brand-logo">Math<span>Base</span></span><span class="nav-divider"></span><span class="nav-course">Calculus I</span></a><ul class="nav-units"><li><a href="unit1.html">U1</a></li><li><a href="unit2.html">U2</a></li><li><a href="unit3.html">U3</a></li><li><a href="unit4.html">U4</a></li><li><a href="unit5.html">U5</a></li><li><a href="unit6.html" class="active">U6</a></li><li><a href="unit7.html">U7</a></li><li><a href="unit8.html">U8</a></li><li><a href="unit9.html">U9</a></li></ul></nav>
+<section class="unit-hero"><div class="unit-hero-bg"></div><div class="unit-eyebrow">Unit 06 · Calculus I</div><h1>Approximation &amp;<br><em>Inverse Functions</em></h1><p class="unit-hero-desc">Newton's iterative root-finder, the linearisation formula, and the elegant chain-rule derivation of inverse function derivatives.</p><div class="unit-hero-number">6</div></section>
+<div class="page-body"><main class="main-content">
+
+<div class="topic-block" id="newton">
+  <div class="topic-label">Topic 1</div>
+  <h2>Newton's Method</h2>
+  <p>Newton's Method finds roots of f by replacing the curve with its tangent line and finding where <em>that</em> crosses zero. Each iteration refines the estimate — under good conditions, the error roughly <strong>squares</strong> each step (quadratic convergence).</p>
+
+  <div class="theorem-box"><div class="thm-label">Algorithm — Newton's Method</div><div class="thm-title">xₙ₊₁ = xₙ − f(xₙ)/f'(xₙ)</div><div class="thm-body">Starting from initial guess x₀ near a root, each iterate is the x-intercept of the tangent line at (xₙ, f(xₙ)).<br><br><strong>Derivation:</strong> Tangent at xₙ: y − f(xₙ) = f'(xₙ)(x−xₙ). Set y=0: x = xₙ − f(xₙ)/f'(xₙ).<br><br><strong>Failure modes:</strong> f'(xₙ)=0 (horizontal tangent); x₀ far from root (converges to wrong root or diverges); multiple roots close together.</div></div>
+
+  <!-- Newton's method visualization -->
+  <div class="viz-container">
+    <div class="viz-header"><span>Visualization — Newton's Method Iteration</span><span class="viz-badge">Interactive</span></div>
+    <div class="viz-body">
+      <canvas id="newtonCanvas" width="540" height="300" style="max-width:100%;display:block;background:#0c0e0f;border-radius:2px"></canvas>
+      <div class="viz-controls">
+        <div class="viz-slider-group"><span class="viz-slider-label">x₀ (initial guess)</span><input type="range" class="viz-slider" id="x0Slider" min="-200" max="300" value="200" step="5"/></div>
+        <div class="viz-slider-group"><span class="viz-slider-label">Iterations shown</span><input type="range" class="viz-slider" id="iterSlider" min="1" max="6" value="3" step="1"/></div>
+      </div>
+      <div class="viz-caption">f(x) = x³ − x − 1. Orange lines show the tangent-intercept steps. The root ≈ 1.3247 is shown in gold.</div>
+    </div>
+  </div>
+
+  <div class="example-block"><div class="ex-label">Worked Example — Approximating √2</div>
+  <div class="ex-problem">Use Newton's Method with x₀=1 to approximate √2 (2 iterations).</div>
+  <div class="ex-step">f(x)=x²−2, f'(x)=2x. xₙ₊₁ = xₙ − (xₙ²−2)/(2xₙ) = (xₙ + 2/xₙ)/2.</div>
+  <div class="ex-step">x₁ = (1+2/1)/2 = 1.5.</div>
+  <div class="ex-step">x₂ = (1.5+2/1.5)/2 = (1.5+1.333…)/2 = 1.4166…</div>
+  <div class="ex-step">True value √2 ≈ 1.41421… — already 4 decimal places accurate after 2 steps.</div></div>
+</div>
+
+<hr class="topic-divider"/>
+
+<div class="topic-block" id="linearapprox">
+  <div class="topic-label">Topic 2</div>
+  <h2>Linear Approximation</h2>
+  <p>Differentiability means f looks like its tangent line under sufficient magnification. The tangent line is the best linear approximation to f near a — better than any other line through (a, f(a)).</p>
+
+  <div class="theorem-box"><div class="thm-label">Definition — Linearisation</div><div class="thm-title">L(x) = f(a) + f'(a)(x − a)</div><div class="thm-body">For x near a: f(x) ≈ L(x) = f(a) + f'(a)(x−a).<br><br>The error is |f(x)−L(x)| = O((x−a)²) — it goes to zero faster than (x−a) does. This is why differentiable functions are "locally linear."</div></div>
+
+  <div class="example-block"><div class="ex-label">Worked Example</div>
+  <div class="ex-problem">Estimate (1.03)¹⁰ using linear approximation.</div>
+  <div class="ex-step">Let f(x)=(1+x)¹⁰, a=0. f(0)=1, f'(x)=10(1+x)⁹, f'(0)=10.</div>
+  <div class="ex-step">L(x) = 1 + 10x. At x=0.03: L(0.03) = 1 + 0.3 = 1.3.</div>
+  <div class="ex-step">True value: (1.03)¹⁰ ≈ 1.3439. Error ≈ 3.3% — reasonable for x=0.03.</div></div>
+</div>
+
+<hr class="topic-divider"/>
+
+<div class="topic-block" id="inversederiv">
+  <div class="topic-label">Topic 3</div>
+  <h2>Derivatives of Inverse Functions</h2>
+  <p>If f is one-to-one and differentiable, its inverse f⁻¹ is also differentiable, and the derivative of f⁻¹ is determined entirely by the derivative of f. The key formula comes from differentiating f(f⁻¹(x)) = x via the Chain Rule.</p>
+
+  <div class="theorem-box"><div class="thm-label">Theorem — Inverse Function Derivative</div><div class="thm-title">(f⁻¹)'(x) = 1 / f'(f⁻¹(x))</div><div class="thm-body">Proof: Differentiate f(f⁻¹(x))=x via Chain Rule: f'(f⁻¹(x))·(f⁻¹)'(x)=1. Divide: (f⁻¹)'(x)=1/f'(f⁻¹(x)). □<br><br>Leibniz form: if y=f⁻¹(x) then dy/dx = 1/(dx/dy). Slopes of f and f⁻¹ are reciprocals at reflected points.</div></div>
+
+  <div class="proof-block"><div class="proof-header"><span>Proof — d/dx[arctan x] = 1/(1+x²)</span><span>Inverse function theorem + right triangle</span></div><div class="proof-body">
+    Let y=arctan(x), so tan(y)=x and y∈(−π/2,π/2).<br>
+    Differentiate: sec²(y)·(dy/dx) = 1, so dy/dx = 1/sec²(y) = cos²(y).<br><br>
+    From tan(y)=x and identity sec²(y)=1+tan²(y)=1+x²:<br>
+    cos²(y) = 1/sec²(y) = 1/(1+x²).<br>
+    So d/dx[arctan x] = 1/(1+x²). <span class="qed">□</span>
+  </div></div>
+
+  <div class="formula-block"><div class="f-label">Standard Inverse Derivatives</div><div class="f-math">d/dx[arcsin x]  = 1/√(1−x²),  |x|&lt;1
+d/dx[arccos x]  = −1/√(1−x²), |x|&lt;1
+d/dx[arctan x]  = 1/(1+x²)
+d/dx[arcsec x]  = 1/(|x|√(x²−1)), |x|>1
+d/dx[ln x]      = 1/x  (inverse of eˣ)</div></div>
+</div>
+
+<hr class="topic-divider"/>
+
+<div class="practice-section topic-block" id="practice">
+  <h3>Practice Problems</h3>
+  <div class="practice-grid">
+    <div class="practice-problem"><div class="pp-header"><span class="pp-num">01</span><span class="pp-q">Use linear approximation to estimate ∛(8.06).</span><span class="pp-diff diff-easy">Easy</span><span class="pp-toggle">▾</span></div><div class="pp-answer">f(x)=x^(1/3), a=8. f(8)=2, f'(x)=(1/3)x^(-2/3), f'(8)=1/12. L(x)=2+(1/12)(x−8). At x=8.06: L=2+(0.06/12)=2+0.005=2.005. True: ≈2.00499…</div></div>
+    <div class="practice-problem"><div class="pp-header"><span class="pp-num">02</span><span class="pp-q">Derive d/dx[arcsin x] = 1/√(1−x²) using the inverse function theorem.</span><span class="pp-diff diff-hard">Hard</span><span class="pp-toggle">▾</span></div><div class="pp-answer">Let y=arcsin(x), so sin(y)=x, y∈[−π/2,π/2]. Differentiate: cos(y)·dy/dx=1, so dy/dx=1/cos(y). Since sin(y)=x and y∈[−π/2,π/2]: cos(y)=√(1−sin²y)=√(1−x²)≥0. Thus d/dx[arcsin x]=1/√(1−x²). □</div></div>
+  </div>
+</div>
+
+<div class="ai-chat topic-block" id="ai-chat">
+  <div class="ai-chat-header"><div class="ai-dot"></div><span>AI Tutor — Unit 6</span><small>Newton's Method · Linear Approximation · Inverse Derivatives</small></div>
+  <div class="chat-messages" id="chatMessages"><div class="msg ai"><div class="msg-avatar">∑</div><div class="msg-bubble">Hi! Ask me about Newton's Method convergence, how accurate linear approximation is, or how to derive any inverse trig derivative. What do you need?</div></div></div>
+  <div class="chat-input-row"><textarea class="chat-input" id="chatInput" placeholder="e.g. When does Newton's Method fail to converge?" rows="1"></textarea><button class="chat-send" id="sendBtn" onclick="sendMessage()">Send ↑</button></div>
+</div>
+
+<!-- QUIZ -->
+<div class="quiz-section topic-block" id="quiz-u6">
+  <div class="quiz-banner"><div class="quiz-banner-left"><h2>Unit 6 Quiz</h2><p>Newton's Method · Linearisation · Inverse Derivatives</p></div>
+    <div class="quiz-meta"><div class="quiz-meta-item"><span class="quiz-meta-num">3</span><span class="quiz-meta-label">MC</span></div><div class="quiz-meta-item"><span class="quiz-meta-num">2</span><span class="quiz-meta-label">Short</span></div><div class="quiz-meta-item"><span class="quiz-meta-num">2</span><span class="quiz-meta-label">Long</span></div></div>
+    <button class="quiz-start-btn">Begin Quiz →</button></div>
+  <div class="quiz-body">
+    <div class="quiz-progress-bar"><div class="quiz-progress-fill"></div></div>
+    <div class="quiz-section-label"><span class="qsl-icon">Section A</span><span class="qsl-title">Multiple Choice</span><span class="qsl-badge">3 Questions</span></div>
+
+    <div class="quiz-question">
+      <div class="qq-num">Question 1</div>
+      <div class="qq-text">In Newton's Method, if f'(xₙ) = 0 at some iterate xₙ, then:</div>
+      <div class="mc-options">
+        <div class="mc-option" data-correct="false"><span class="mc-letter">A</span><span class="mc-text">The method converges immediately since xₙ is a critical point.</span></div>
+        <div class="mc-option" data-correct="true"><span class="mc-letter">B</span><span class="mc-text">The method fails — division by zero; xₙ₊₁ is undefined.</span></div>
+        <div class="mc-option" data-correct="false"><span class="mc-letter">C</span><span class="mc-text">xₙ must be the root, so we stop.</span></div>
+        <div class="mc-option" data-correct="false"><span class="mc-letter">D</span><span class="mc-text">The tangent line is horizontal, so xₙ₊₁ = xₙ.</span></div>
+      </div>
+      <div class="mc-feedback"><strong>Correct! B.</strong> xₙ₊₁ = xₙ − f(xₙ)/f'(xₙ) requires f'(xₙ)≠0. If f'(xₙ)=0, the tangent is horizontal and never crosses the x-axis — xₙ₊₁ is undefined. A: a critical point is not necessarily a root. C: f'(xₙ)=0 just means the tangent is flat, not that f(xₙ)=0.</div>
+      <button class="qq-check-btn" data-type="mc" disabled>Check Answer</button>
+    </div>
+
+    <div class="quiz-question">
+      <div class="qq-num">Question 2</div>
+      <div class="qq-text">Linear approximation f(x) ≈ f(a) + f'(a)(x−a) is most accurate when:</div>
+      <div class="mc-options">
+        <div class="mc-option" data-correct="false"><span class="mc-letter">A</span><span class="mc-text">f is increasing near a.</span></div>
+        <div class="mc-option" data-correct="true"><span class="mc-letter">B</span><span class="mc-text">x is very close to a and the second derivative f''(a) is small in magnitude.</span></div>
+        <div class="mc-option" data-correct="false"><span class="mc-letter">C</span><span class="mc-text">f'(a) is large (steep tangent = more accurate).</span></div>
+        <div class="mc-option" data-correct="false"><span class="mc-letter">D</span><span class="mc-text">a is a critical point (f'(a)=0).</span></div>
+      </div>
+      <div class="mc-feedback"><strong>Correct! B.</strong> The error in linear approximation is approximately ½f''(c)(x−a)² for some c between x and a. So the approximation is best when (i) x is close to a (small (x−a)²) and (ii) f'' is small (the function doesn't curve much). D is backwards — if f'(a)=0, the linear approximation is just f(a), a constant, which is poor unless f really is flat.</div>
+      <button class="qq-check-btn" data-type="mc" disabled>Check Answer</button>
+    </div>
+
+    <div class="quiz-question">
+      <div class="qq-num">Question 3</div>
+      <div class="qq-text">If f'(x₀) = 3 and f⁻¹(y₀) = x₀ (i.e. f(x₀) = y₀), what is (f⁻¹)'(y₀)?</div>
+      <div class="mc-options">
+        <div class="mc-option" data-correct="false"><span class="mc-letter">A</span><span class="mc-text">3</span></div>
+        <div class="mc-option" data-correct="false"><span class="mc-letter">B</span><span class="mc-text">−3</span></div>
+        <div class="mc-option" data-correct="true"><span class="mc-letter">C</span><span class="mc-text">1/3</span></div>
+        <div class="mc-option" data-correct="false"><span class="mc-letter">D</span><span class="mc-text">−1/3</span></div>
+      </div>
+      <div class="mc-feedback"><strong>Correct! C.</strong> By the Inverse Function Theorem: (f⁻¹)'(y₀) = 1/f'(f⁻¹(y₀)) = 1/f'(x₀) = 1/3. The slopes of f and f⁻¹ at reflected points are reciprocals of each other.</div>
+      <button class="qq-check-btn" data-type="mc" disabled>Check Answer</button>
+    </div>
+
+    <div class="quiz-section-label"><span class="qsl-icon">Section B</span><span class="qsl-title">Short Answer</span><span class="qsl-badge">2 Questions</span></div>
+
+    <div class="quiz-question">
+      <div class="qq-num">Question 4</div>
+      <div class="qq-text">Use linear approximation to estimate sin(0.1). Round to 4 decimal places.</div>
+      <input type="text" class="sa-input" placeholder="e.g. 0.1000" data-accept="0.1|0.1000|0.10"/>
+      <div class="sa-feedback incorrect-sfb"><span class="sa-answer-reveal">≈ 0.1. Linearise sin(x) at a=0: L(x)=sin(0)+cos(0)(x−0)=x. So sin(0.1)≈0.1. True value: 0.09983…</span></div>
+      <button class="qq-check-btn" data-type="sa">Check</button>
+    </div>
+
+    <div class="quiz-question">
+      <div class="qq-num">Question 5</div>
+      <div class="qq-text">Given f(x) = x³ + 2x and f(1) = 3. What is (f⁻¹)'(3)?</div>
+      <input type="text" class="sa-input" placeholder="e.g. 1/5" data-accept="1/5|0.2"/>
+      <div class="sa-feedback incorrect-sfb"><span class="sa-answer-reveal">1/5. f'(x)=3x²+2. f'(1)=3+2=5. (f⁻¹)'(3)=1/f'(f⁻¹(3))=1/f'(1)=1/5.</span></div>
+      <button class="qq-check-btn" data-type="sa">Check</button>
+    </div>
+
+    <div class="quiz-section-label"><span class="qsl-icon">Section C</span><span class="qsl-title">Long Answer</span><span class="qsl-badge">2 Questions</span></div>
+
+    <div class="quiz-question">
+      <div class="qq-num">Question 6 — Newton's Method</div>
+      <div class="qq-text">Apply Newton's Method to f(x) = x² − 5 starting from x₀ = 2. Perform 3 iterations and state how close you are to √5 after each step.</div>
+      <textarea class="la-textarea" placeholder="x₁ = x₀ − f(x₀)/f'(x₀) = ..."></textarea>
+      <button class="la-reveal-btn">Reveal Model Solution</button>
+      <div class="la-solution"><div class="la-sol-label">Model Solution</div><div class="la-sol-body">
+        f(x)=x²−5, f'(x)=2x. Iteration: xₙ₊₁ = xₙ − (xₙ²−5)/(2xₙ) = (xₙ + 5/xₙ)/2.<br><br>
+        x₁ = (2 + 5/2)/2 = (2+2.5)/2 = <strong>2.25</strong>. Error: |2.25−√5| ≈ |2.25−2.2360679…| ≈ 0.0139.<br><br>
+        x₂ = (2.25 + 5/2.25)/2 = (2.25+2.2222…)/2 ≈ <strong>2.2361111</strong>. Error ≈ 0.0000432.<br><br>
+        x₃ ≈ (2.2361111 + 5/2.2361111)/2 ≈ <strong>2.2360679</strong>. Error ≈ 4×10⁻¹⁰.<br><br>
+        The error roughly squares each iteration — this is quadratic convergence.
+      </div></div>
+    </div>
+
+    <div class="quiz-question">
+      <div class="qq-num">Question 7 — Inverse Derivative Derivation</div>
+      <div class="qq-text">Derive d/dx[arctan(x)] = 1/(1+x²) from scratch. Your proof must state the identity you use to simplify sec²(arctan x).</div>
+      <textarea class="la-textarea" placeholder="Let y = arctan(x), so tan(y) = x. Differentiate implicitly..."></textarea>
+      <button class="la-reveal-btn">Reveal Model Solution</button>
+      <div class="la-solution"><div class="la-sol-label">Model Solution</div><div class="la-sol-body">
+        <strong>Setup:</strong> Let y = arctan(x), so tan(y) = x with y ∈ (−π/2, π/2).<br><br>
+        <strong>Implicit differentiation:</strong> d/dx[tan(y)] = d/dx[x] ⟹ sec²(y)·(dy/dx) = 1.<br>
+        So dy/dx = 1/sec²(y) = cos²(y).<br><br>
+        <strong>Key identity:</strong> From tan(y)=x: draw a right triangle with opposite=x, adjacent=1, hypotenuse=√(1+x²). Then cos(y) = 1/√(1+x²), so cos²(y) = 1/(1+x²).<br><br>
+        Alternatively: sec²(y) = 1 + tan²(y) = 1 + x², so 1/sec²(y) = 1/(1+x²).<br><br>
+        <strong>Conclusion:</strong> d/dx[arctan x] = 1/(1+x²). □
+      </div></div>
+    </div>
+
+    <div class="quiz-submit-row"><span class="quiz-submit-note">MC and Short Answer auto-scored.</span><button class="quiz-submit-btn">Submit &amp; Score →</button></div>
+    <div class="quiz-score-panel"><div class="qs-title">Quiz Complete</div><div class="qs-score">—</div><div class="qs-label">out of 5 scored questions</div><p class="qs-msg"></p><button class="quiz-retry-btn">↺ Retry Quiz</button></div>
+  </div>
+</div>
+
+</main>
+<aside class="sidebar">
+  <div class="sidebar-section"><h4>On This Page</h4><ul class="toc-list">
+    <li><a href="#newton">Newton's Method</a></li><li><a href="#linearapprox">Linear Approximation</a></li><li><a href="#inversederiv">Inverse Function Derivatives</a></li><li><a href="#practice">Practice</a></li><li><a href="#ai-chat">AI Tutor</a></li><li><a href="#quiz-u6">Unit Quiz</a></li>
+  </ul></div>
+  <div class="sidebar-section"><h4>Key Formulas</h4>
+    <div class="formula-pill"><div class="fp-label">Newton's Method</div><div class="fp-math">xₙ₊₁ = xₙ − f(xₙ)/f'(xₙ)</div></div>
+    <div class="formula-pill"><div class="fp-label">Linearisation</div><div class="fp-math">L(x) = f(a) + f'(a)(x−a)</div></div>
+    <div class="formula-pill"><div class="fp-label">Inverse Deriv.</div><div class="fp-math">(f⁻¹)'(x) = 1/f'(f⁻¹(x))</div></div>
+    <div class="formula-pill"><div class="fp-label">arctan</div><div class="fp-math">d/dx[arctan x] = 1/(1+x²)</div></div>
+  </div>
+</aside>
+</div>
+<div class="unit-nav"><a href="unit5.html" class="unit-nav-btn">← <div><span class="un-label">Previous</span><span class="un-title">Differentiation</span></div></a><a href="unit7.html" class="unit-nav-btn"><div style="text-align:right"><span class="un-label">Next Unit</span><span class="un-title">Implicit Diff. & EVT</span></div> →</a></div>
+<script src="shared.js"></script>
+<script>
+(function(){
+  const canvas=document.getElementById('newtonCanvas');
+  if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  const x0Slider=document.getElementById('x0Slider');
+  const iterSlider=document.getElementById('iterSlider');
+  const W=canvas.width,H=canvas.height;
+  const xMin=-2,xMax=3,yMin=-3,yMax=5;
+  const pad={l:44,r:16,t:20,b:36};
+  const pw=W-pad.l-pad.r,ph=H-pad.t-pad.b;
+  const sx=x=>pad.l+(x-xMin)/(xMax-xMin)*pw;
+  const sy=y=>pad.t+(1-(y-yMin)/(yMax-yMin))*ph;
+  const f=x=>x*x*x-x-1;
+  const fp=x=>3*x*x-1;
+  const ROOT=1.3247179572;
+
+  function draw(){
+    let x=+x0Slider.value/100;
+    const iters=+iterSlider.value;
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle='#0c0e0f';ctx.fillRect(0,0,W,H);
+    // grid
+    ctx.strokeStyle='rgba(255,255,255,0.05)';ctx.lineWidth=1;
+    for(let xg=-2;xg<=3;xg++){ctx.beginPath();ctx.moveTo(sx(xg),pad.t);ctx.lineTo(sx(xg),pad.t+ph);ctx.stroke();}
+    for(let yg=-2;yg<=4;yg+=2){ctx.beginPath();ctx.moveTo(pad.l,sy(yg));ctx.lineTo(pad.l+pw,sy(yg));ctx.stroke();}
+    // axes
+    ctx.strokeStyle='rgba(255,255,255,0.2)';ctx.lineWidth=1.5;
+    ctx.beginPath();ctx.moveTo(pad.l,sy(0));ctx.lineTo(pad.l+pw,sy(0));ctx.stroke();
+    ctx.beginPath();ctx.moveTo(sx(0),pad.t);ctx.lineTo(sx(0),pad.t+ph);ctx.stroke();
+    // curve
+    ctx.strokeStyle='#e8e4dc';ctx.lineWidth=2;
+    ctx.beginPath();
+    for(let px=0;px<=pw;px++){
+      const xv=xMin+(px/pw)*(xMax-xMin);
+      const yv=f(xv);
+      if(px===0)ctx.moveTo(pad.l+px,sy(yv));
+      else ctx.lineTo(pad.l+px,sy(yv));
+    }
+    ctx.stroke();
+    // root line
+    ctx.strokeStyle='rgba(212,168,67,0.5)';ctx.lineWidth=1;ctx.setLineDash([4,3]);
+    ctx.beginPath();ctx.moveTo(sx(ROOT),pad.t);ctx.lineTo(sx(ROOT),pad.t+ph);ctx.stroke();
+    ctx.setLineDash([]);
+    // iterations
+    const colors=['#e05555','#e8924a','#4a90d9','#4caf7d','#9b59b6','#e8e4dc'];
+    for(let i=0;i<iters&&i<6;i++){
+      const fy=f(x),fpy=fp(x);
+      if(Math.abs(fpy)<1e-10)break;
+      // tangent line
+      ctx.strokeStyle=colors[i];ctx.lineWidth=1.5;ctx.setLineDash([]);
+      const xnext=x-fy/fpy;
+      ctx.beginPath();ctx.moveTo(sx(x),sy(fy));ctx.lineTo(sx(xnext),sy(0));ctx.stroke();
+      // vertical drop
+      ctx.setLineDash([3,3]);
+      ctx.beginPath();ctx.moveTo(sx(xnext),sy(0));ctx.lineTo(sx(xnext),sy(f(xnext)));ctx.stroke();
+      ctx.setLineDash([]);
+      // point
+      ctx.beginPath();ctx.arc(sx(x),sy(fy),4,0,Math.PI*2);ctx.fillStyle=colors[i];ctx.fill();
+      ctx.fillStyle=colors[i];ctx.font='9px JetBrains Mono,monospace';ctx.textAlign='center';
+      ctx.fillText('x'+i,sx(x),pad.t+ph+14);
+      x=xnext;
+    }
+    // final xnext label
+    ctx.fillStyle='#d4a843';ctx.font='9px JetBrains Mono,monospace';ctx.textAlign='center';
+    ctx.fillText('root≈'+ROOT.toFixed(4),sx(ROOT),pad.t+14);
+    // axis ticks
+    [-1,0,1,2].forEach(xv=>{ctx.fillStyle='#5a5650';ctx.font='9px JetBrains Mono';ctx.textAlign='center';ctx.fillText(xv,sx(xv),pad.t+ph+14);});
+  }
+  x0Slider.addEventListener('input',draw);
+  iterSlider.addEventListener('input',draw);
+  draw();
+})();
+</script>
+</body></html>

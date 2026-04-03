@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Unit 1 — Absolute Values & Sequence Limits · Calculus I</title>
+<link rel="stylesheet" href="shared.css"/>
+</head>
+<body>
+<script>window.UNIT_CONTEXT = "Calculus I — Unit 1: Absolute Values (formal/distance definition), Triangle Inequality I & II, Sequences and convergence, and the Epsilon-N definition of a limit of a sequence";</script>
+
+<nav class="topnav">
+  <a class="nav-brand" href="index.html"><span class="nav-brand-logo">Math<span>Base</span></span><span class="nav-divider"></span><span class="nav-course">Calculus I</span></a>
+  <ul class="nav-units">
+    <li><a href="unit1.html" class="active">U1</a></li><li><a href="unit2.html">U2</a></li><li><a href="unit3.html">U3</a></li><li><a href="unit4.html">U4</a></li><li><a href="unit5.html">U5</a></li><li><a href="unit6.html">U6</a></li><li><a href="unit7.html">U7</a></li><li><a href="unit8.html">U8</a></li><li><a href="unit9.html">U9</a></li>
+  </ul>
+</nav>
+
+<section class="unit-hero">
+  <div class="unit-hero-bg"></div>
+  <div class="unit-eyebrow">Unit 01 · Calculus I</div>
+  <h1>Absolute Values &amp;<br><em>Sequence Limits</em></h1>
+  <p class="unit-hero-desc">The rigorous metric foundation of analysis: distance on the real line, inequalities, and the precise ε-N definition of convergence.</p>
+  <div class="unit-hero-number">1</div>
+</section>
+
+<div class="page-body">
+<main class="main-content">
+
+<!-- ═══ TOPIC 1: ABSOLUTE VALUE ═══ -->
+<div class="topic-block" id="absval">
+  <div class="topic-label">Topic 1</div>
+  <h2>Absolute Values — The Formal Definition</h2>
+
+  <p>The absolute value is not merely "drop the negative sign." Its correct interpretation is <strong>distance from zero</strong> on the real number line, and more generally, |x − a| is the <em>distance between x and a</em>. Every ε-δ and ε-N argument in analysis is secretly a statement about distances.</p>
+
+  <div class="theorem-box">
+    <div class="thm-label">Definition — Absolute Value</div>
+    <div class="thm-title">Piecewise, algebraic, and distance definitions</div>
+    <div class="thm-body">
+      <strong>Piecewise:</strong> |x| = x if x ≥ 0, and |x| = −x if x &lt; 0.<br><br>
+      <strong>Algebraic:</strong> |x| = √(x²) — always non-negative.<br><br>
+      <strong>Distance (operative in analysis):</strong> |x − a| is the distance between x and a. When you read |x − a| &lt; δ, think: "x is within distance δ of a." This is the lens through which every limit proof is read.
+    </div>
+  </div>
+
+  <div class="formula-block">
+    <div class="f-label">Key Properties of Absolute Value</div>
+    <div class="f-math">|x| ≥ 0  for all x ∈ ℝ,  with |x| = 0 ⟺ x = 0
+|xy| = |x|·|y|          (multiplicativity)
+|x/y| = |x|/|y|         (y ≠ 0)
+|x − a| &lt; r  ⟺  a − r &lt; x &lt; a + r   (open interval of radius r about a)
+|x − a| ≤ r  ⟺  a − r ≤ x ≤ a + r   (closed interval)</div>
+  </div>
+
+  <h3>The Interval Characterization — Why It Matters</h3>
+  <p>The equivalence |x − a| &lt; r ⟺ x ∈ (a−r, a+r) is the most-used fact in all of first-year analysis. It translates between the algebraic language of absolute values and the geometric language of intervals. Every ε-δ proof is really an interval-shrinking argument.</p>
+
+  <!-- SVG: number line showing |x - a| < r -->
+  <div class="viz-container">
+    <div class="viz-header"><span>Visualization — |x − a| &lt; δ as an Interval</span><span class="viz-badge">Interactive</span></div>
+    <div class="viz-body">
+      <svg id="svgAbsval" viewBox="0 0 520 110" width="520" height="110">
+        <defs>
+          <marker id="arrowAV" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#7a7670"/>
+          </marker>
+        </defs>
+        <!-- number line -->
+        <line x1="30" y1="55" x2="490" y2="55" stroke="#7a7670" stroke-width="1.5" marker-end="url(#arrowAV)"/>
+        <!-- interval shading -->
+        <rect id="avRect" x="170" y="42" width="180" height="26" fill="rgba(212,168,67,0.18)" rx="2"/>
+        <!-- bracket lines -->
+        <line id="avL" x1="170" y1="36" x2="170" y2="74" stroke="#d4a843" stroke-width="2"/>
+        <line id="avR" x1="350" y1="36" x2="350" y2="74" stroke="#d4a843" stroke-width="2"/>
+        <!-- center point a -->
+        <circle id="avA" cx="260" cy="55" r="5" fill="#4a90d9"/>
+        <text id="avALabel" x="260" y="90" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="#4a90d9">a</text>
+        <!-- delta labels -->
+        <text id="avD1" x="170" y="28" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#d4a843">a−δ</text>
+        <text id="avD2" x="350" y="28" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#d4a843">a+δ</text>
+        <!-- dashed distance lines -->
+        <line id="avArrow1" x1="260" y1="55" x2="170" y2="55" stroke="#d4a843" stroke-width="1" stroke-dasharray="4,3"/>
+        <line id="avArrow2" x1="260" y1="55" x2="350" y2="55" stroke="#d4a843" stroke-width="1" stroke-dasharray="4,3"/>
+        <text x="215" y="48" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#d4a843">δ</text>
+        <text x="305" y="48" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#d4a843">δ</text>
+        <!-- moving x point -->
+        <circle id="avX" cx="310" cy="55" r="5" fill="#e8924a"/>
+        <text id="avXLabel" x="310" y="90" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="#e8924a">x</text>
+        <!-- inside/outside label -->
+        <text id="avStatus" x="260" y="106" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="#4caf7d">|x − a| &lt; δ  ✓</text>
+      </svg>
+      <div class="viz-controls">
+        <div class="viz-slider-group">
+          <span class="viz-slider-label">δ (radius)</span>
+          <input type="range" class="viz-slider" id="avDelta" min="20" max="160" value="90" step="5"/>
+        </div>
+        <div class="viz-slider-group">
+          <span class="viz-slider-label">x (position)</span>
+          <input type="range" class="viz-slider" id="avX_slider" min="60" max="460" value="310" step="5"/>
+        </div>
+      </div>
+      <div class="viz-caption">The orange point x is inside the golden interval iff |x − a| &lt; δ. Drag the sliders to feel the geometry of this definition.</div>
+    </div>
+  </div>
+
+  <div class="example-block">
+    <div class="ex-label">Worked Example — Bounding |f(x)| using Triangle Inequality</div>
+    <div class="ex-problem">Given |x − 2| &lt; 1, find an upper bound for |x² − 4|.</div>
+    <div class="ex-step">Factor: |x² − 4| = |x − 2| · |x + 2|</div>
+    <div class="ex-step">Bound |x+2|: from |x−2| &lt; 1 we get 1 &lt; x &lt; 3, so x+2 ∈ (3,5), thus |x+2| &lt; 5</div>
+    <div class="ex-step">Therefore: |x² − 4| &lt; 1 · 5 = 5 whenever |x − 2| &lt; 1</div>
+    <div class="ex-step">This "bounding the nearby factor" trick is used in virtually every ε-δ proof for non-linear functions.</div>
+  </div>
+</div>
+
+<hr class="topic-divider"/>
+
+<!-- ═══ TOPIC 2: TRIANGLE INEQUALITY ═══ -->
+<div class="topic-block" id="triangle">
+  <div class="topic-label">Topic 2</div>
+  <h2>The Triangle Inequality</h2>
+  <p>The triangle inequality is the single most-used tool in analysis after the definition of absolute value. Named for the geometric fact that "the length of any side of a triangle is at most the sum of the other two sides," it controls the absolute value of sums.</p>
+
+  <div class="theorem-box">
+    <div class="thm-label">Theorem — Triangle Inequality I</div>
+    <div class="thm-title">|a + b| ≤ |a| + |b|</div>
+    <div class="thm-body">For all a, b ∈ ℝ. The absolute value of a sum never exceeds the sum of the absolute values. Generalizes to: |a₁ + ··· + aₙ| ≤ |a₁| + ··· + |aₙ|.</div>
+  </div>
+
+  <div class="proof-block">
+    <div class="proof-header"><span>Proof — Triangle Inequality I</span><span>Direct, from interval property</span></div>
+    <div class="proof-body">
+      For any real x, −|x| ≤ x ≤ |x|. Apply to both a and b:<br>
+      &nbsp;&nbsp;−|a| ≤ a ≤ |a| &nbsp;&nbsp; and &nbsp;&nbsp; −|b| ≤ b ≤ |b|<br><br>
+      Adding these: −(|a|+|b|) ≤ a+b ≤ |a|+|b|<br><br>
+      This is exactly the interval condition |a+b| ≤ |a|+|b|. <span class="qed">□</span>
+    </div>
+  </div>
+
+  <div class="theorem-box">
+    <div class="thm-label">Theorem — Triangle Inequality II (Reverse)</div>
+    <div class="thm-title">||a| − |b|| ≤ |a − b|</div>
+    <div class="thm-body">The absolute difference of the magnitudes is bounded by the distance between the numbers. Used to argue: if a is close to b, then |a| is close to |b|. In analysis: if xₙ → L, then |xₙ| → |L|.</div>
+  </div>
+
+  <div class="proof-block">
+    <div class="proof-header"><span>Proof — Reverse Triangle Inequality</span><span>Two applications of TI I</span></div>
+    <div class="proof-body">
+      By TI I: |a| = |(a−b) + b| ≤ |a−b| + |b|, so |a| − |b| ≤ |a−b|.<br>
+      Symmetrically: |b| − |a| ≤ |b−a| = |a−b|.<br><br>
+      Both |a|−|b| ≤ |a−b| and −(|a|−|b|) ≤ |a−b| hold simultaneously,<br>
+      which is precisely ||a|−|b|| ≤ |a−b|. <span class="qed">□</span>
+    </div>
+  </div>
+
+  <h3>Strategic Use of the Triangle Inequality</h3>
+  <p>In proofs you often need to bound |f(x) − L| where f is a sum or product. The key technique: <em>split the expression and bound each piece separately</em>. For example, to bound |(aₙ + bₙ) − (A + B)|:</p>
+
+  <div class="formula-block">
+    <div class="f-label">Standard Splitting Technique</div>
+    <div class="f-math">|(aₙ + bₙ) − (A + B)|  =  |(aₙ − A) + (bₙ − B)|
+                         ≤  |aₙ − A| + |bₙ − B|   (Triangle Inequality I)
+                         &lt;  ε/2 + ε/2  =  ε         (choosing N for each)</div>
+  </div>
+  <p>This is the skeleton of the proof that limits of sums equal the sum of limits.</p>
+</div>
+
+<hr class="topic-divider"/>
+
+<!-- ═══ TOPIC 3: SEQUENCES & EPSILON-N ═══ -->
+<div class="topic-block" id="sequences">
+  <div class="topic-label">Topic 3</div>
+  <h2>Sequences and the ε-N Definition of a Limit</h2>
+
+  <p>A <strong>sequence</strong> is a function a : ℕ → ℝ — an ordered, infinite list of real numbers (a₁, a₂, a₃, …). The central question: does the sequence <em>converge</em>? Intuition says "gets closer and closer to L," but intuition alone is insufficient. What does "closer and closer" mean precisely?</p>
+
+  <div class="theorem-box">
+    <div class="thm-label">Definition — Convergence of a Sequence (ε-N)</div>
+    <div class="thm-title">lim(n→∞) aₙ = L</div>
+    <div class="thm-body">
+      (aₙ) converges to L ∈ ℝ if:<br><br>
+      <strong>∀ ε > 0, ∃ N ∈ ℕ such that ∀ n > N : |aₙ − L| &lt; ε</strong><br><br>
+      Unpacked: no matter how small a tolerance ε you name, there is a "tail index" N such that every term beyond N is within distance ε of L. The sequence eventually (and permanently) enters any ε-neighborhood of L.
+    </div>
+  </div>
+
+  <h3>Reading the Quantifiers</h3>
+  <p>The order of quantifiers matters enormously. The <strong>∀ε … ∃N</strong> structure means: <em>the challenger picks ε first</em>, then you must produce a valid N. You cannot choose ε yourself — you must handle every positive ε the challenger might give you.</p>
+
+  <!-- SVG: epsilon-N visualization on a number line, interactive -->
+  <div class="viz-container">
+    <div class="viz-header"><span>Visualization — ε-N Definition</span><span class="viz-badge">Interactive</span></div>
+    <div class="viz-body">
+      <canvas id="epsnCanvas" width="560" height="280" style="max-width:100%;display:block;border-radius:2px;background:#131618"></canvas>
+      <div class="viz-controls">
+        <div class="viz-slider-group">
+          <span class="viz-slider-label">ε (tolerance)</span>
+          <input type="range" class="viz-slider" id="epsSlider" min="5" max="60" value="30" step="1"/>
+        </div>
+        <div class="viz-slider-group">
+          <span class="viz-slider-label">N (cutoff)</span>
+          <input type="range" class="viz-slider" id="nSlider" min="1" max="25" value="8" step="1"/>
+        </div>
+      </div>
+      <div class="viz-caption" id="epsCaption">Sequence aₙ = 1/n converging to L = 0. Golden band = ε-neighborhood. Terms past N = <span id="nVal">8</span> that fall outside the band are highlighted in red.</div>
+    </div>
+  </div>
+
+  <div class="proof-block">
+    <div class="proof-header"><span>Proof — lim(n→∞) 1/n = 0</span><span>ε-N, canonical example</span></div>
+    <div class="proof-body">
+      <strong>Scratch work (private, find N):</strong> Need |1/n − 0| = 1/n &lt; ε. This requires n > 1/ε. So choose N = ⌈1/ε⌉.<br><br>
+      <strong>Formal proof:</strong> Let ε > 0. Choose N = ⌈1/ε⌉ (the ceiling of 1/ε; this is a natural number with N ≥ 1/ε). For any n > N:<br>
+      &nbsp;&nbsp;n > N ≥ 1/ε<br>
+      &nbsp;&nbsp;⟹ 1/n &lt; ε<br>
+      &nbsp;&nbsp;⟹ |1/n − 0| &lt; ε. ✓ <span class="qed">□</span>
+    </div>
+  </div>
+
+  <div class="proof-block">
+    <div class="proof-header"><span>Proof — lim(n→∞) (3n+1)/(n+2) = 3</span><span>ε-N, rational sequence</span></div>
+    <div class="proof-body">
+      <strong>Scratch work:</strong><br>
+      |(3n+1)/(n+2) − 3| = |(3n+1 − 3n−6)/(n+2)| = |−5/(n+2)| = 5/(n+2)<br>
+      Need: 5/(n+2) &lt; ε ⟹ n+2 > 5/ε ⟹ n > 5/ε − 2.<br>
+      Choose N = ⌈5/ε⌉ (safe: N ≥ 5/ε − 2 since N ≥ 5/ε > 5/ε − 2).<br><br>
+      <strong>Formal proof:</strong> Let ε > 0. Set N = ⌈5/ε⌉. For n > N:<br>
+      &nbsp;&nbsp;n > N ≥ 5/ε, so n+2 > 5/ε, so 5/(n+2) &lt; ε.<br>
+      &nbsp;&nbsp;Thus |(3n+1)/(n+2) − 3| = 5/(n+2) &lt; ε. ✓ <span class="qed">□</span>
+    </div>
+  </div>
+
+  <h3>Proof-Writing Template</h3>
+  <div class="formula-block">
+    <div class="f-label">ε-N Proof Template</div>
+    <div class="f-math">Step 0. Scratch work: compute |aₙ − L| and simplify to a function of n.
+Step 1. Find N: solve |aₙ − L| &lt; ε for n, getting n > f(ε). Set N = ⌈f(ε)⌉.
+Step 2. Formal proof:
+  "Let ε > 0. Set N = ⌈f(ε)⌉.
+   Let n > N. Then:
+   |aₙ − L| = [simplified expression] &lt; ε. □"</div>
+  </div>
+</div>
+
+<hr class="topic-divider"/>
+
+<!-- ═══ PRACTICE ═══ -->
+<div class="practice-section topic-block" id="practice">
+  <h3>Practice Problems</h3>
+  <div class="practice-grid">
+    <div class="practice-problem">
+      <div class="pp-header"><span class="pp-num">01</span><span class="pp-q">Solve and interpret: |2x − 8| ≤ 6. Express as an interval and describe geometrically.</span><span class="pp-diff diff-easy">Easy</span><span class="pp-toggle">▾</span></div>
+      <div class="pp-answer">|2(x−4)| ≤ 6 → 2|x−4| ≤ 6 → |x−4| ≤ 3 → −3 ≤ x−4 ≤ 3 → 1 ≤ x ≤ 7. Solution: x ∈ [1,7]. Geometrically: all points within distance 3 of x = 4 on the number line.</div>
+    </div>
+    <div class="practice-problem">
+      <div class="pp-header"><span class="pp-num">02</span><span class="pp-q">Use the Triangle Inequality to prove: |a² − b²| ≤ (|a|+|b|)|a−b|.</span><span class="pp-diff diff-med">Medium</span><span class="pp-toggle">▾</span></div>
+      <div class="pp-answer">Factor: |a²−b²| = |a+b||a−b|. By TI I: |a+b| ≤ |a|+|b|. So |a²−b²| = |a+b||a−b| ≤ (|a|+|b|)|a−b|. □</div>
+    </div>
+    <div class="practice-problem">
+      <div class="pp-header"><span class="pp-num">03</span><span class="pp-q">ε-N proof: Prove lim(n→∞) n/(n²+1) = 0.</span><span class="pp-diff diff-med">Medium</span><span class="pp-toggle">▾</span></div>
+      <div class="pp-answer">|n/(n²+1) − 0| = n/(n²+1) ≤ n/n² = 1/n (since n²+1 > n²). Need 1/n &lt; ε: choose N = ⌈1/ε⌉. For n > N: n/(n²+1) ≤ 1/n &lt; 1/N ≤ ε. □</div>
+    </div>
+    <div class="practice-problem">
+      <div class="pp-header"><span class="pp-num">04</span><span class="pp-q">ε-N proof: Prove lim(n→∞) (2n²−1)/(n²+3) = 2.</span><span class="pp-diff diff-hard">Hard</span><span class="pp-toggle">▾</span></div>
+      <div class="pp-answer">|(2n²−1)/(n²+3) − 2| = |2n²−1−2n²−6|/(n²+3) = 7/(n²+3) ≤ 7/n². Choose N = ⌈√(7/ε)⌉. For n > N: 7/n² &lt; 7/N² ≤ ε. □</div>
+    </div>
+    <div class="practice-problem">
+      <div class="pp-header"><span class="pp-num">05</span><span class="pp-q">True/False with justification: If |aₙ − L| &lt; ε for all n ≥ 1, does it follow that lim aₙ = L?</span><span class="pp-diff diff-hard">Hard</span><span class="pp-toggle">▾</span></div>
+      <div class="pp-answer">YES — this is actually stronger than the definition requires. The definition asks for the condition to hold only for n > N (some N depending on ε); here it holds for all n ≥ 1. If |aₙ − L| &lt; ε for all n ≥ 1 and every ε > 0, then in particular for any ε > 0, choose N = 1, and the condition is satisfied. So lim aₙ = L.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ AI CHAT ═══ -->
+<div class="ai-chat topic-block" id="ai-chat">
+  <div class="ai-chat-header"><div class="ai-dot"></div><span>AI Tutor — Unit 1</span><small>Ask anything about absolute values, triangle inequality, or ε-N limits</small></div>
+  <div class="chat-messages" id="chatMessages">
+    <div class="msg ai"><div class="msg-avatar">∑</div><div class="msg-bubble">Hi! I'm your Unit 1 tutor. Ask me to walk through an ε-N proof, explain how to find N from scratch, or clarify the distance interpretation of |x − a|. What are you working on?</div></div>
+  </div>
+  <div class="chat-input-row">
+    <textarea class="chat-input" id="chatInput" placeholder="e.g. How do I find N for aₙ = (5n−2)/(2n+1)?" rows="1"></textarea>
+    <button class="chat-send" id="sendBtn" onclick="sendMessage()">Send ↑</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     QUIZ
+═══════════════════════════════════════ -->
+<div class="quiz-section topic-block" id="quiz-u1">
+  <div class="quiz-banner">
+    <div class="quiz-banner-left">
+      <h2>Unit 1 Quiz</h2>
+      <p>Absolute Values · Triangle Inequality · ε-N Limits</p>
+    </div>
+    <div class="quiz-meta">
+      <div class="quiz-meta-item"><span class="quiz-meta-num">3</span><span class="quiz-meta-label">MC</span></div>
+      <div class="quiz-meta-item"><span class="quiz-meta-num">2</span><span class="quiz-meta-label">Short</span></div>
+      <div class="quiz-meta-item"><span class="quiz-meta-num">2</span><span class="quiz-meta-label">Long</span></div>
+    </div>
+    <button class="quiz-start-btn">Begin Quiz →</button>
+  </div>
+
+  <div class="quiz-body">
+    <div class="quiz-progress-bar"><div class="quiz-progress-fill"></div></div>
+
+    <!-- MC SECTION -->
+    <div class="quiz-section-label"><span class="qsl-icon">Section A</span><span class="qsl-title">Multiple Choice</span><span class="qsl-badge">3 Questions</span></div>
+
+    <div class="quiz-question">
+      <div class="qq-num">Question 1 — Multiple Choice</div>
+      <div class="qq-text">Which of the following is the correct negation of the statement "lim(n→∞) aₙ = L"?</div>
+      <div class="qq-hint">Watch out: the negation flips ALL quantifiers. The most common error is only negating the last part.</div>
+      <div class="mc-options">
+        <div class="mc-option" data-correct="false"><span class="mc-letter">A</span><span class="mc-text">∃ ε > 0 such that ∀ N ∈ ℕ, ∃ n > N with |aₙ − L| ≥ ε</span></div>
+        <div class="mc-option" data-correct="false"><span class="mc-letter">B</span><span class="mc-text">∀ ε > 0, ∃ N ∈ ℕ such that ∃ n > N with |aₙ − L| ≥ ε</span></div>
+        <div class="mc-option" data-correct="true"><span class="mc-letter">C</span><span class="mc-text">∃ ε > 0 such that ∀ N ∈ ℕ, ∃ n > N with |aₙ − L| ≥ ε</span></div>
+        <div class="mc-option" data-correct="false"><span class="mc-letter">D</span><span class="mc-text">∀ ε > 0, ∀ N ∈ ℕ, ∃ n > N with |aₙ − L| ≥ ε</span></div>
+      </div>
+      <div class="mc-feedback"><strong>Correct!</strong> The original statement is ∀ε ∃N ∀n>N: |aₙ−L|&lt;ε. Negating flips every quantifier and negates the conclusion: ∃ε ∀N ∃n>N: |aₙ−L|≥ε. This says: there is some fixed tolerance ε such that no matter how far out you go (any N), you can always find a term beyond N that escapes the ε-band. Option A and C look identical — C is the correct formal negation.</div>
+      <button class="qq-check-btn" data-type="mc" disabled>Check Answer</button>
+    </div>
+
+    <div class="quiz-question">
+      <div class="qq-num">Question 2 — Multiple Choice</div>
+      <div class="qq-text">Let aₙ = (−1)ⁿ/n. Which statement is true?</div>
+      <div class="qq-hint">Don't confuse |aₙ| → 0 with something about the sequence's sign pattern.</div>
+      <div class="mc-options">
+        <div class="mc-option" data-correct="false"><span class="mc-letter">A</span><span class="mc-text">The sequence diverges because it alternates sign.</span></div>
+        <div class="mc-option" data-correct="true"><span class="mc-letter">B</span><span class="mc-text">lim(n→∞) aₙ = 0, because |(−1)ⁿ/n − 0| = 1/n → 0.</span></div>
+        <div class="mc-option" data-correct="false"><span class="mc-letter">C</span><span class="mc-text">The sequence converges to 1 because (−1)ⁿ oscillates about 1.</span></div>
+        <div class="mc-option" data-correct="false"><span class="mc-letter">D</span><span class="mc-text">The sequence converges to 0 only for even n.</span></div>
+      </div>
+      <div class="mc-feedback"><strong>Correct!</strong> B is right. The ε-N condition only requires |aₙ − L| &lt; ε; the sign of aₙ is irrelevant. Since |(−1)ⁿ/n| = 1/n → 0, the sequence converges to 0 regardless of alternation. A is a common trap: alternating sign does NOT cause divergence by itself — the magnitudes must fail to settle.</div>
+      <button class="qq-check-btn" data-type="mc" disabled>Check Answer</button>
+    </div>
+
+    <div class="quiz-question">
+      <div class="qq-num">Question 3 — Multiple Choice</div>
+      <div class="qq-text">In an ε-N proof that lim aₙ = L, you have found that |aₙ − L| ≤ 3/n². Which choice of N suffices for a general ε > 0?</div>
+      <div class="qq-hint">You need 3/n² &lt; ε. Be careful: N must be a natural number and you need n > N (not n ≥ N).</div>
+      <div class="mc-options">
+        <div class="mc-option" data-correct="false"><span class="mc-letter">A</span><span class="mc-text">N = ε/3</span></div>
+        <div class="mc-option" data-correct="false"><span class="mc-letter">B</span><span class="mc-text">N = 3/ε</span></div>
+        <div class="mc-option" data-correct="true"><span class="mc-letter">C</span><span class="mc-text">N = ⌈√(3/ε)⌉</span></div>
+        <div class="mc-option" data-correct="false"><span class="mc-letter">D</span><span class="mc-text">N = ⌈3/ε⌉</span></div>
+      </div>
+      <div class="mc-feedback"><strong>Correct!</strong> We need 3/n² &lt; ε, i.e., n² > 3/ε, i.e., n > √(3/ε). So N = ⌈√(3/ε)⌉ works: for n > N, we have n > √(3/ε), so n² > 3/ε, so 3/n² &lt; ε. Option D (N = ⌈3/ε⌉) is wrong — it would give 3/n &lt; ε, not 3/n².</div>
+      <button class="qq-check-btn" data-type="mc" disabled>Check Answer</button>
+    </div>
+
+    <!-- SHORT ANSWER -->
+    <div class="quiz-section-label"><span class="qsl-icon">Section B</span><span class="qsl-title">Short Answer</span><span class="qsl-badge">2 Questions</span></div>
+
+    <div class="quiz-question">
+      <div class="qq-num">Question 4 — Short Answer</div>
+      <div class="qq-text">Solve: |3x − 6| &lt; 9. Write your answer as an interval in the form (a, b).</div>
+      <input type="text" class="sa-input" placeholder="e.g. (-1, 5)" data-accept="-1,5|(-1,5)|(-1, 5)"/>
+      <div class="sa-feedback incorrect-sfb">
+        <span class="sa-answer-reveal">Answer: (−1, 5). Work: |3(x−2)| &lt; 9 → 3|x−2| &lt; 9 → |x−2| &lt; 3 → −3 &lt; x−2 &lt; 3 → −1 &lt; x &lt; 5.</span>
+      </div>
+      <button class="qq-check-btn" data-type="sa">Check</button>
+    </div>
+
+    <div class="quiz-question">
+      <div class="qq-num">Question 5 — Short Answer</div>
+      <div class="qq-text">What is the smallest valid choice of N (as a natural number) in an ε-N proof that lim(n→∞) 5/n = 0, when ε = 0.01?</div>
+      <input type="text" class="sa-input" placeholder="e.g. 500" data-accept="500"/>
+      <div class="sa-feedback incorrect-sfb">
+        <span class="sa-answer-reveal">N = 500. We need 5/n &lt; 0.01, so n > 5/0.01 = 500. The smallest natural number N such that all n > N satisfy this is N = 500.</span>
+      </div>
+      <button class="qq-check-btn" data-type="sa">Check</button>
+    </div>
+
+    <!-- LONG ANSWER -->
+    <div class="quiz-section-label"><span class="qsl-icon">Section C</span><span class="qsl-title">Long Answer</span><span class="qsl-badge">2 Questions</span></div>
+
+    <div class="quiz-question">
+      <div class="qq-num">Question 6 — Long Answer (Proof)</div>
+      <div class="qq-text">Prove rigorously using the ε-N definition: lim(n→∞) (4n − 3)/(2n + 1) = 2.</div>
+      <textarea class="la-textarea" placeholder="Write your proof here. Start with scratch work (finding N), then write the formal proof..."></textarea>
+      <button class="la-reveal-btn">Reveal Model Solution</button>
+      <div class="la-solution">
+        <div class="la-sol-label">Model Solution</div>
+        <div class="la-sol-body">
+          <strong>Scratch work:</strong><br>
+          |(4n−3)/(2n+1) − 2| = |(4n−3 − 2(2n+1))/(2n+1)| = |(4n−3−4n−2)/(2n+1)| = |−5/(2n+1)| = 5/(2n+1)<br><br>
+          Need: 5/(2n+1) &lt; ε. This holds when 2n+1 > 5/ε, i.e., n > (5/ε − 1)/2.<br>
+          Choose N = ⌈5/(2ε)⌉ (safe: for n > N, certainly 2n > 5/ε − 1).<br><br>
+          <strong>Formal proof:</strong><br>
+          Let ε > 0. Set N = ⌈5/(2ε)⌉. Let n > N. Then:<br>
+          n > N ≥ 5/(2ε), so 2n > 5/ε, so 2n+1 > 5/ε, so 5/(2n+1) &lt; ε.<br>
+          Therefore |(4n−3)/(2n+1) − 2| = 5/(2n+1) &lt; ε. □
+        </div>
+      </div>
+    </div>
+
+    <div class="quiz-question">
+      <div class="qq-num">Question 7 — Long Answer (Triangle Inequality + Bound)</div>
+      <div class="qq-text">Let f(x) = x³. Given |x − 1| &lt; 1/2, find an explicit upper bound for |f(x) − 1| = |x³ − 1|. Show all steps of your bounding argument clearly.</div>
+      <textarea class="la-textarea" placeholder="Factor x³ − 1, then bound each factor using |x−1| < 1/2..."></textarea>
+      <button class="la-reveal-btn">Reveal Model Solution</button>
+      <div class="la-solution">
+        <div class="la-sol-label">Model Solution</div>
+        <div class="la-sol-body">
+          <strong>Step 1 — Factor:</strong> x³ − 1 = (x−1)(x² + x + 1), so |x³ − 1| = |x−1| · |x² + x + 1|.<br><br>
+          <strong>Step 2 — Bound |x² + x + 1|:</strong> From |x−1| &lt; 1/2 we get 1/2 &lt; x &lt; 3/2.<br>
+          • x² &lt; (3/2)² = 9/4<br>
+          • x &lt; 3/2<br>
+          • 1 = 1<br>
+          So |x² + x + 1| ≤ x² + x + 1 &lt; 9/4 + 3/2 + 1 = 9/4 + 6/4 + 4/4 = 19/4.<br><br>
+          <strong>Step 3 — Combine:</strong><br>
+          |x³ − 1| = |x−1| · |x² + x + 1| &lt; (1/2) · (19/4) = 19/8.<br><br>
+          Therefore |x³ − 1| &lt; 19/8 whenever |x − 1| &lt; 1/2.
+        </div>
+      </div>
+    </div>
+
+    <div class="quiz-submit-row">
+      <span class="quiz-submit-note">MC and Short Answer will be auto-scored. Long Answer solutions will be revealed.</span>
+      <button class="quiz-submit-btn">Submit &amp; Score →</button>
+    </div>
+    <div class="quiz-score-panel">
+      <div class="qs-title">Quiz Complete</div>
+      <div class="qs-score">—</div>
+      <div class="qs-label">out of 5 scored questions</div>
+      <p class="qs-msg"></p>
+      <button class="quiz-retry-btn">↺ Retry Quiz</button>
+    </div>
+  </div>
+</div>
+
+</main>
+<aside class="sidebar">
+  <div class="sidebar-section">
+    <h4>On This Page</h4>
+    <ul class="toc-list">
+      <li><a href="#absval">Absolute Values</a></li>
+      <li><a href="#triangle">Triangle Inequality I & II</a></li>
+      <li><a href="#sequences">Sequences & ε-N Definition</a></li>
+      <li><a href="#practice">Practice Problems</a></li>
+      <li><a href="#ai-chat">AI Tutor</a></li>
+      <li><a href="#quiz-u1">Unit Quiz</a></li>
+    </ul>
+  </div>
+  <div class="sidebar-section">
+    <h4>Key Formulas</h4>
+    <div class="formula-pill"><div class="fp-label">Absolute Value</div><div class="fp-math">|x| = x if x≥0, −x if x&lt;0</div></div>
+    <div class="formula-pill"><div class="fp-label">Distance</div><div class="fp-math">|x−a|&lt;δ ⟺ x∈(a−δ,a+δ)</div></div>
+    <div class="formula-pill"><div class="fp-label">Triangle Ineq. I</div><div class="fp-math">|a+b| ≤ |a| + |b|</div></div>
+    <div class="formula-pill"><div class="fp-label">Triangle Ineq. II</div><div class="fp-math">||a|−|b|| ≤ |a−b|</div></div>
+    <div class="formula-pill"><div class="fp-label">ε-N Definition</div><div class="fp-math">∀ε>0 ∃N: n>N ⟹ |aₙ−L|&lt;ε</div></div>
+  </div>
+</aside>
+</div>
+
+<div class="unit-nav">
+  <a href="index.html" class="unit-nav-btn">← <div><span class="un-label">Back to</span><span class="un-title">Course Overview</span></div></a>
+  <a href="unit2.html" class="unit-nav-btn"><div style="text-align:right"><span class="un-label">Next Unit</span><span class="un-title">Convergence & Sequence Theorems</span></div> →</a>
+</div>
+
+<script src="shared.js"></script>
+<script>
+// Absolute value number line interaction
+(function(){
+  const deltaSlider = document.getElementById('avDelta');
+  const xSlider = document.getElementById('avX_slider');
+  if(!deltaSlider) return;
+  const a = 260; // center
+  function update() {
+    const delta = +deltaSlider.value;
+    const xPos = +xSlider.value;
+    const L = a - delta, R = a + delta;
+    document.getElementById('avRect').setAttribute('x', L);
+    document.getElementById('avRect').setAttribute('width', delta*2);
+    document.getElementById('avL').setAttribute('x1', L); document.getElementById('avL').setAttribute('x2', L);
+    document.getElementById('avR').setAttribute('x1', R); document.getElementById('avR').setAttribute('x2', R);
+    document.getElementById('avD1').setAttribute('x', L); document.getElementById('avD1').textContent = 'a−δ';
+    document.getElementById('avD2').setAttribute('x', R); document.getElementById('avD2').textContent = 'a+δ';
+    document.getElementById('avArrow1').setAttribute('x2', L);
+    document.getElementById('avArrow2').setAttribute('x2', R);
+    document.getElementById('avX').setAttribute('cx', xPos);
+    document.getElementById('avXLabel').setAttribute('x', xPos);
+    const dist = Math.abs(xPos - a);
+    const inside = dist < delta;
+    document.getElementById('avX').setAttribute('fill', inside ? '#e8924a' : '#e05555');
+    const statusEl = document.getElementById('avStatus');
+    if (inside) {
+      statusEl.textContent = '|x − a| < δ  ✓  (x is inside the interval)';
+      statusEl.setAttribute('fill', '#4caf7d');
+    } else {
+      statusEl.textContent = '|x − a| ≥ δ  ✗  (x is outside the interval)';
+      statusEl.setAttribute('fill', '#e05555');
+    }
+  }
+  deltaSlider.addEventListener('input', update);
+  xSlider.addEventListener('input', update);
+  update();
+})();
+
+// ε-N canvas visualization
+(function(){
+  const canvas = document.getElementById('epsnCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const epsSlider = document.getElementById('epsSlider');
+  const nSlider = document.getElementById('nSlider');
+  const nValSpan = document.getElementById('nVal');
+  const W = canvas.width, H = canvas.height;
+  const PAD = 48, RPAD = 20;
+  const plotW = W - PAD - RPAD, plotH = H - 60;
+  const NTERMS = 30;
+  const L = 0; // limit
+
+  function seqVal(n) { return 1/n; }
+
+  function toX(n) { return PAD + ((n - 1) / (NTERMS - 1)) * plotW; }
+  function toY(v) { return 16 + (1 - (v + 0.12) / (1.0 + 0.24)) * plotH; }
+
+  function draw() {
+    const eps = +epsSlider.value / 220;
+    const N = +nSlider.value;
+    if (nValSpan) nValSpan.textContent = N;
+
+    ctx.clearRect(0, 0, W, H);
+
+    // background
+    ctx.fillStyle = '#131618';
+    ctx.fillRect(0, 0, W, H);
+
+    // ε band
+    const yTop = toY(L + eps), yBot = toY(L - eps);
+    ctx.fillStyle = 'rgba(212,168,67,0.1)';
+    ctx.fillRect(PAD, yTop, plotW, yBot - yTop);
+    ctx.strokeStyle = 'rgba(212,168,67,0.4)';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([6,4]);
+    ctx.beginPath(); ctx.moveTo(PAD, yTop); ctx.lineTo(PAD + plotW, yTop); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(PAD, yBot); ctx.lineTo(PAD + plotW, yBot); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // N cutoff line
+    const xN = toX(N);
+    ctx.strokeStyle = 'rgba(74,144,217,0.6)';
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([4,3]);
+    ctx.beginPath(); ctx.moveTo(xN, 10); ctx.lineTo(xN, H - 30); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // N label
+    ctx.fillStyle = '#4a90d9';
+    ctx.font = '11px JetBrains Mono, monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('N=' + N, xN, H - 16);
+
+    // limit line
+    const yL = toY(L);
+    ctx.strokeStyle = 'rgba(255,255,255,0.15)';
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(PAD, yL); ctx.lineTo(PAD + plotW, yL); ctx.stroke();
+    ctx.fillStyle = 'rgba(255,255,255,0.35)';
+    ctx.font = '10px JetBrains Mono, monospace';
+    ctx.textAlign = 'left';
+    ctx.fillText('L=0', 4, yL + 4);
+
+    // ε labels
+    ctx.fillStyle = '#d4a843';
+    ctx.font = '10px JetBrains Mono, monospace';
+    ctx.textAlign = 'right';
+    ctx.fillText('+ε', PAD - 4, yTop + 4);
+    ctx.fillText('−ε', PAD - 4, yBot + 4);
+
+    // sequence dots
+    for (let n = 1; n <= NTERMS; n++) {
+      const v = seqVal(n);
+      const x = toX(n), y = toY(v);
+      const isInsideBand = Math.abs(v - L) < eps;
+      const isPastN = n > N;
+
+      if (!isInsideBand && isPastN) {
+        ctx.fillStyle = '#e05555';
+      } else if (isPastN && isInsideBand) {
+        ctx.fillStyle = '#4caf7d';
+      } else {
+        ctx.fillStyle = '#7a7670';
+      }
+      ctx.beginPath();
+      ctx.arc(x, y, 4, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // axis
+    ctx.strokeStyle = 'rgba(255,255,255,0.15)';
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(PAD, 10); ctx.lineTo(PAD, H - 30); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(PAD, H - 30); ctx.lineTo(W - RPAD, H - 30); ctx.stroke();
+
+    // x-axis ticks
+    ctx.fillStyle = '#5a5650';
+    ctx.font = '9px JetBrains Mono, monospace';
+    ctx.textAlign = 'center';
+    [5, 10, 15, 20, 25, 30].forEach(n => {
+      const x = toX(n);
+      ctx.fillText(n, x, H - 18);
+      ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+      ctx.beginPath(); ctx.moveTo(x, H-32); ctx.lineTo(x, H-28); ctx.stroke();
+    });
+    ctx.fillStyle = '#7a7670';
+    ctx.font = '10px JetBrains Mono, monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('n', W - 10, H - 18);
+  }
+
+  epsSlider.addEventListener('input', draw);
+  nSlider.addEventListener('input', draw);
+  draw();
+})();
+</script>
+</body>
+</html>

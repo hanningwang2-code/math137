@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Calculus I — MathBase</title>
+<link rel="stylesheet" href="shared.css"/>
+<style>
+.index-hero {
+  min-height: 60vh; display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 120px 64px 64px; position: relative; overflow: hidden;
+  border-bottom: 1px solid var(--border);
+}
+.index-hero-bg {
+  position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(ellipse 70% 80% at 100% 60%, rgba(74,144,217,0.08), transparent 65%),
+              radial-gradient(ellipse 40% 50% at 10% 80%, rgba(212,168,67,0.05), transparent 60%);
+}
+.floating-formula {
+  position: absolute; font-family: 'JetBrains Mono', monospace;
+  color: rgba(255,255,255,0.04); white-space: nowrap;
+  animation: floatUp 25s linear infinite; pointer-events: none; user-select: none;
+}
+@keyframes floatUp { from{transform:translateY(100vh)} to{transform:translateY(-100px)} }
+
+.index-hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(3rem, 6vw, 5.5rem);
+  font-weight: 900; letter-spacing: -0.04em; line-height: 1.0;
+  margin-bottom: 24px;
+}
+.index-hero h1 em { font-style: italic; color: var(--gold); }
+.index-hero p { color: var(--muted); font-size: 1.1rem; max-width: 600px; line-height: 1.75; margin-bottom: 40px; }
+
+.hero-tags { display: flex; gap: 10px; flex-wrap: wrap; }
+.hero-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 6px 14px; border: 1px solid var(--border2); color: var(--muted);
+}
+
+.units-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 0; margin: 0; border-bottom: 1px solid var(--border);
+}
+.unit-card {
+  padding: 40px 44px; border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  text-decoration: none; color: inherit;
+  position: relative; overflow: hidden;
+  transition: background 0.3s;
+  display: block;
+}
+.unit-card:nth-child(3n) { border-right: none; }
+.unit-card:hover { background: var(--surface); }
+
+.uc-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.58rem; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 14px;
+  display: flex; align-items: center; gap: 8px;
+}
+.uc-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); flex-shrink:0; }
+
+.uc-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.25rem; font-weight: 700; margin-bottom: 12px;
+  letter-spacing: -0.01em; line-height: 1.25;
+}
+.uc-topics { list-style: none; margin-top: 14px; }
+.uc-topics li {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem; color: var(--muted); padding: 4px 0;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 6px;
+}
+.uc-topics li:last-child { border-bottom: none; }
+.uc-topics li::before { content:'·'; color: var(--gold); }
+
+.uc-arrow {
+  position: absolute; bottom: 20px; right: 24px;
+  font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
+  color: var(--muted); transition: color 0.2s, transform 0.2s;
+}
+.unit-card:hover .uc-arrow { color: var(--gold); transform: translateX(4px); }
+
+.uc-bg-num {
+  position: absolute; right: -8px; bottom: -16px;
+  font-family: 'Playfair Display', serif; font-size: 7rem;
+  font-weight: 900; color: rgba(255,255,255,0.025);
+  line-height: 1; pointer-events: none; user-select: none;
+  transition: opacity 0.3s;
+}
+.unit-card:hover .uc-bg-num { opacity: 2; color: rgba(212,168,67,0.05); }
+
+@media(max-width:900px){
+  .units-grid{grid-template-columns:1fr;}
+  .unit-card{border-right:none!important;}
+  .index-hero{padding:100px 28px 44px;}
+}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a class="nav-brand" href="../math_hub.html">
+    <span class="nav-brand-logo">Math<span>Base</span></span>
+    <span class="nav-divider"></span>
+    <span class="nav-course">Calculus I</span>
+  </a>
+  <ul class="nav-units">
+    <li><a href="unit1.html">U1</a></li><li><a href="unit2.html">U2</a></li>
+    <li><a href="unit3.html">U3</a></li><li><a href="unit4.html">U4</a></li>
+    <li><a href="unit5.html">U5</a></li><li><a href="unit6.html">U6</a></li>
+    <li><a href="unit7.html">U7</a></li><li><a href="unit8.html">U8</a></li>
+    <li><a href="unit9.html">U9</a></li>
+  </ul>
+</nav>
+
+<section class="index-hero">
+  <div class="index-hero-bg"></div>
+  <div class="floating-formula" style="left:10%;animation-duration:22s;animation-delay:-4s">lim(x→a) f(x) = L</div>
+  <div class="floating-formula" style="left:35%;animation-duration:30s;animation-delay:-11s">∫ₐᵇ f(x)dx = F(b)-F(a)</div>
+  <div class="floating-formula" style="left:65%;animation-duration:26s;animation-delay:-8s">f'(x) = lim(h→0) [f(x+h)-f(x)]/h</div>
+  <div class="floating-formula" style="left:82%;animation-duration:34s;animation-delay:-18s">∀ε>0 ∃δ>0</div>
+
+  <div style="position:relative;z-index:2">
+    <div class="unit-eyebrow">MATH 135 · Calculus I</div>
+    <h1>The <em>Language</em><br>of Change</h1>
+    <p>From the rigorous ε-δ foundations of limits to the Fundamental Theorem of Calculus — nine units covering every essential concept of first-year differential and integral calculus.</p>
+    <div class="hero-tags">
+      <span class="hero-tag">Limits</span>
+      <span class="hero-tag">Sequences</span>
+      <span class="hero-tag">Continuity</span>
+      <span class="hero-tag">Derivatives</span>
+      <span class="hero-tag">Integration</span>
+      <span class="hero-tag">MVT</span>
+      <span class="hero-tag">L'Hôpital</span>
+    </div>
+  </div>
+</section>
+
+<div class="units-grid">
+
+  <a class="unit-card" href="unit1.html">
+    <div class="uc-num"><span class="uc-dot"></span> Unit 01</div>
+    <div class="uc-title">Absolute Values &amp; Sequence Limits</div>
+    <ul class="uc-topics">
+      <li>Absolute value — formal definition</li>
+      <li>Triangle Inequality I &amp; II</li>
+      <li>Sequences and convergence</li>
+      <li>Epsilon-N definition of a limit</li>
+    </ul>
+    <span class="uc-arrow">→</span>
+    <div class="uc-bg-num">1</div>
+  </a>
+
+  <a class="unit-card" href="unit2.html">
+    <div class="uc-num"><span class="uc-dot"></span> Unit 02</div>
+    <div class="uc-title">Convergence &amp; Sequence Theorems</div>
+    <ul class="uc-topics">
+      <li>Convergence &amp; divergence</li>
+      <li>Squeeze Theorem &amp; applications</li>
+      <li>Monotone Convergence Theorem</li>
+      <li>Induction for sequence bounds</li>
+    </ul>
+    <span class="uc-arrow">→</span>
+    <div class="uc-bg-num">2</div>
+  </a>
+
+  <a class="unit-card" href="unit3.html">
+    <div class="uc-num"><span class="uc-dot"></span> Unit 03</div>
+    <div class="uc-title">Limits of Functions</div>
+    <ul class="uc-topics">
+      <li>Epsilon-Delta definition</li>
+      <li>Sequential characterization</li>
+      <li>Disproving limits exist</li>
+      <li>Fundamental trig &amp; log limits</li>
+    </ul>
+    <span class="uc-arrow">→</span>
+    <div class="uc-bg-num">3</div>
+  </a>
+
+  <a class="unit-card" href="unit4.html">
+    <div class="uc-num"><span class="uc-dot"></span> Unit 04</div>
+    <div class="uc-title">Continuity &amp; IVT</div>
+    <ul class="uc-topics">
+      <li>Epsilon-Delta continuity</li>
+      <li>Limits at infinity (L = ∞)</li>
+      <li>Vertical &amp; horizontal asymptotes</li>
+      <li>Intermediate Value Theorem</li>
+    </ul>
+    <span class="uc-arrow">→</span>
+    <div class="uc-bg-num">4</div>
+  </a>
+
+  <a class="unit-card" href="unit5.html">
+    <div class="uc-num"><span class="uc-dot"></span> Unit 05</div>
+    <div class="uc-title">Differentiation</div>
+    <ul class="uc-topics">
+      <li>First principles definition</li>
+      <li>Power, Chain, Product, Quotient Rules</li>
+      <li>Derivatives of log, trig, exp</li>
+    </ul>
+    <span class="uc-arrow">→</span>
+    <div class="uc-bg-num">5</div>
+  </a>
+
+  <a class="unit-card" href="unit6.html">
+    <div class="uc-num"><span class="uc-dot"></span> Unit 06</div>
+    <div class="uc-title">Approximation &amp; Inverse Functions</div>
+    <ul class="uc-topics">
+      <li>Newton's Method</li>
+      <li>Linear Approximation</li>
+      <li>Derivatives of Inverse Functions</li>
+    </ul>
+    <span class="uc-arrow">→</span>
+    <div class="uc-bg-num">6</div>
+  </a>
+
+  <a class="unit-card" href="unit7.html">
+    <div class="uc-num"><span class="uc-dot"></span> Unit 07</div>
+    <div class="uc-title">Implicit Differentiation &amp; EVT</div>
+    <ul class="uc-topics">
+      <li>Implicit differentiation</li>
+      <li>Extreme Value Theorem</li>
+      <li>Related rates</li>
+    </ul>
+    <span class="uc-arrow">→</span>
+    <div class="uc-bg-num">7</div>
+  </a>
+
+  <a class="unit-card" href="unit8.html">
+    <div class="uc-num"><span class="uc-dot"></span> Unit 08</div>
+    <div class="uc-title">Extrema &amp; Curve Sketching</div>
+    <ul class="uc-topics">
+      <li>Local &amp; global max/min</li>
+      <li>Critical points</li>
+      <li>Curve sketching with derivatives</li>
+    </ul>
+    <span class="uc-arrow">→</span>
+    <div class="uc-bg-num">8</div>
+  </a>
+
+  <a class="unit-card" href="unit9.html">
+    <div class="uc-num"><span class="uc-dot"></span> Unit 09</div>
+    <div class="uc-title">MVT &amp; L'Hôpital's Rule</div>
+    <ul class="uc-topics">
+      <li>Mean Value Theorem &amp; proofs</li>
+      <li>Indeterminate forms</li>
+      <li>L'Hôpital's Rule &amp; strategies</li>
+    </ul>
+    <span class="uc-arrow">→</span>
+    <div class="uc-bg-num">9</div>
+  </a>
+
+</div>
+
+<footer style="padding:32px 64px; border-top:1px solid var(--border); display:flex; justify-content:space-between; align-items:center;">
+  <span style="font-family:'Playfair Display',serif;font-size:1rem;font-weight:900;color:var(--text)">Math<span style="color:var(--gold)">Base</span></span>
+  <span style="font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase">Calculus I · MATH 135</span>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Unit 8 — Extrema & Curve Sketching · Calculus I</title>
+<link rel="stylesheet" href="shared.css"/></head>
+<body>
+<script>window.UNIT_CONTEXT = "Calculus I — Unit 8: Local and global maximum/minimum, Fermat's Theorem, First and Second Derivative Tests for critical points, concavity, inflection points, and complete curve sketching using derivatives";</script>
+<nav class="topnav"><a class="nav-brand" href="index.html"><span class="nav-brand-logo">Math<span>Base</span></span><span class="nav-divider"></span><span class="nav-course">Calculus I</span></a><ul class="nav-units"><li><a href="unit1.html">U1</a></li><li><a href="unit2.html">U2</a></li><li><a href="unit3.html">U3</a></li><li><a href="unit4.html">U4</a></li><li><a href="unit5.html">U5</a></li><li><a href="unit6.html">U6</a></li><li><a href="unit7.html">U7</a></li><li><a href="unit8.html" class="active">U8</a></li><li><a href="unit9.html">U9</a></li></ul></nav>
+<section class="unit-hero"><div class="unit-hero-bg"></div><div class="unit-eyebrow">Unit 08 · Calculus I</div><h1>Extrema &amp;<br><em>Curve Sketching</em></h1><p class="unit-hero-desc">Fermat's Theorem, 1st and 2nd Derivative Tests, concavity, inflection points, and the complete curve-sketching algorithm.</p><div class="unit-hero-number">8</div></section>
+<div class="page-body"><main class="main-content">
+
+<div class="topic-block" id="extrema">
+  <div class="topic-label">Topic 1</div>
+  <h2>Local &amp; Global Extrema</h2>
+
+  <div class="theorem-box"><div class="thm-label">Definitions</div><div class="thm-title">Local and Global Extrema</div><div class="thm-body"><strong>Local max at c:</strong> f(c)≥f(x) for all x in some open interval containing c.<br><strong>Local min at c:</strong> f(c)≤f(x) for all x in some open interval containing c.<br><br><strong>Global (absolute) max on D:</strong> f(c)≥f(x) for all x∈D.<br>Every global extremum is local, but not vice versa.</div></div>
+
+  <div class="theorem-box"><div class="thm-label">Theorem — Fermat's Theorem</div><div class="thm-title">Local extrema at differentiable points require f'(c) = 0</div><div class="thm-body">If f has a local extremum at c AND f is differentiable at c, then f'(c)=0. This is <strong>necessary but not sufficient</strong>: f'(c)=0 doesn't guarantee an extremum (e.g., f(x)=x³ at c=0).</div></div>
+
+  <div class="theorem-box"><div class="thm-label">Definition — Critical Point</div><div class="thm-title">f'(c) = 0 OR f'(c) does not exist</div><div class="thm-body">Critical points are the <em>candidates</em> for local extrema. Every local extremum is a critical point (Fermat), but not every critical point is an extremum.</div></div>
+</div>
+
+<hr class="topic-divider"/>
+
+<div class="topic-block" id="tests">
+  <div class="topic-label">Topic 2</div>
+  <h2>First &amp; Second Derivative Tests</h2>
+
+  <div class="theorem-box"><div class="thm-label">Theorem — First Derivative Test</div><div class="thm-title">Sign changes of f' classify local extrema</div><div class="thm-body">Let c be a critical point.<br>• f' changes + → − at c: <strong>local max</strong> at c.<br>• f' changes − → + at c: <strong>local min</strong> at c.<br>• f' doesn't change sign: <strong>neither</strong> (e.g. inflection point).</div></div>
+
+  <div class="theorem-box"><div class="thm-label">Theorem — Second Derivative Test</div><div class="thm-title">Concavity at a critical point classifies it</div><div class="thm-body">If f'(c)=0:<br>• f''(c)>0 ⟹ <strong>local min</strong> at c (concave up = "smile").<br>• f''(c)&lt;0 ⟹ <strong>local max</strong> at c (concave down = "frown").<br>• f''(c)=0 ⟹ <strong>inconclusive</strong>; use 1st Derivative Test.</div></div>
+
+  <div class="formula-block"><div class="f-label">Concavity & Inflection Points</div><div class="f-math">f''(x) > 0 on (a,b)  ⟹  f is concave UP  on (a,b)  (slopes increasing)
+f''(x) &lt; 0 on (a,b)  ⟹  f is concave DOWN on (a,b)  (slopes decreasing)
+Inflection point at c: f''(c)=0 (or undefined) AND f'' changes sign at c</div></div>
+
+  <!-- Curve sketching visualization -->
+  <div class="viz-container">
+    <div class="viz-header"><span>Visualization — f, f', f'' Sign Chart</span><span class="viz-badge">Interactive</span></div>
+    <div class="viz-body">
+      <canvas id="sketchCanvas" width="540" height="340" style="max-width:100%;display:block;background:#0c0e0f;border-radius:2px"></canvas>
+      <div class="viz-controls">
+        <select id="sketchFn" style="background:var(--surface2);border:1px solid var(--border2);color:var(--text);font-family:'JetBrains Mono',monospace;font-size:.7rem;padding:6px 14px;outline:none;cursor:pointer;border-radius:2px">
+          <option value="cubic">f(x) = x³ − 3x</option>
+          <option value="quartic">f(x) = x⁴ − 4x³</option>
+          <option value="sin">f(x) = sin(x)</option>
+        </select>
+      </div>
+      <div class="viz-caption">Green = f, blue = f', orange = f''. Watch where f'=0 (local extrema) and f''=0 (inflection points).</div>
+    </div>
+  </div>
+</div>
+
+<hr class="topic-divider"/>
+
+<div class="topic-block" id="curvesketch">
+  <div class="topic-label">Topic 3</div>
+  <h2>Complete Curve Sketching</h2>
+
+  <div class="formula-block"><div class="f-label">Curve Sketching Algorithm (8 steps)</div><div class="f-math">1. Domain: where is f defined?
+2. Intercepts: f(0); solutions to f(x)=0.
+3. Symmetry: even (f(−x)=f(x)), odd (f(−x)=−f(x)), neither.
+4. Asymptotes: vertical (discontinuities), horizontal (limits at ±∞).
+5. f'(x): find critical points, determine intervals of increase/decrease.
+6. f''(x): find inflection points, determine intervals of concavity.
+7. Classify each critical point via 1st or 2nd Derivative Test.
+8. Plot key points and sketch.</div></div>
+
+  <div class="example-block"><div class="ex-label">Full Worked Example</div>
+  <div class="ex-problem">Sketch f(x) = x⁴ − 4x³.</div>
+  <div class="ex-step"><strong>Domain:</strong> ℝ. <strong>y-intercept:</strong> f(0)=0. <strong>x-intercepts:</strong> x³(x−4)=0 ⟹ x=0,4.</div>
+  <div class="ex-step"><strong>f'(x)=4x³−12x²=4x²(x−3)=0</strong> ⟹ critical points x=0,3.</div>
+  <div class="ex-step"><strong>Sign of f':</strong> x∈(−∞,0): 4x²>0,(x−3)&lt;0, f'&lt;0 (dec). (0,3): same signs, f'&lt;0 (dec). (3,∞): f'>0 (inc).</div>
+  <div class="ex-step"><strong>Classification:</strong> x=0: no sign change in f' → inflection. x=3: f' changes −→+ → local min. f(3)=81−108=−27.</div>
+  <div class="ex-step"><strong>f''(x)=12x²−24x=12x(x−2)=0</strong> ⟹ potential inflections x=0,2. Sign changes at both → inflection points at (0,0) and (2,−16).</div>
+  <div class="ex-step"><strong>Behavior:</strong> f(x)→+∞ as x→±∞. Global min at (3,−27).</div></div>
+</div>
+
+<hr class="topic-divider"/>
+
+<div class="practice-section topic-block" id="practice">
+  <h3>Practice Problems</h3>
+  <div class="practice-grid">
+    <div class="practice-problem"><div class="pp-header"><span class="pp-num">01</span><span class="pp-q">Find and classify all critical points of f(x)=x³−6x²+9x+1.</span><span class="pp-diff diff-med">Medium</span><span class="pp-toggle">▾</span></div><div class="pp-answer">f'(x)=3x²−12x+9=3(x−1)(x−3)=0 ⟹ x=1,3. f''(x)=6x−12. f''(1)=−6&lt;0 → local max at x=1, f(1)=5. f''(3)=6>0 → local min at x=3, f(3)=1.</div></div>
+    <div class="practice-problem"><div class="pp-header"><span class="pp-num">02</span><span class="pp-q">Find all inflection points of g(x)=x⁴−6x².</span><span class="pp-diff diff-med">Medium</span><span class="pp-toggle">▾</span></div><div class="pp-answer">g''(x)=12x²−12=12(x−1)(x+1)=0 at x=±1. g'' changes sign at both. Inflection points: (1,−5) and (−1,−5).</div></div>
+    <div class="practice-problem"><div class="pp-header"><span class="pp-num">03</span><span class="pp-q">Sketch a complete curve analysis for f(x)=x/(x²+1).</span><span class="pp-diff diff-hard">Hard</span><span class="pp-toggle">▾</span></div><div class="pp-answer">Domain: ℝ. Odd function. y=0 horizontal asymptote. f'(x)=(1−x²)/(x²+1)²=0 ⟹ x=±1. f'(−1)=neg→pos: local min f(−1)=−1/2. f'(1)=pos→neg: local max f(1)=1/2. f''(x)=2x(x²−3)/(x²+1)³=0 at x=0,±√3. Inflections at these 3 points.</div></div>
+  </div>
+</div>
+
+<div class="ai-chat topic-block" id="ai-chat">
+  <div class="ai-chat-header"><div class="ai-dot"></div><span>AI Tutor — Unit 8</span><small>Extrema · Derivative Tests · Curve Sketching</small></div>
+  <div class="chat-messages" id="chatMessages"><div class="msg ai"><div class="msg-avatar">∑</div><div class="msg-bubble">Hi! I can walk through a full curve sketch, classify critical points with either derivative test, or explain why f'(c)=0 is necessary but not sufficient for a local extremum. What are you analyzing?</div></div></div>
+  <div class="chat-input-row"><textarea class="chat-input" id="chatInput" placeholder="e.g. Sketch f(x) = xe^(-x)" rows="1"></textarea><button class="chat-send" id="sendBtn" onclick="sendMessage()">Send ↑</button></div>
+</div>
+
+<!-- QUIZ -->
+<div class="quiz-section topic-block" id="quiz-u8">
+  <div class="quiz-banner"><div class="quiz-banner-left"><h2>Unit 8 Quiz</h2><p>Critical Points · Derivative Tests · Curve Sketching</p></div>
+    <div class="quiz-meta"><div class="quiz-meta-item"><span class="quiz-meta-num">3</span><span class="quiz-meta-label">MC</span></div><div class="quiz-meta-item"><span class="quiz-meta-num">2</span><span class="quiz-meta-label">Short</span></div><div class="quiz-meta-item"><span class="quiz-meta-num">2</span><span class="quiz-meta-label">Long</span></div></div>
+    <button class="quiz-start-btn">Begin Quiz →</button></div>
+  <div class="quiz-body">
+    <div class="quiz-progress-bar"><div class="quiz-progress-fill"></div></div>
+    <div class="quiz-section-label"><span class="qsl-icon">Section A</span><span class="qsl-title">Multiple Choice</span><span class="qsl-badge">3 Questions</span></div>
+
+    <div class="quiz-question">
+      <div class="qq-num">Question 1</div>
+      <div class="qq-text">f'(c) = 0. Can we conclude f has a local extremum at c?</div>
+      <div class="qq-hint">Think carefully: is f'(c)=0 sufficient, or just necessary?</div>
+      <div class="mc-options">
+        <div class="mc-option" data-correct="false"><span class="mc-letter">A</span><span class="mc-text">Yes — by Fermat's Theorem, f'(c)=0 guarantees a local extremum.</span></div>
+        <div class="mc-option" data-correct="true"><span class="mc-letter">B</span><span class="mc-text">No — f'(c)=0 is necessary but not sufficient. Example: f(x)=x³ at c=0.</span></div>
+        <div class="mc-option" data-correct="false"><span class="mc-letter">C</span><span class="mc-text">Yes — unless f''(c)=0 as well.</span></div>
+        <div class="mc-option" data-correct="false"><span class="mc-letter">D</span><span class="mc-text">Only if f is defined on a closed interval.</span></div>
+      </div>
+      <div class="mc-feedback"><strong>Correct! B.</strong> Fermat's Theorem says local extremum → f'(c)=0 (at differentiable points). The converse is false. f(x)=x³ has f'(0)=0 but a sign chart shows f' doesn't change sign at 0 — it's an inflection point, not an extremum.</div>
+      <button class="qq-check-btn" data-type="mc" disabled>Check Answer</button>
+    </div>
+
+    <div class="quiz-question">
+      <div class="qq-num">Question 2</div>
+      <div class="qq-text">f''(c) = 0 at a critical point c. What can you conclude?</div>
+      <div class="mc-options">
+        <div class="mc-option" data-correct="false"><span class="mc-letter">A</span><span class="mc-text">c is an inflection point.</span></div>
+        <div class="mc-option" data-correct="false"><span class="mc-letter">B</span><span class="mc-text">c is neither a max nor a min.</span></div>
+        <div class="mc-option" data-correct="true"><span class="mc-letter">C</span><span class="mc-text">The Second Derivative Test is inconclusive; use the First Derivative Test instead.</span></div>
+        <div class="mc-option" data-correct="false"><span class="mc-letter">D</span><span class="mc-text">c is a local minimum since f'' is zero (flat = stable).</span></div>
+      </div>
+      <div class="mc-feedback"><strong>Correct! C.</strong> f''(c)=0 makes the 2nd Derivative Test inconclusive — all three outcomes (local max, local min, inflection) are possible. f(x)=x⁴ has f''(0)=0 at its global minimum; f(x)=x³ has f''(0)=0 at an inflection point; f(x)=−x⁴ has f''(0)=0 at its global maximum. You must check f' sign change.</div>
+      <button class="qq-check-btn" data-type="mc" disabled>Check Answer</button>
+    </div>
+
+    <div class="quiz-question">
+      <div class="qq-num">Question 3</div>
+      <div class="qq-text">An inflection point of f occurs where:</div>
+      <div class="mc-options">
+        <div class="mc-option" data-correct="false"><span class="mc-letter">A</span><span class="mc-text">f''(c) = 0.</span></div>
+        <div class="mc-option" data-correct="false"><span class="mc-letter">B</span><span class="mc-text">f'(c) = 0 and f''(c) = 0.</span></div>
+        <div class="mc-option" data-correct="true"><span class="mc-letter">C</span><span class="mc-text">f''(c) = 0 (or undefined) AND f'' changes sign at c.</span></div>
+        <div class="mc-option" data-correct="false"><span class="mc-letter">D</span><span class="mc-text">f'(c) = 0 and the graph changes from concave up to concave down.</span></div>
+      </div>
+      <div class="mc-feedback"><strong>Correct! C.</strong> f''(c)=0 alone is insufficient (e.g. f(x)=x⁴ has f''(0)=0 but no inflection at 0 since f'' doesn't change sign). D is wrong because inflection points don't require f'(c)=0 (the slope at an inflection can be any value).</div>
+      <button class="qq-check-btn" data-type="mc" disabled>Check Answer</button>
+    </div>
+
+    <div class="quiz-section-label"><span class="qsl-icon">Section B</span><span class="qsl-title">Short Answer</span><span class="qsl-badge">2 Questions</span></div>
+
+    <div class="quiz-question">
+      <div class="qq-num">Question 4</div>
+      <div class="qq-text">f(x) = x³ − 3x² − 9x + 5. How many local extrema does f have? (Give the number.)</div>
+      <input type="text" class="sa-input" placeholder="number of local extrema" data-accept="2|two"/>
+      <div class="sa-feedback incorrect-sfb"><span class="sa-answer-reveal">2. f'(x)=3x²−6x−9=3(x+1)(x−3)=0 at x=−1,3. f' changes sign at both (from +→− at x=−1, from −→+ at x=3), so there are 2 local extrema: local max at x=−1 and local min at x=3.</span></div>
+      <button class="qq-check-btn" data-type="sa">Check</button>
+    </div>
+
+    <div class="quiz-question">
+      <div class="qq-num">Question 5</div>
+      <div class="qq-text">For f(x) = x⁴ − 8x², how many inflection points does f have?</div>
+      <input type="text" class="sa-input" placeholder="number" data-accept="2|two"/>
+      <div class="sa-feedback incorrect-sfb"><span class="sa-answer-reveal">2. f''(x)=12x²−16=0 ⟹ x²=4/3 ⟹ x=±2/√3. f'' changes sign at both (positive outside, negative between). So 2 inflection points.</span></div>
+      <button class="qq-check-btn" data-type="sa">Check</button>
+    </div>
+
+    <div class="quiz-section-label"><span class="qsl-icon">Section C</span><span class="qsl-title">Long Answer</span><span class="qsl-badge">2 Questions</span></div>
+
+    <div class="quiz-question">
+      <div class="qq-num">Question 6 — Full Curve Sketch</div>
+      <div class="qq-text">Perform a complete curve analysis for f(x) = 3x⁵ − 5x³. Find: domain, intercepts, critical points, local extrema, inflection points, and end behaviour.</div>
+      <textarea class="la-textarea" placeholder="Work through all 8 steps of the curve sketching algorithm..."></textarea>
+      <button class="la-reveal-btn">Reveal Model Solution</button>
+      <div class="la-solution"><div class="la-sol-label">Model Solution</div><div class="la-sol-body">
+        <strong>Domain:</strong> ℝ. <strong>Odd function</strong> (f(−x)=−f(x)).<br>
+        <strong>Intercepts:</strong> f(0)=0; 3x⁵−5x³=x³(3x²−5)=0 ⟹ x=0, ±√(5/3).<br><br>
+        <strong>f'(x)=15x⁴−15x²=15x²(x²−1)=15x²(x−1)(x+1).</strong><br>
+        Critical points: x=0,±1.<br>
+        Sign of f': f'&lt;0 on (−∞,−1), f'&lt;0 on (−1,0), f'&lt;0 on (0,1), f'>0 on (1,∞).<br>
+        Wait — let me recheck: 15x²≥0 always; (x−1)(x+1) = x²−1 &lt; 0 for |x|&lt;1, >0 for |x|>1.<br>
+        So: f' changes from − to + at x=−1: <strong>local min f(−1)=−3+5=2</strong>... wait: f(−1)=3(−1)−5(−1)=−3+5=2. At x=1: f'(1)=0, changes from neg to pos: <strong>local min f(1)=3−5=−2.</strong> At x=0: f' doesn't change sign (always ≤0 nearby) → inflection.<br><br>
+        <strong>f''(x)=60x³−30x=30x(2x²−1)=0 ⟹ x=0, ±1/√2.</strong><br>
+        f'' changes sign at all three → inflection points at x=0, x=±1/√2.<br><br>
+        <strong>End behaviour:</strong> f(x)→+∞ as x→+∞; f(x)→−∞ as x→−∞.
+      </div></div>
+    </div>
+
+    <div class="quiz-question">
+      <div class="qq-num">Question 7 — Proof via Derivatives</div>
+      <div class="qq-text">Prove that f(x) = x³ has no local extremum at x = 0, even though f'(0) = 0. Use the First Derivative Test, showing explicitly that f' does not change sign.</div>
+      <textarea class="la-textarea" placeholder="Compute f', examine its sign for x < 0 and x > 0 near 0..."></textarea>
+      <button class="la-reveal-btn">Reveal Model Solution</button>
+      <div class="la-solution"><div class="la-sol-label">Model Solution</div><div class="la-sol-body">
+        <strong>Compute f':</strong> f'(x) = 3x².<br><br>
+        <strong>Sign analysis of f':</strong><br>
+        For x &lt; 0 (near 0): f'(x) = 3x² > 0. (f is <em>increasing</em> to the left of 0.)<br>
+        For x > 0 (near 0): f'(x) = 3x² > 0. (f is <em>increasing</em> to the right of 0.)<br><br>
+        <strong>Conclusion by First Derivative Test:</strong> f' does not change sign at x=0 — it is positive on both sides. Therefore f is increasing through 0, and x=0 is NOT a local extremum.<br><br>
+        It is an <strong>inflection point</strong> (f goes from concave down to concave up: f''(x)=6x changes sign at 0). □
+      </div></div>
+    </div>
+
+    <div class="quiz-submit-row"><span class="quiz-submit-note">MC and Short Answer auto-scored.</span><button class="quiz-submit-btn">Submit &amp; Score →</button></div>
+    <div class="quiz-score-panel"><div class="qs-title">Quiz Complete</div><div class="qs-score">—</div><div class="qs-label">out of 5 scored questions</div><p class="qs-msg"></p><button class="quiz-retry-btn">↺ Retry Quiz</button></div>
+  </div>
+</div>
+
+</main>
+<aside class="sidebar">
+  <div class="sidebar-section"><h4>On This Page</h4><ul class="toc-list">
+    <li><a href="#extrema">Local & Global Extrema</a></li><li><a href="#tests">Derivative Tests</a></li><li><a href="#curvesketch">Curve Sketching</a></li><li><a href="#practice">Practice</a></li><li><a href="#ai-chat">AI Tutor</a></li><li><a href="#quiz-u8">Unit Quiz</a></li>
+  </ul></div>
+  <div class="sidebar-section"><h4>Key Tests</h4>
+    <div class="formula-pill"><div class="fp-label">1st Deriv. Test</div><div class="fp-math">f' +→−: local max; −→+: local min</div></div>
+    <div class="formula-pill"><div class="fp-label">2nd Deriv. Test</div><div class="fp-math">f'(c)=0, f''(c)>0: min; &lt;0: max</div></div>
+    <div class="formula-pill"><div class="fp-label">Concavity</div><div class="fp-math">f''>0: concave up; f''&lt;0: concave down</div></div>
+    <div class="formula-pill"><div class="fp-label">Inflection</div><div class="fp-math">f'' changes sign at c</div></div>
+  </div>
+</aside>
+</div>
+<div class="unit-nav"><a href="unit7.html" class="unit-nav-btn">← <div><span class="un-label">Previous</span><span class="un-title">Implicit Diff. & EVT</span></div></a><a href="unit9.html" class="unit-nav-btn"><div style="text-align:right"><span class="un-label">Next Unit</span><span class="un-title">MVT & L'Hôpital</span></div> →</a></div>
+<script src="shared.js"></script>
+<script>
+(function(){
+  const canvas=document.getElementById('sketchCanvas');
+  if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  const sel=document.getElementById('sketchFn');
+  const W=canvas.width,H=canvas.height;
+  const pad={l:44,r:16,t:16,b:36};
+  const pw=W-pad.l-pad.r,ph=H-pad.t-pad.b;
+
+  const fns={
+    cubic:{f:x=>x*x*x-3*x,fp:x=>3*x*x-3,fpp:x=>6*x,xMin:-2.5,xMax:2.5,yMin:-6,yMax:6},
+    quartic:{f:x=>x*x*x*x-4*x*x*x,fp:x=>4*x*x*x-12*x*x,fpp:x=>12*x*x-24*x,xMin:-1,xMax:4.5,yMin:-30,yMax:20},
+    sin:{f:x=>Math.sin(x),fp:x=>Math.cos(x),fpp:x=>-Math.sin(x),xMin:-Math.PI*1.5,xMax:Math.PI*1.5,yMin:-1.5,yMax:1.5}
+  };
+
+  function draw(){
+    const key=sel.value;
+    const fn=fns[key];
+    const sx=x=>pad.l+(x-fn.xMin)/(fn.xMax-fn.xMin)*pw;
+    const sy=y=>pad.t+(1-(y-fn.yMin)/(fn.yMax-fn.yMin))*ph;
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle='#0c0e0f';ctx.fillRect(0,0,W,H);
+    // grid
+    ctx.strokeStyle='rgba(255,255,255,0.05)';ctx.lineWidth=1;
+    for(let y=Math.ceil(fn.yMin);y<=fn.yMax;y++){if(y%2===0){ctx.beginPath();ctx.moveTo(pad.l,sy(y));ctx.lineTo(pad.l+pw,sy(y));ctx.stroke();}}
+    // axes
+    ctx.strokeStyle='rgba(255,255,255,0.18)';ctx.lineWidth=1.5;
+    if(fn.yMin<0&&fn.yMax>0){ctx.beginPath();ctx.moveTo(pad.l,sy(0));ctx.lineTo(pad.l+pw,sy(0));ctx.stroke();}
+    if(fn.xMin<0&&fn.xMax>0){ctx.beginPath();ctx.moveTo(sx(0),pad.t);ctx.lineTo(sx(0),pad.t+ph);ctx.stroke();}
+    // draw 3 curves
+    const curves=[
+      {fn:fn.f,color:'#4caf7d',label:'f'},
+      {fn:fn.fp,color:'#4a90d9',label:"f'"},
+      {fn:fn.fpp,color:'#e8924a',label:"f''"}
+    ];
+    curves.forEach(c=>{
+      ctx.strokeStyle=c.color;ctx.lineWidth=2;ctx.beginPath();
+      let first=true;
+      for(let px=0;px<=pw;px++){
+        const x=fn.xMin+(px/pw)*(fn.xMax-fn.xMin);
+        const y=c.fn(x);
+        if(y<fn.yMin-1||y>fn.yMax+1){first=true;continue;}
+        if(first){ctx.moveTo(pad.l+px,sy(y));first=false;}
+        else ctx.lineTo(pad.l+px,sy(y));
+      }
+      ctx.stroke();
+    });
+    // legend
+    let lx=pad.l+8,ly=pad.t+18;
+    curves.forEach(c=>{
+      ctx.fillStyle=c.color;ctx.font='11px JetBrains Mono,monospace';ctx.textAlign='left';
+      ctx.fillText('— '+c.label,lx,ly);lx+=60;
+    });
+  }
+  sel.addEventListener('change',draw);draw();
+})();
+</script>
+</body></html>
