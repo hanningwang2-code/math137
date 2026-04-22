@@ -40,6 +40,87 @@ sections.forEach(s => tocObs.observe(s));
 
 // ── AI Chat ──
 const UNIT_CONTEXT = window.UNIT_CONTEXT || 'Calculus I';
+
+function escapeHtml(text) {
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+function formatMathText(text) {
+  return text
+    .replace(/\$\$([\s\S]+?)\$\$/g, (_, expr) => `\n${expr.trim()}\n`)
+    .replace(/\\\[((?:[\s\S]*?))\\\]/g, (_, expr) => `\n${expr.trim()}\n`)
+    .replace(/\\\((.*?)\\\)/g, (_, expr) => expr.trim())
+    .replace(/\$([^$\n]+)\$/g, (_, expr) => expr.trim())
+    .replace(/\\frac\s*\{([^{}]+)\}\s*\{([^{}]+)\}/g, '($1)/($2)')
+    .replace(/\\sqrt\s*\{([^{}]+)\}/g, 'sqrt($1)')
+    .replace(/\\mathbb\s*\{R\}/g, 'R')
+    .replace(/\\mathbb\s*\{N\}/g, 'N')
+    .replace(/\\mathbb\s*\{Z\}/g, 'Z')
+    .replace(/\\mathbb\s*\{Q\}/g, 'Q')
+    .replace(/\\mathbb\s*\{C\}/g, 'C')
+    .replace(/\\cdot/g, '·')
+    .replace(/\\times/g, '×')
+    .replace(/\\pm/g, '±')
+    .replace(/\\mp/g, '∓')
+    .replace(/\\neq/g, '≠')
+    .replace(/\\leq/g, '≤')
+    .replace(/\\geq/g, '≥')
+    .replace(/\\le\b/g, '≤')
+    .replace(/\\ge\b/g, '≥')
+    .replace(/\\to/g, '→')
+    .replace(/\\rightarrow/g, '→')
+    .replace(/\\infty/g, '∞')
+    .replace(/\\in\b/g, '∈')
+    .replace(/\\notin/g, '∉')
+    .replace(/\\subseteq/g, '⊆')
+    .replace(/\\subset/g, '⊂')
+    .replace(/\\cup/g, '∪')
+    .replace(/\\cap/g, '∩')
+    .replace(/\\sin/g, 'sin')
+    .replace(/\\cos/g, 'cos')
+    .replace(/\\tan/g, 'tan')
+    .replace(/\\ln/g, 'ln')
+    .replace(/\\log/g, 'log')
+    .replace(/\\exp/g, 'exp')
+    .replace(/\\lim/g, 'lim')
+    .replace(/\\forall/g, 'for all')
+    .replace(/\\exists/g, 'there exists')
+    .replace(/\\,|\\;|\\:/g, ' ')
+    .replace(/\\\\/g, '\n')
+    .replace(/\\([A-Za-z]+)/g, '$1');
+}
+
+function renderMessageText(text) {
+  const codeBlocks = [];
+  let content = text.replace(/```([\s\S]*?)```/g, (_, block) => {
+    const placeholder = `__CODE_BLOCK_${codeBlocks.length}__`;
+    codeBlocks.push(`<pre class="msg-code-block"><code>${escapeHtml(block.trim())}</code></pre>`);
+    return placeholder;
+  });
+
+  content = formatMathText(content);
+  content = escapeHtml(content);
+  content = content
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/`([^`]+)`/g, '<code>$1</code>');
+
+  const paragraphs = content
+    .split(/\n\s*\n/)
+    .map(part => part.trim())
+    .filter(Boolean)
+    .map(part => `<p>${part.replace(/\n/g, '<br>')}</p>`)
+    .join('');
+
+  let html = paragraphs || `<p>${content.replace(/\n/g, '<br>')}</p>`;
+  codeBlocks.forEach((block, index) => {
+    html = html.replace(`__CODE_BLOCK_${index}__`, block);
+  });
+  return html;
+}
+
 async function sendMessage() {
   const input = document.getElementById('chatInput');
   const messages = document.getElementById('chatMessages');
@@ -62,7 +143,7 @@ async function sendMessage() {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        system: `You are a university mathematics tutor specializing in ${UNIT_CONTEXT}. Give rigorous, clear, pedagogically excellent explanations. Use mathematical notation inline. Be concise but thorough. For proofs, give clean numbered steps. Never be vague.`,
+        system: `You are a university mathematics tutor specializing in ${UNIT_CONTEXT}. Give rigorous, clear, pedagogically excellent explanations. Be concise but thorough. For proofs, give clean numbered steps. Never be vague. Format for a simple website chatbox: prefer plain text and Unicode math symbols like ≤, ≥, →, ∈, and f(x). Do not use LaTeX delimiters such as $...$, $$...$$, \\(...\\), or \\[...\\]. Avoid raw LaTeX commands unless absolutely necessary.`,
         messages: history
       })
     });
@@ -73,13 +154,15 @@ async function sendMessage() {
     const data = await res.json();
     const reply = data.reply || 'Sorry, no response.';
     typingEl.remove(); appendMsg('ai', reply, messages);
-  } catch (e) { typingEl.remove(); appendMsg('ai', 'Connection error — please try again.', messages); }
+  } catch (e) {
+    typingEl.remove();
+    appendMsg('ai', e.message || 'Connection error — please try again.', messages);
+  }
   sendBtn.disabled = false; messages.scrollTop = messages.scrollHeight;
 }
 function appendMsg(role, text, container) {
   const div = document.createElement('div'); div.className = `msg ${role}`;
-  const html = text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-    .replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/`([^`]+)`/g,'<code>$1</code>').replace(/\n/g,'<br>');
+  const html = renderMessageText(text);
   div.innerHTML = `<div class="msg-avatar">${role==='ai'?'∑':'U'}</div><div class="msg-bubble">${html}</div>`;
   container.appendChild(div); container.scrollTop = container.scrollHeight;
 }
